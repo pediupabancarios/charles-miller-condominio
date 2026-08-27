@@ -271,6 +271,15 @@ table.datatable td{padding:12px;border-bottom:1px solid var(--line);}
 table.datatable tr:last-child td{border-bottom:none;}
 .inline-select{border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 8px;font-family:inherit;background:var(--paper);}
 
+/* --- avisos (painel) --- */
+.aviso-row{display:flex;gap:13px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line);}
+.aviso-row:last-child{border-bottom:none;}
+.aviso-row .t1{font-size:13.5px;font-weight:700;margin:0 0 3px;}
+.aviso-row .t2{font-size:11.5px;color:var(--ink-soft);margin:0;}
+.aviso-row .t2.corpo{margin-top:4px;line-height:1.5;}
+.aviso-acoes{display:flex;flex-direction:column;align-items:flex-end;gap:9px;flex:none;}
+.aviso-acoes>div{display:flex;gap:12px;}
+
 /* --- assembleias --- */
 .ass-card{border:1px solid var(--line);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:12px;}
 .ass-card:last-child{margin-bottom:0;}
@@ -316,7 +325,9 @@ table.datatable tr:last-child td{border-bottom:none;}
 
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
 .form-grid label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;}
-.form-grid input,.form-grid select{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:13px;background:var(--paper);}
+.form-grid input,.form-grid select,.form-grid textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:13px;background:var(--paper);}
+.form-grid textarea{resize:vertical;line-height:1.5;min-height:76px;}
+.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{outline:none;border-color:var(--navy-700);}
 .form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:4px;}
 .btn-primary{background:var(--navy-950);color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:700;font-size:12.5px;}
 .btn-ghost{background:none;border:1px solid var(--line);padding:10px 18px;border-radius:10px;font-weight:600;font-size:12.5px;color:var(--ink-soft);}
@@ -406,10 +417,17 @@ const boletos = [
 ];
 const totalAberto = "R$ 507,80";
 
+/* categoria do aviso define ícone, cor e badge — fonte única para os dois apps */
+const tiposAviso = {
+  urgentes:    {plural:"Urgentes",     tag:"Urgente",    ic:"🚨", cor:"var(--red-bg)",   tagClass:"b-red"},
+  comunicados: {plural:"Comunicados",  tag:"Comunicado", ic:"📣", cor:"var(--blue-bg)",  tagClass:"b-blue"},
+  manutencoes: {plural:"Manutenções",  tag:"Manutenção", ic:"🔧", cor:"var(--amber-bg)", tagClass:"b-amber"}
+};
+
 const avisos = [
-  {ic:"🚨",cor:"var(--red-bg)",titulo:"Manutenção no reservatório",data:"19/08/2026 - 08:30",corpo:"Amanhã, 20/08, das 09h às 14h, haverá interrupção no abastecimento de água.",tag:"Urgente",tagClass:"b-red",cat:"urgentes"},
-  {ic:"📣",cor:"var(--blue-bg)",titulo:"Convocação de Assembleia",data:"14/08/2026 - 10:15",corpo:"A pauta inclui aprovação do orçamento 2027 e eleição da nova gestão.",tag:"Comunicado",tagClass:"b-blue",cat:"comunicados"},
-  {ic:"🔧",cor:"var(--amber-bg)",titulo:"Manutenção do elevador social",data:"12/08/2026 - 14:45",corpo:"Manutenção preventiva será realizada no elevador social no dia 22/08.",tag:"Manutenção",tagClass:"b-amber",cat:"manutencoes"},
+  {titulo:"Manutenção no reservatório",data:"19/08/2026 - 08:30",corpo:"Amanhã, 20/08, das 09h às 14h, haverá interrupção no abastecimento de água.",cat:"urgentes",fixado:true},
+  {titulo:"Convocação de Assembleia",data:"14/08/2026 - 10:15",corpo:"A pauta inclui aprovação do orçamento 2027 e eleição da nova gestão.",cat:"comunicados",fixado:false},
+  {titulo:"Manutenção do elevador social",data:"12/08/2026 - 14:45",corpo:"Manutenção preventiva será realizada no elevador social no dia 22/08.",cat:"manutencoes",fixado:false},
 ];
 
 const ocorrencias = [
@@ -730,21 +748,31 @@ function renderFinanceiro(){
 }
 function actionCard(ic,t1,t2){return `<button class="card action-card" onclick="toast('${t1} (protótipo)')"><span class="ic">${ic}</span><div><p class="t1">${t1}</p><p class="t2">${t2}</p></div></button>`;}
 
+/* fixados primeiro, mantendo a ordem de publicação dentro de cada grupo */
+function avisosOrdenados(){
+  return [...avisos].sort((a,b)=>(b.fixado?1:0)-(a.fixado?1:0));
+}
+
 function renderAvisos(){
+  const lista=avisosOrdenados();
   return `
   <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Avisos</h1></div>
   <div class="view">
     <div class="filters" id="avisoFilters">
-      ${[["Todos",""],["Comunicados","comunicados"],["Manutenções","manutencoes"],["Urgentes","urgentes"]].map(([f,cat],i)=>`<button class="chip ${i===0?'active':''}" onclick="filterList(this,'avisoFilters','avisoList','${cat}')">${f}</button>`).join("")}
+      ${[["Todos",""],...Object.entries(tiposAviso).map(([cat,t])=>[t.plural,cat])]
+        .map(([f,cat],i)=>`<button class="chip ${i===0?'active':''}" onclick="filterList(this,'avisoFilters','avisoList','${cat}')">${f}</button>`).join("")}
     </div>
-    <div class="card list-card" id="avisoList">
-      ${avisos.map(a=>`
+    ${lista.length?`<div class="card list-card" id="avisoList">
+      ${lista.map(a=>{const t=tiposAviso[a.cat];return `
         <div class="list-row" data-cat="${a.cat}">
-          <div class="list-ic" style="background:${a.cor}">${a.ic}</div>
-          <div class="list-body"><p class="t1">${a.titulo}</p><p class="t2">${a.data}</p><p class="t2">${a.corpo}</p></div>
-          <span class="badge ${a.tagClass}">${a.tag}</span>
-        </div>`).join("")}
-    </div>
+          <div class="list-ic" style="background:${t.cor}">${t.ic}</div>
+          <div class="list-body">
+            <p class="t1">${a.fixado?'<span title="Fixado no topo">📌 </span>':''}${a.titulo}</p>
+            <p class="t2">${a.data}</p><p class="t2">${a.corpo}</p>
+          </div>
+          <span class="badge ${t.tagClass}">${t.tag}</span>
+        </div>`;}).join("")}
+    </div>`:`<div class="empty-note">Nenhum aviso publicado.</div>`}
   </div>`;
 }
 
@@ -998,7 +1026,8 @@ function filterList(btn,filtersId,listId,cat){
    ADMIN APP
    ============================================================ */
 const sbItemsSindico=[
-  ["dashboard","▦","Dashboard"],["financeiro","💳","Financeiro"],["moradores","👥","Moradores"],
+  ["dashboard","▦","Dashboard"],["avisos","📣","Avisos"],["financeiro","💳","Financeiro"],
+  ["moradores","👥","Moradores"],
   ["unidades","🏢","Unidades"],["reservas","📅","Reservas"],["ocorrencias","⚠️","Ocorrências"],
   ["sugestoes","💡","Sugestões"],
   ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"],["assembleias","🗳️","Assembleias"],
@@ -1006,7 +1035,8 @@ const sbItemsSindico=[
   ["configuracoes","⚙️","Configurações"]
 ];
 const sbItemsAdministrativo=[
-  ["dashboard","▦","Dashboard"],["financeiro","💳","Financeiro"],["moradores","👥","Moradores"],
+  ["dashboard","▦","Dashboard"],["avisos","📣","Avisos"],["financeiro","💳","Financeiro"],
+  ["moradores","👥","Moradores"],
   ["unidades","🏢","Unidades"],["reservas","📅","Reservas"],["ocorrencias","⚠️","Ocorrências"],
   ["sugestoes","💡","Sugestões"],
   ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"],
@@ -1055,6 +1085,8 @@ function goAdmin(v){
     toast("Este módulo não está disponível para o seu perfil");
     return;
   }
+  // sair do módulo de avisos descarta a edição pendente (o índice pode não valer mais)
+  if(v!=="avisos" && staffViewByRole[currentStaffRole]==="avisos") avisoEditando=null;
   staffViewByRole[currentStaffRole]=v;
   buildSidebar();
   const renderers=rendererMap[currentStaffRole];
@@ -1095,8 +1127,8 @@ function renderDashboard(){
   </div>
   <div class="bottom-grid">
     <div class="panel">
-      <div class="panel-head"><h3>Avisos recentes</h3><span class="see-all">${avisos.length} avisos</span></div>
-      ${avisos.map(a=>`<div class="mini-row"><div class="list-ic" style="background:${a.cor};width:34px;height:34px;font-size:14px">${a.ic}</div><div style="flex:1"><p class="t1">${a.titulo}</p><p class="t2">${a.data}</p></div><span class="badge ${a.tagClass}" style="font-size:9px">${a.tag}</span></div>`).join("")}
+      <div class="panel-head"><h3>Avisos recentes</h3><button class="see-all" onclick="goAdmin('avisos')">Ver todos</button></div>
+      ${avisos.length?avisosOrdenados().slice(0,4).map(a=>{const t=tiposAviso[a.cat];return `<div class="mini-row"><div class="list-ic" style="background:${t.cor};width:34px;height:34px;font-size:14px">${t.ic}</div><div style="flex:1"><p class="t1">${a.fixado?'📌 ':''}${a.titulo}</p><p class="t2">${a.data}</p></div><span class="badge ${t.tagClass}" style="font-size:9px">${t.tag}</span></div>`;}).join(""):`<div class="empty-note">Nenhum aviso publicado.</div>`}
     </div>
     <div class="panel">
       <div class="panel-head"><h3>Assembleias</h3>${temModulo('assembleias')?`<button class="see-all" onclick="goAdmin('assembleias')">Ver todas</button>`:''}</div>
@@ -1120,7 +1152,7 @@ function renderDashboard(){
       <div class="panel-head"><h3>Atalhos rápidos</h3></div>
       <div class="shortcut-grid">
         ${shortcut("📅","Nova reserva","goAdmin('reservas');toggleReservaForm(true)")}
-        ${shortcut("📣","Novo aviso")}
+        ${shortcut("📣","Novo aviso","goAdmin('avisos');novoAviso()")}
         ${shortcut("⚠️","Nova ocorrência","goAdmin('ocorrencias');toggleOcorrenciaForm(true)")}
         ${shortcut("👤","Novo morador","goAdmin('moradores');toggleMoradorForm(true)")}
         ${shortcut("💳","Relatório financeiro","goAdmin('financeiro')")}
@@ -1523,6 +1555,159 @@ function somaISO(iso,meses){
   const d=new Date(iso+"T00:00:00");
   d.setMonth(d.getMonth()+meses);
   return d.toISOString().slice(0,10);
+}
+
+/* ============================================================
+   MÓDULO: AVISOS (publicação pelo síndico / administrativo)
+   ============================================================ */
+let avisoEditando = null;      // índice em `avisos`, ou null se for publicação nova
+let filtroAviso = "Todos";
+
+function renderAdminAvisos(){
+  const cats=["Todos",...Object.keys(tiposAviso)];
+  const lista=avisosOrdenados().filter(a=>filtroAviso==="Todos"||a.cat===filtroAviso);
+  const notif=config.notificacoes.find(n=>n.chave==="avisos");
+  return `
+  ${adminTopbar("Avisos")}
+  <div class="kpi-grid">
+    ${kpi("Publicados",String(avisos.length),"visíveis aos moradores","up","📣","var(--blue-bg)")}
+    ${kpi("Urgentes",String(avisos.filter(a=>a.cat==="urgentes").length),"destaque em vermelho","down","🚨","var(--red-bg)")}
+    ${kpi("Fixados",String(avisos.filter(a=>a.fixado).length),"aparecem no topo da lista","up","📌","var(--amber-bg)")}
+    ${kpi("Alcance",String(TOTAL_UNIDADES),"unidades notificadas","up","👥","var(--green-bg)")}
+  </div>
+
+  <div class="panel" id="avisoFormPanel" style="display:${avisoEditando!==null?'block':'none'};margin-bottom:16px">
+    <div class="panel-head"><h3>${avisoEditando!==null?'Editar aviso':'Publicar aviso'}</h3></div>
+    ${!notif.ativo?`<div class="tip-card" style="margin:0 0 14px">
+      <p class="t1">Notificações de avisos estão desativadas</p>
+      <p>O aviso ficará visível no app, mas os moradores não receberão alerta.
+      Ative em <strong>Configurações → Notificações</strong>.</p>
+    </div>`:''}
+    <div class="form-grid">
+      <div style="grid-column:1/-1"><label>Título</label><input id="avTitulo" placeholder="Ex: Interrupção no fornecimento de água"></div>
+      <div style="grid-column:1/-1"><label>Mensagem</label><textarea id="avCorpo" rows="4" placeholder="Descreva o aviso com data, horário e o que o morador precisa fazer."></textarea></div>
+      <div><label>Categoria</label>
+        <select id="avCat">${Object.entries(tiposAviso).map(([k,t])=>`<option value="${k}">${t.ic} ${t.tag}</option>`).join("")}</select>
+      </div>
+      <div>
+        <label>Fixar no topo</label>
+        <div style="display:flex;align-items:center;gap:10px;padding-top:5px">
+          ${sw('avFixado',avisoEditando!==null&&avisos[avisoEditando].fixado,'alternarFixarNoForm()')}
+          <span style="font-size:12px;color:var(--ink-soft)">Mantém o aviso acima dos demais</span>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="cancelarAviso()">Cancelar</button>
+      <button class="btn-primary" onclick="salvarAviso()">${avisoEditando!==null?'Salvar alterações':'Publicar aviso'}</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Avisos publicados</h3><button class="see-all" onclick="novoAviso()">+ Publicar aviso</button></div>
+    <div class="filters" style="margin-bottom:14px">
+      ${cats.map(c=>{
+        const label=c==="Todos"?"Todos":tiposAviso[c].plural;
+        const n=c==="Todos"?avisos.length:avisos.filter(a=>a.cat===c).length;
+        return `<button class="chip ${c===filtroAviso?'active':''}" onclick="filtrarAvisos('${c}')">${label} (${n})</button>`;
+      }).join("")}
+    </div>
+    ${lista.length?lista.map(a=>{
+      const t=tiposAviso[a.cat], i=avisos.indexOf(a);
+      return `
+      <div class="aviso-row">
+        <div class="list-ic" style="background:${t.cor}">${t.ic}</div>
+        <div style="flex:1;min-width:0">
+          <p class="t1">${a.fixado?'📌 ':''}${a.titulo}</p>
+          <p class="t2">${a.data}</p>
+          <p class="t2 corpo">${a.corpo}</p>
+        </div>
+        <div class="aviso-acoes">
+          <span class="badge ${t.tagClass}">${t.tag}</span>
+          <div>
+            <button class="see-all" onclick="alternarFixado(${i})">${a.fixado?'Desafixar':'Fixar'}</button>
+            <button class="see-all" onclick="editarAviso(${i})">Editar</button>
+            <button class="see-all" style="color:var(--red)" onclick="removerAviso(${i})">Remover</button>
+          </div>
+        </div>
+      </div>`;
+    }).join(""):`<div class="empty-note">Nenhum aviso ${filtroAviso==="Todos"?'publicado':'nesta categoria'}.</div>`}
+  </div>`;
+}
+
+function filtrarAvisos(c){ filtroAviso=c; goAdmin("avisos"); }
+
+function novoAviso(){
+  avisoEditando=null;
+  const p=document.getElementById("avisoFormPanel");
+  if(p){ p.style.display="block"; limparFormAviso(); document.getElementById("avTitulo").focus(); }
+}
+function limparFormAviso(){
+  document.getElementById("avTitulo").value="";
+  document.getElementById("avCorpo").value="";
+  document.getElementById("avCat").value="comunicados";
+  const s=document.getElementById("avFixado");
+  s.classList.remove("on"); s.setAttribute("aria-checked","false");
+}
+function alternarFixarNoForm(){
+  const s=document.getElementById("avFixado");
+  const on=!s.classList.contains("on");
+  s.classList.toggle("on",on);
+  s.setAttribute("aria-checked",String(on));
+}
+function editarAviso(i){
+  avisoEditando=i;
+  goAdmin("avisos");
+  const a=avisos[i];
+  document.getElementById("avTitulo").value=a.titulo;
+  document.getElementById("avCorpo").value=a.corpo;
+  document.getElementById("avCat").value=a.cat;
+  document.getElementById("avisoFormPanel").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function cancelarAviso(){
+  avisoEditando=null;
+  goAdmin("avisos");
+}
+function salvarAviso(){
+  const titulo=document.getElementById("avTitulo").value.trim();
+  const corpo=document.getElementById("avCorpo").value.trim();
+  const cat=document.getElementById("avCat").value;
+  const fixado=document.getElementById("avFixado").classList.contains("on");
+  if(!titulo){ toast("Informe o título do aviso"); return; }
+  if(!corpo){ toast("Escreva a mensagem do aviso"); return; }
+
+  const notif=config.notificacoes.find(n=>n.chave==="avisos");
+  if(avisoEditando!==null){
+    Object.assign(avisos[avisoEditando],{titulo,corpo,cat,fixado});
+    avisoEditando=null;
+    goAdmin("avisos");
+    toast("Aviso atualizado");
+  } else {
+    const agora=new Date();
+    avisos.unshift({titulo,corpo,cat,fixado,
+      data:`${agora.toLocaleDateString('pt-BR')} - ${horaAgora()}`});
+    filtroAviso="Todos";
+    goAdmin("avisos");
+    toast(notif.ativo
+      ? `Aviso publicado · ${TOTAL_UNIDADES} unidades notificadas`
+      : "Aviso publicado (notificações desativadas)");
+  }
+}
+function alternarFixado(i){
+  const a=avisos[i];
+  if(!a) return;
+  a.fixado=!a.fixado;
+  goAdmin("avisos");
+  toast(a.fixado?"Aviso fixado no topo":"Aviso desafixado");
+}
+function removerAviso(i){
+  const a=avisos[i];
+  if(!a) return;
+  if(!confirm(`Remover o aviso "${a.titulo}"? Ele deixará de aparecer para os moradores.`)) return;
+  avisos.splice(i,1);
+  avisoEditando=null;   // os índices mudaram: cancela qualquer edição em curso
+  goAdmin("avisos");
+  toast("Aviso removido");
 }
 
 /* ============================================================
@@ -2004,6 +2189,7 @@ const adminRenderers={
   unidades:renderAdminUnidades,
   reservas:renderAdminReservas, ocorrencias:renderAdminOcorrencias, sugestoes:renderAdminSugestoes,
   encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes,
+  avisos:renderAdminAvisos,
   assembleias:renderAdminAssembleias, documentos:renderAdminDocumentos,
   manutencoes:renderAdminManutencoes, relatorios:renderAdminRelatorios,
   configuracoes:renderAdminConfiguracoes
@@ -2013,6 +2199,7 @@ const administrativoRenderers={
   unidades:renderAdminUnidades, reservas:renderAdminReservas, ocorrencias:renderAdminOcorrencias,
   sugestoes:renderAdminSugestoes,
   encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes,
+  avisos:renderAdminAvisos,
   documentos:renderAdminDocumentos, relatorios:renderAdminRelatorios
 };
 const porteiroRenderers={

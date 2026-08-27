@@ -39,6 +39,7 @@ Estado atual: **protótipo** — dados mockados no próprio `index.html`, sem ba
   - `buildSidebar()`, `mobileTabs()`, `adminStub(v)` — módulos não implementados caem no stub
   - `renderDashboard/AdminFinanceiro/AdminMoradores/AdminReservas/AdminOcorrencias/`
     `AdminSugestoes/AdminEncomendas/AdminVisitantes/AdminUnidades/PorteiroDashboard()`
+  - `renderAdminAvisos()` — publicar/editar/fixar/remover aviso (síndico e administrativo)
   - `renderAdminAssembleias/AdminDocumentos/AdminManutencoes/AdminRelatorios/AdminConfiguracoes()`
   - `temModulo(v)` — o módulo existe no menu do perfil atual? (`goAdmin` bloqueia o que não existe)
 - **Troca de perfil:** `#roleSwitch` no topo → `setRole('resident'|'porteiro'|'administrativo'|'sindico')`
@@ -64,6 +65,10 @@ Estado atual: **protótipo** — dados mockados no próprio `index.html`, sem ba
 - **Assembleias:** status Agendada → Votação aberta → Encerrada. Voto por **pauta**,
   1 voto por unidade (`TOTAL_UNIDADES = 104`), quórum = maioria simples das unidades.
   O morador pode trocar o voto enquanto a votação estiver aberta.
+- **Avisos:** categoria (`urgentes` / `comunicados` / `manutencoes`) define ícone, cor e
+  badge via `tiposAviso` — **não** duplique esses campos no registro. Aviso `fixado`
+  sobe ao topo em todas as listas (`avisosOrdenados()`). Publicação respeita o toggle
+  de notificações em `config.notificacoes`.
 - **Manutenções:** status derivado da data (`Atrasada` < hoje, `Vence em Nd` ≤ 15 dias,
   senão `Em dia`). Registrar execução recalcula a próxima pela periodicidade.
 
@@ -92,9 +97,11 @@ Ainda são placeholder (mostram só um toast): no hub do morador — Visitantes,
 Veículos, Fale com o síndico, Configurações; e no financeiro — Pix, 2ª via,
 histórico e os botões de pagamento.
 
+Sidebar do síndico: 15 módulos · administrativo: 12 · portaria: 5.
+
 ## Próximos passos
 1. **Autenticação real** — hoje o seletor de perfil no topo troca de papel sem login
 2. **Backend (Supabase)** — todo o estado vive em memória e some ao recarregar
 3. Módulo de **Veículos/vagas** e **cadastro de visitante autorizado** pelo morador
-4. **Avisos**: o síndico ainda não tem tela para publicar (só o morador lê)
-5. Upload real de documentos (hoje o `<input type=file>` só lê o tamanho)
+4. Upload real de documentos (hoje o `<input type=file>` só lê o tamanho)
+5. Envio real das notificações (Web Push) — hoje o toggle só controla o texto do toast
