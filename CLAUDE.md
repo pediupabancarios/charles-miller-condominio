@@ -24,12 +24,13 @@ Estado atual: **protótipo** — dados mockados no próprio `index.html`, sem ba
 - **Dados mock** no topo: `morador`, `eventos`, `reservas`, `boletos`, `avisos`,
   `ocorrencias`, `encomendas`, `sugestoes`, `moradoresLista`, `visitantes`, `calendarEvents`,
   `assembleias`, `documentos`, `manutencoes`, `serieFinanceira`, `despesasPorCategoria`,
-  `inadimplentes`, `config`, `autorizacoes`, `vagas`, `veiculos`, `boletosDoMes`
+  `inadimplentes`, `config`, `autorizacoes`, `vagas`, `veiculos`, `boletosDoMes`, `conversas`
 - **App do Morador** (mobile, `#residentApp`):
   - `renderHome/Reservas/Financeiro/Avisos/Ocorrencias/Sugestoes/Encomendas/Hub()` — retornam string HTML
   - `renderAssembleiasMorador()` — pauta + votação (`votar()`); `renderDocumentosMorador()` — biblioteca
   - `renderVeiculosMorador()` — própria vaga e veículos
   - `renderAutorizacoesMorador()` — pré-autoriza visitantes e acompanha os códigos
+  - `renderFaleMorador()` — threads com o síndico; `renderConfigMorador()` — perfil e preferências
   - `ocultarFab(bool)` — o FAB cobre os botões de qualquer formulário aberto; todo
     `toggle*Form` do morador precisa chamá-lo
   - `viewMap{}` — mapeia nome da view → função render
@@ -47,6 +48,7 @@ Estado atual: **protótipo** — dados mockados no próprio `index.html`, sem ba
   - `renderAdminVeiculos()` — cadastro de veículos + mapa de vagas (também na portaria)
   - `painelAutorizacoes()` — embutido em `renderAdminVisitantes()`: busca por código/nome/
     unidade e `liberarEntrada()`, que registra o uso e cria a entrada em `visitantes`
+  - `renderAdminMensagens()` — caixa de entrada do "Fale com o síndico"
   - `podeVerInadimplencia()` / `painelRestrito()` — ver **Privacidade** abaixo
   - `renderAdminAssembleias/AdminDocumentos/AdminManutencoes/AdminRelatorios/AdminConfiguracoes()`
   - `temModulo(v)` — o módulo existe no menu do perfil atual? (`goAdmin` bloqueia o que não existe)
@@ -81,6 +83,28 @@ O morador pré-autoriza; a portaria confere o código e libera sem ligar para el
   `autorizado:true`, que vira o badge "Pré-autorizado" na tabela de entradas.
 - `CTX_AUTORIZACAO` diz de qual tela o cancelamento partiu (morador ou portaria).
 
+## Fale com o síndico
+Uma thread por assunto, compartilhada entre o morador e o síndico.
+- `statusConversa()` deriva de quem mandou a **última** mensagem: Encerrada →
+  Respondida → Aguardando resposta. Nada de status gravado no registro.
+- `conversaAberta` (id) alterna entre lista e thread nos **dois** lados;
+  `CTX_CONVERSA` diz de qual lado veio a ação. Sempre zere `conversaAberta`
+  ao entrar por outro caminho, senão a tela abre direto numa thread antiga.
+- Não lidas por `naoLidas(c, "morador"|"sindico")`, marcadas ao abrir a thread.
+- Conversa encerrada some com a caixa de resposta do morador; o síndico reabre.
+
+## Configurações do morador
+- `morador` guarda perfil (`nomeCompleto`, `email`, `telefone`), `notificacoes`
+  pessoais e `mostrarNaLista`.
+- **O nome vive em dois lugares** (`morador` e `moradoresLista`, ligados por
+  `unidade === morador.cod`): `salvarPerfil()` propaga para a lista do síndico
+  e para `conversas`. Qualquer novo lugar que copie o nome precisa entrar ali.
+- Notificação pessoal só aparece se o síndico não desligou a categoria em
+  `config.notificacoes` — desligada globalmente, vira badge "Indisponível".
+- `mostrarNaLista` desligado marca "Nome oculto" na tabela de Moradores
+  (`ocultoNaLista()`), sinalizando a preferência a ser honrada por qualquer
+  lista de moradores voltada a moradores.
+
 ## Unidades e vagas
 - Código: `codUnidade(andar,apto,torre)` → `802-A`, `1401-B` — **sem zero à esquerda no andar**
 - `todasUnidades()` gera as 104; `UNIDADES_DESOCUPADAS` lista as 3 sem morador
@@ -91,7 +115,8 @@ O morador pré-autoriza; a portaria confere o código e libera sem ligar para el
 
 ## Perfis e permissões (protótipo — sem auth real)
 - **Morador:** própria unidade — financeiro, reservas, avisos, ocorrências, sugestões,
-  encomendas, assembleias (voto), documentos, veículos
+  encomendas, assembleias (voto), documentos, veículos, visitantes autorizados,
+  fale com o síndico, configurações
 - **Portaria:** moradores, reservas, encomendas, visitantes, veículos e vagas
 - **Administrativo:** tudo do síndico exceto assembleias / manutenções / configurações,
   **e sem os dados de inadimplência** (ver Privacidade)
@@ -138,16 +163,16 @@ Depois abrir http://localhost:8000
 Todos os módulos do menu de cada perfil estão implementados — `adminStub()` continua
 no código apenas como rede de segurança para views não registradas.
 
-Ainda são placeholder (mostram só um toast): no hub do morador — Fale com o
-síndico e Configurações; e no financeiro — Pix, 2ª via, histórico e os botões
-de pagamento.
+O hub do morador não tem mais placeholders. Ainda mostram só um toast: no
+financeiro — Pix, 2ª via, histórico e os botões de pagamento.
 
-Sidebar do síndico: 16 módulos · administrativo: 13 · portaria: 6.
-Views do morador: 12.
+Sidebar do síndico: 17 módulos · administrativo: 14 · portaria: 6.
+Views do morador: 14.
 
 ## Próximos passos
 1. **Autenticação real** — hoje o seletor de perfil no topo troca de papel sem login
 2. **Backend (Supabase)** — todo o estado vive em memória e some ao recarregar
 3. Upload real de documentos (hoje o `<input type=file>` só lê o tamanho)
-4. Envio real das notificações (Web Push) — hoje o toggle só controla o texto do toast
+4. Envio real das notificações (Web Push) — hoje os toggles só controlam textos
 5. QR code para a autorização (hoje o visitante apresenta o código digitado)
+6. Lista de moradores visível ao morador, honrando `mostrarNaLista`
