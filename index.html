@@ -271,6 +271,23 @@ table.datatable td{padding:12px;border-bottom:1px solid var(--line);}
 table.datatable tr:last-child td{border-bottom:none;}
 .inline-select{border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 8px;font-family:inherit;background:var(--paper);}
 
+/* --- mapa de vagas --- */
+.vaga-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:8px;max-height:460px;overflow-y:auto;padding-right:2px;}
+.vaga{border:1px solid var(--line);border-radius:10px;padding:9px 10px;background:var(--paper);display:flex;flex-direction:column;gap:2px;min-width:0;}
+.vaga .n{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12.5px;}
+.vaga .u{font-size:10.5px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.vaga .v{font-size:11px;letter-spacing:1px;}
+.vaga.ocupada{background:var(--navy-700);border-color:var(--navy-700);color:#fff;}
+.vaga.ocupada .u{color:#b9c2d6;}
+.vaga.visitante{background:var(--gold-100);border-color:var(--gold-400);}
+.vaga.livre{border-style:dashed;}
+
+/* --- painel restrito por perfil --- */
+.restrito{padding:38px 20px;text-align:center;color:var(--ink-soft);}
+.restrito .ic{font-size:30px;margin-bottom:10px;}
+.restrito h4{font-family:'Fraunces',serif;color:var(--ink);margin:0 0 6px;font-size:15px;}
+.restrito p{margin:0 auto;font-size:12.5px;max-width:420px;line-height:1.5;}
+
 /* --- avisos (painel) --- */
 .aviso-row{display:flex;gap:13px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--line);}
 .aviso-row:last-child{border-bottom:none;}
@@ -396,7 +413,7 @@ table.datatable tr:last-child td{border-bottom:none;}
 /* ============================================================
    MOCK DATA — Condomínio Charles Miller
    ============================================================ */
-const morador = { nome:"Rodrigo", unidade:"Apto 802 - Torre A", papel:"Proprietário" };
+const morador = { nome:"Rodrigo", unidade:"Apto 802 - Torre A", cod:"802-A", papel:"Proprietário" };
 
 const eventos = [
   {dia:20,mes:"AGO",titulo:"Assembleia Geral Ordinária",hora:"20/08/2026 às 19:00",local:"Salão de Festas",tag:"Confirmado",tagClass:"b-blue"},
@@ -411,11 +428,11 @@ const reservas = [
 
 const calendarEvents = {5:"reserva",12:"reserva",14:"reserva",20:"assembleia",25:"manutencao",8:"evento"};
 
+/* boletos da unidade do morador logado — dado privado da própria unidade */
 const boletos = [
-  {titulo:"Condomínio - Agosto/2026",venc:"Vencimento: 10/08/2026",val:"R$ 412,80"},
-  {titulo:"Fundo de Obras",venc:"Vencimento: 15/08/2026",val:"R$ 95,00"},
+  {titulo:"Condomínio - Agosto/2026",venc:"Vencimento: 10/08/2026",val:412.80},
+  {titulo:"Fundo de Obras",venc:"Vencimento: 15/08/2026",val:95.00},
 ];
-const totalAberto = "R$ 507,80";
 
 /* categoria do aviso define ícone, cor e badge — fonte única para os dois apps */
 const tiposAviso = {
@@ -463,6 +480,54 @@ const visitantes = [
 ];
 
 const TOTAL_UNIDADES = 104;
+const TORRES = ["A","B"], ANDARES = 26, APTOS_POR_ANDAR = 2;
+
+/* código da unidade: andar + apto (2 díg) + torre → 802-A, 1401-B */
+function codUnidade(andar,apto,torre){
+  return `${andar}${String(apto).padStart(2,"0")}-${torre}`;
+}
+function todasUnidades(){
+  const out=[];
+  TORRES.forEach(t=>{
+    for(let andar=1;andar<=ANDARES;andar++)
+      for(let apto=1;apto<=APTOS_POR_ANDAR;apto++) out.push(codUnidade(andar,apto,t));
+  });
+  return out;
+}
+
+/* --- Vagas de garagem: 1 por unidade + vagas de visitante --- */
+/* unidades desocupadas → vaga livre (nenhuma delas tem morador cadastrado) */
+const UNIDADES_DESOCUPADAS = ["902-A","1701-A","2201-B"];
+const vagas = (function(){
+  const lista=[];
+  TORRES.forEach(torre=>{
+    let n=0;
+    for(let andar=1;andar<=ANDARES;andar++){
+      for(let apto=1;apto<=APTOS_POR_ANDAR;apto++){
+        n++;
+        const unidade=codUnidade(andar,apto,torre);
+        lista.push({
+          num:`${torre}-${String(n).padStart(2,"0")}`,
+          tipo:"Coberta",
+          local:torre==="A"?"Subsolo 1":"Subsolo 2",
+          unidade: UNIDADES_DESOCUPADAS.includes(unidade) ? null : unidade
+        });
+      }
+    }
+  });
+  for(let i=1;i<=6;i++) lista.push({num:`V-${i}`,tipo:"Descoberta",local:"Pátio externo",unidade:null,visitante:true});
+  return lista;
+})();
+
+const tiposVeiculo = {Carro:"🚗",Moto:"🏍️",Bicicleta:"🚲"};
+const veiculos = [
+  {placa:"QAB1D23",modelo:"Honda Civic",cor:"Prata",tipo:"Carro",unidade:"802-A",vaga:"A-16"},
+  {placa:"PBX7H41",modelo:"Yamaha Fazer 250",cor:"Azul",tipo:"Moto",unidade:"802-A",vaga:"A-16"},
+  {placa:"QBC4F09",modelo:"Toyota Corolla",cor:"Preto",tipo:"Carro",unidade:"1401-B",vaga:"B-27"},
+  {placa:"OGH2A88",modelo:"Fiat Argo",cor:"Branco",tipo:"Carro",unidade:"301-A",vaga:"A-05"},
+  {placa:"QDE9J55",modelo:"Jeep Renegade",cor:"Cinza",tipo:"Carro",unidade:"202-A",vaga:"A-04"},
+  {placa:"PZK3C17",modelo:"Hyundai HB20",cor:"Vermelho",tipo:"Carro",unidade:"1102-B",vaga:"B-22"},
+];
 
 /* --- Assembleias: cada pauta é votada em separado --- */
 const assembleias = [
@@ -599,7 +664,7 @@ function renderHome(){
       ${quick("💡","Sugestões","#f6ecd6","#b9822c","sugestoes")}
       ${quick("📦","Encomendas","#f3e6d8","#a3652f","encomendas")}
       ${quick("👥","Visitantes","#e6e0f2","#6d4fa8","hub")}
-      ${quick("🚗","Veículos","#e0ebf2","#3a6ea8","hub")}
+      ${quick("🚗","Veículos","#e0ebf2","#3a6ea8","veiculos")}
       ${quick("▦","Mais","#eceae2","#5c5f66","hub")}
     </div>
     <div class="section-title"><h2>Próximos eventos</h2><button class="see-all" onclick="goView('reservas')">Ver todos</button></div>
@@ -714,12 +779,13 @@ function calendar(){
 }
 
 function renderFinanceiro(){
+  const totalAberto=boletos.reduce((s,b)=>s+b.val,0);
   return `
   <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Financeiro</h1></div>
   <div class="view">
     <div class="balance-card">
-      <p class="lbl">Total em aberto</p>
-      <p class="val num">${totalAberto}</p>
+      <p class="lbl">Total em aberto · Unidade ${morador.cod}</p>
+      <p class="val num">${fmtBRL(totalAberto)}</p>
       <button class="pay-all" onclick="toast('Pagamento consolidado (protótipo)')">Pagar tudo · ${boletos.length} boletos</button>
     </div>
     <div class="section-title" style="margin-top:6px"><h2>Boletos em aberto</h2><span class="see-all">${boletos.length} em aberto</span></div>
@@ -727,7 +793,7 @@ function renderFinanceiro(){
       <div class="card bill-card">
         <div class="bill-top">
           <div><p class="t1">${b.titulo}</p><p class="t2">${b.venc}</p></div>
-          <p class="val num">${b.val}</p>
+          <p class="val num">${fmtBRL(b.val)}</p>
         </div>
         <div class="bill-actions">
           <span style="font-size:11px;color:var(--ink-soft)">▤ Boleto</span>
@@ -877,7 +943,7 @@ function renderHub(){
   const items=[
     ["🗳️","Assembleias","assembleias"],["📄","Documentos","documentos"],
     ["💡","Sugestões","sugestoes"],["📦","Encomendas","encomendas"],
-    ["👥","Visitantes",null],["🚗","Veículos",null],
+    ["👥","Visitantes",null],["🚗","Veículos","veiculos"],
     ["💬","Fale com o síndico",null],["⚙️","Configurações",null]
   ];
   return `
@@ -994,7 +1060,8 @@ function filtrarDocMorador(c){ filtroDocMorador=c; goView("documentos"); }
 
 const viewMap={home:renderHome,reservas:renderReservas,financeiro:renderFinanceiro,avisos:renderAvisos,
   ocorrencias:renderOcorrencias,sugestoes:renderSugestoes,encomendas:renderEncomendas,hub:renderHub,
-  assembleias:renderAssembleiasMorador,documentos:renderDocumentosMorador};
+  assembleias:renderAssembleiasMorador,documentos:renderDocumentosMorador,
+  veiculos:renderVeiculosMorador};
 
 function goView(v){
   const render=viewMap[v];
@@ -1030,7 +1097,8 @@ const sbItemsSindico=[
   ["moradores","👥","Moradores"],
   ["unidades","🏢","Unidades"],["reservas","📅","Reservas"],["ocorrencias","⚠️","Ocorrências"],
   ["sugestoes","💡","Sugestões"],
-  ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"],["assembleias","🗳️","Assembleias"],
+  ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"],["veiculos","🚗","Veículos e vagas"],
+  ["assembleias","🗳️","Assembleias"],
   ["documentos","📄","Documentos"],["manutencoes","🔧","Manutenções"],["relatorios","📊","Relatórios"],
   ["configuracoes","⚙️","Configurações"]
 ];
@@ -1039,12 +1107,12 @@ const sbItemsAdministrativo=[
   ["moradores","👥","Moradores"],
   ["unidades","🏢","Unidades"],["reservas","📅","Reservas"],["ocorrencias","⚠️","Ocorrências"],
   ["sugestoes","💡","Sugestões"],
-  ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"],
+  ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"],["veiculos","🚗","Veículos e vagas"],
   ["documentos","📄","Documentos"],["relatorios","📊","Relatórios"]
 ];
 const sbItemsPorteiro=[
   ["dashboard","▦","Painel da portaria"],["moradores","👥","Moradores"],["reservas","📅","Reservas"],
-  ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"]
+  ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"],["veiculos","🚗","Veículos e vagas"]
 ];
 
 const staffRoles={
@@ -1079,6 +1147,23 @@ function temModulo(v){
   return staffRoles[currentStaffRole].items.some(i=>i[0]===v);
 }
 
+/* ------------------------------------------------------------
+   PERMISSÃO — dados de inadimplência
+   Quem deve em qual unidade é dado pessoal: só o síndico vê a
+   situação de terceiros. O morador vê a própria em "Financeiro".
+   O administrativo trabalha com os totais, sem os nomes.
+   ------------------------------------------------------------ */
+function podeVerInadimplencia(){
+  return currentStaffRole==="sindico";
+}
+function painelRestrito(msg){
+  return `<div class="restrito">
+    <div class="ic">🔒</div>
+    <h4>Restrito ao síndico</h4>
+    <p>${msg}</p>
+  </div>`;
+}
+
 function goAdmin(v){
   // impede navegar para um módulo fora do menu do perfil atual
   if(!temModulo(v)){
@@ -1106,8 +1191,10 @@ function renderDashboard(){
   <div class="kpi-grid">
     ${kpi("Receitas do mês","R$ 138.240,00","+9% vs mês anterior","up","💰","var(--green-bg)")}
     ${kpi("Despesas do mês","R$ 94.610,00","-3% vs mês anterior","down","🧾","var(--red-bg)")}
-    ${kpi("Inadimplência","R$ 21.340,00","12,8% da receita","down","📉","var(--amber-bg)")}
-    ${kpi("Unidades","104","97% ocupadas","up","🏢","var(--blue-bg)")}
+    ${podeVerInadimplencia()
+      ? kpi("Inadimplência","R$ 21.340,00","12,8% da receita","down","📉","var(--amber-bg)")
+      : kpi("Saldo em caixa","R$ 187.920,00","+5% vs mês anterior","up","🏦","var(--green-bg)")}
+    ${kpi("Unidades",String(TOTAL_UNIDADES),Math.round((TOTAL_UNIDADES-UNIDADES_DESOCUPADAS.length)/TOTAL_UNIDADES*100)+"% ocupadas","up","🏢","var(--blue-bg)")}
   </div>
   <div class="admin-grid">
     <div class="panel">
@@ -1199,25 +1286,50 @@ function donut(){
   </div>`;
 }
 
+const boletosDoMes = [
+  {unidade:"802-A", morador:"Rodrigo Cahuana", venc:"10/08/2026", val:412.80, status:"Pago"},
+  {unidade:"1401-B",morador:"João Neto",       venc:"10/08/2026", val:412.80, status:"Pago"},
+  {unidade:"301-A", morador:"Marina Costa",    venc:"10/08/2026", val:398.50, status:"Em atraso"},
+  {unidade:"1502-B",morador:"Eduardo Lima",    venc:"10/08/2026", val:445.10, status:"Pendente"},
+  {unidade:"202-A", morador:"Fernanda Alves",  venc:"10/08/2026", val:398.50, status:"Pago"},
+];
+const clsStatusBoleto={"Pago":"b-green","Em atraso":"b-red","Pendente":"b-amber"};
+
 function renderAdminFinanceiro(){
+  const verInad=podeVerInadimplencia();
+  const emAtraso=boletosDoMes.filter(b=>b.status==="Em atraso");
   return `
   ${adminTopbar("Financeiro")}
   <div class="kpi-grid">
     ${kpi("Receitas do mês","R$ 138.240,00","+9% vs mês anterior","up","💰","var(--green-bg)")}
     ${kpi("Despesas do mês","R$ 94.610,00","-3% vs mês anterior","down","🧾","var(--red-bg)")}
-    ${kpi("Inadimplência","R$ 21.340,00","12,8% da receita","down","📉","var(--amber-bg)")}
+    ${verInad
+      ? kpi("Inadimplência","R$ 21.340,00","12,8% da receita","down","📉","var(--amber-bg)")
+      : kpi("Boletos emitidos",String(TOTAL_UNIDADES),"referentes a agosto/2026","up","🧾","var(--blue-bg)")}
     ${kpi("Saldo em caixa","R$ 187.920,00","+5% vs mês anterior","up","🏦","var(--blue-bg)")}
   </div>
   <div class="panel">
-    <div class="panel-head"><h3>Boletos do mês</h3><button class="see-all" onclick="toast('Exportação de boletos (protótipo)')">Exportar</button></div>
+    <div class="panel-head">
+      <h3>Boletos do mês</h3>
+      <button class="see-all" onclick="toast('Exportação de boletos (protótipo)')">Exportar</button>
+    </div>
     <table class="datatable">
       <tr><th>Unidade</th><th>Morador</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr>
-      <tr><td>802-A</td><td>Rodrigo Cahuana</td><td>10/08/2026</td><td class="mono">R$ 412,80</td><td><span class="badge b-green">Pago</span></td></tr>
-      <tr><td>1401-B</td><td>João Neto</td><td>10/08/2026</td><td class="mono">R$ 412,80</td><td><span class="badge b-green">Pago</span></td></tr>
-      <tr><td>301-A</td><td>Marina Costa</td><td>10/08/2026</td><td class="mono">R$ 398,50</td><td><span class="badge b-red">Em atraso</span></td></tr>
-      <tr><td>1502-B</td><td>Eduardo Lima</td><td>10/08/2026</td><td class="mono">R$ 445,10</td><td><span class="badge b-amber">Pendente</span></td></tr>
-      <tr><td>202-A</td><td>Fernanda Alves</td><td>10/08/2026</td><td class="mono">R$ 398,50</td><td><span class="badge b-green">Pago</span></td></tr>
+      ${boletosDoMes.map(b=>{
+        // sem permissão, quem está em atraso não é identificado
+        const ocultar = !verInad && b.status==="Em atraso";
+        return `<tr>
+          <td>${ocultar?'<span class="mono" style="color:var(--ink-soft)">•••</span>':b.unidade}</td>
+          <td>${ocultar?'<span style="color:var(--ink-soft)">Identificação restrita</span>':b.morador}</td>
+          <td>${b.venc}</td>
+          <td class="mono">${fmtBRL(b.val)}</td>
+          <td><span class="badge ${clsStatusBoleto[b.status]}">${b.status}</span></td>
+        </tr>`;
+      }).join("")}
     </table>
+    ${!verInad&&emAtraso.length?`<p style="font-size:11.5px;color:var(--ink-soft);margin:14px 0 0">
+      🔒 ${emAtraso.length} ${emAtraso.length===1?'boleto em atraso tem':'boletos em atraso têm'} a identificação
+      restrita ao síndico.</p>`:''}
   </div>`;
 }
 
@@ -1477,28 +1589,34 @@ function verPerfilMorador(i){
 function renderAdminUnidades(){
   function torreBlock(torre){
     let rows="";
-    for(let andar=26;andar>=1;andar--){
-      const c1=`${andar<10?'0'+andar:andar}01-${torre}`;
-      const cod2=`${andar<10?'0'+andar:andar}02-${torre}`;
-      rows+=`<div class="mini-row"><div style="width:34px;text-align:center;font-size:11px;color:var(--ink-soft);font-weight:700">${andar}º</div><div style="flex:1;display:flex;gap:8px"><span class="badge b-blue" style="font-family:'IBM Plex Mono',monospace">${c1}</span><span class="badge b-blue" style="font-family:'IBM Plex Mono',monospace">${cod2}</span></div></div>`;
+    for(let andar=ANDARES;andar>=1;andar--){
+      const codigos=[];
+      for(let apto=1;apto<=APTOS_POR_ANDAR;apto++) codigos.push(codUnidade(andar,apto,torre));
+      rows+=`<div class="mini-row"><div style="width:34px;text-align:center;font-size:11px;color:var(--ink-soft);font-weight:700">${andar}º</div><div style="flex:1;display:flex;gap:8px">${
+        codigos.map(c=>{
+          const ocupada=!UNIDADES_DESOCUPADAS.includes(c);
+          return `<span class="badge ${ocupada?'b-blue':'b-amber'}" style="font-family:'IBM Plex Mono',monospace">${c}</span>`;
+        }).join("")}</div></div>`;
     }
     return rows;
   }
+  const porTorre=TORRES.length?TOTAL_UNIDADES/TORRES.length:0;
+  const ocupadas=TOTAL_UNIDADES-UNIDADES_DESOCUPADAS.length;
   return `
   ${adminTopbar("Unidades")}
   <div class="kpi-grid">
-    ${kpi("Total de unidades","104","2 torres · 26 andares","up","🏢","var(--blue-bg)")}
-    ${kpi("Torre A","52","2 aptos por andar","up","🅰️","var(--green-bg)")}
-    ${kpi("Torre B","52","2 aptos por andar","up","🅱️","var(--amber-bg)")}
-    ${kpi("Ocupação","97%","101 de 104 ocupadas","up","👥","var(--blue-bg)")}
+    ${kpi("Total de unidades",String(TOTAL_UNIDADES),TORRES.length+" torres · "+ANDARES+" andares","up","🏢","var(--blue-bg)")}
+    ${kpi("Torre A",String(porTorre),APTOS_POR_ANDAR+" aptos por andar","up","🅰️","var(--green-bg)")}
+    ${kpi("Torre B",String(porTorre),APTOS_POR_ANDAR+" aptos por andar","up","🅱️","var(--amber-bg)")}
+    ${kpi("Ocupação",Math.round(ocupadas/TOTAL_UNIDADES*100)+"%",ocupadas+" de "+TOTAL_UNIDADES+" ocupadas","up","👥","var(--blue-bg)")}
   </div>
   <div class="admin-grid" style="grid-template-columns:1fr 1fr">
     <div class="panel">
-      <div class="panel-head"><h3>Torre A</h3><span class="see-all">26 andares</span></div>
+      <div class="panel-head"><h3>Torre A</h3><span class="see-all">${ANDARES} andares</span></div>
       <div style="max-height:420px;overflow-y:auto">${torreBlock('A')}</div>
     </div>
     <div class="panel">
-      <div class="panel-head"><h3>Torre B</h3><span class="see-all">26 andares</span></div>
+      <div class="panel-head"><h3>Torre B</h3><span class="see-all">${ANDARES} andares</span></div>
       <div style="max-height:420px;overflow-y:auto">${torreBlock('B')}</div>
     </div>
   </div>`;
@@ -1513,7 +1631,7 @@ function renderPorteiroDashboard(){
     ${kpi("Reservas pendentes",String(pendentes),"aguardando confirmação","down","📅","var(--amber-bg)")}
     ${kpi("Encomendas em espera",String(emArmazenamento),"aguardando retirada","down","📦","var(--blue-bg)")}
     ${kpi("Visitantes hoje",String(visitantes.length),"registrados na portaria","up","🪪","var(--green-bg)")}
-    ${kpi("Unidades","104","2 torres · 26 andares","up","🏢","var(--blue-bg)")}
+    ${kpi("Unidades",String(TOTAL_UNIDADES),TORRES.length+" torres · "+ANDARES+" andares","up","🏢","var(--blue-bg)")}
   </div>
   <div class="panel" style="margin-bottom:16px">
     <div class="panel-head"><h3>Atalhos</h3></div>
@@ -1555,6 +1673,200 @@ function somaISO(iso,meses){
   const d=new Date(iso+"T00:00:00");
   d.setMonth(d.getMonth()+meses);
   return d.toISOString().slice(0,10);
+}
+
+/* ============================================================
+   MÓDULO: VEÍCULOS E VAGAS
+   ============================================================ */
+let filtroVaga="Todas";
+
+/* aceita Mercosul (ABC1D23) e o padrão antigo (ABC1234) */
+function normalizaPlaca(p){return p.toUpperCase().replace(/[^A-Z0-9]/g,"");}
+function placaValida(p){
+  const n=normalizaPlaca(p);
+  return /^[A-Z]{3}\d[A-Z]\d{2}$/.test(n) || /^[A-Z]{3}\d{4}$/.test(n);
+}
+function formataPlaca(p){
+  const n=normalizaPlaca(p);
+  return /^[A-Z]{3}\d{4}$/.test(n) ? n.slice(0,3)+"-"+n.slice(3) : n;
+}
+function veiculosDaUnidade(u){return veiculos.filter(v=>v.unidade===u);}
+function vagaDaUnidade(u){return vagas.find(v=>v.unidade===u)||null;}
+
+function renderAdminVeiculos(){
+  const ocupadas=vagas.filter(v=>v.unidade).length;
+  const livres=vagas.filter(v=>!v.unidade&&!v.visitante).length;
+  const visitante=vagas.filter(v=>v.visitante).length;
+  const filtradas=vagas.filter(v=>{
+    if(filtroVaga==="Todas") return true;
+    if(filtroVaga==="Livres") return !v.unidade&&!v.visitante;
+    if(filtroVaga==="Visitantes") return v.visitante;
+    return v.local===filtroVaga;
+  });
+  return `
+  ${adminTopbar("Veículos e vagas")}
+  <div class="kpi-grid">
+    ${kpi("Veículos cadastrados",String(veiculos.length),"em "+new Set(veiculos.map(v=>v.unidade)).size+" unidades","up","🚗","var(--blue-bg)")}
+    ${kpi("Vagas ocupadas",String(ocupadas),Math.round(ocupadas/(vagas.length-visitante)*100)+"% das vagas privativas","up","🅿️","var(--green-bg)")}
+    ${kpi("Vagas livres",String(livres),"unidades desocupadas","down","⬜","var(--amber-bg)")}
+    ${kpi("Vagas de visitante",String(visitante),"pátio externo","up","🪧","var(--gold-100)")}
+  </div>
+
+  <div class="panel" id="veicFormPanel" style="display:none;margin-bottom:16px">
+    <div class="panel-head"><h3>Cadastrar veículo</h3></div>
+    <div class="form-grid">
+      <div><label>Placa</label><input id="vcPlaca" placeholder="ABC1D23 ou ABC-1234" maxlength="8" style="text-transform:uppercase"></div>
+      <div><label>Unidade</label><input id="vcUnidade" placeholder="Ex: 1201-A"></div>
+      <div><label>Modelo</label><input id="vcModelo" placeholder="Ex: Honda Civic"></div>
+      <div><label>Cor</label><input id="vcCor" placeholder="Ex: Prata"></div>
+      <div><label>Tipo</label><select id="vcTipo">${Object.keys(tiposVeiculo).map(t=>`<option>${t}</option>`).join("")}</select></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="toggleVeicForm(false)">Cancelar</button>
+      <button class="btn-primary" onclick="addVeiculoAdmin()">Cadastrar</button>
+    </div>
+  </div>
+
+  <div class="panel" style="margin-bottom:20px">
+    <div class="panel-head"><h3>Veículos cadastrados</h3><button class="see-all" onclick="toggleVeicForm(true)">+ Cadastrar veículo</button></div>
+    <table class="datatable">
+      <tr><th>Placa</th><th>Veículo</th><th>Cor</th><th>Unidade</th><th>Vaga</th><th></th></tr>
+      ${veiculos.map((v,i)=>`<tr>
+        <td class="mono" style="font-weight:700">${formataPlaca(v.placa)}</td>
+        <td><span style="margin-right:7px">${tiposVeiculo[v.tipo]}</span>${v.modelo}</td>
+        <td>${v.cor}</td>
+        <td class="mono">${v.unidade}</td>
+        <td class="mono">${v.vaga||'—'}</td>
+        <td><button class="see-all" style="color:var(--red)" onclick="removerVeiculo(${i},'admin')">Remover</button></td>
+      </tr>`).join("")}
+    </table>
+  </div>
+
+  <div class="panel">
+    <div class="panel-head"><h3>Mapa de vagas</h3><span class="see-all">${filtradas.length} de ${vagas.length}</span></div>
+    <div class="filters" style="margin-bottom:14px">
+      ${["Todas","Subsolo 1","Subsolo 2","Livres","Visitantes"].map(f=>
+        `<button class="chip ${f===filtroVaga?'active':''}" onclick="filtrarVagas('${f}')">${f}</button>`).join("")}
+    </div>
+    <div class="vaga-grid">
+      ${filtradas.map(v=>{
+        const veics=v.unidade?veiculosDaUnidade(v.unidade):[];
+        const cls=v.visitante?"visitante":(v.unidade?"ocupada":"livre");
+        return `<div class="vaga ${cls}" title="${v.local} · ${v.tipo}">
+          <span class="n">${v.num}</span>
+          <span class="u">${v.visitante?'Visitante':(v.unidade||'Livre')}</span>
+          ${veics.length?`<span class="v">${veics.map(x=>tiposVeiculo[x.tipo]).join("")}</span>`:''}
+        </div>`;
+      }).join("")}
+    </div>
+    <div class="legend" style="margin-top:14px">
+      <span><i style="background:var(--navy-700)"></i>Ocupada</span>
+      <span><i style="background:var(--line)"></i>Livre</span>
+      <span><i style="background:var(--gold-500)"></i>Visitante</span>
+    </div>
+  </div>`;
+}
+function filtrarVagas(f){ filtroVaga=f; goAdmin("veiculos"); }
+function toggleVeicForm(show){
+  const p=document.getElementById("veicFormPanel");
+  if(p) p.style.display = show ? "block":"none";
+}
+function addVeiculoAdmin(){
+  const placa=document.getElementById("vcPlaca").value.trim();
+  const unidade=document.getElementById("vcUnidade").value.trim().toUpperCase();
+  const modelo=document.getElementById("vcModelo").value.trim();
+  const cor=document.getElementById("vcCor").value.trim()||"—";
+  const tipo=document.getElementById("vcTipo").value;
+  if(!placa||!unidade||!modelo){ toast("Preencha placa, unidade e modelo"); return; }
+  if(!placaValida(placa)){ toast("Placa inválida — use ABC1D23 ou ABC-1234"); return; }
+  if(veiculos.some(v=>normalizaPlaca(v.placa)===normalizaPlaca(placa))){ toast("Esta placa já está cadastrada"); return; }
+  const vaga=vagaDaUnidade(unidade);
+  if(!vaga){ toast("Unidade sem vaga atribuída ou inexistente"); return; }
+  veiculos.push({placa:normalizaPlaca(placa),modelo,cor,tipo,unidade,vaga:vaga.num});
+  goAdmin("veiculos");
+  toast("Veículo cadastrado");
+}
+function removerVeiculo(i,origem){
+  const v=veiculos[i];
+  if(!v) return;
+  if(!confirm(`Remover o veículo ${formataPlaca(v.placa)} (${v.modelo})?`)) return;
+  veiculos.splice(i,1);
+  if(origem==="admin"){ goAdmin("veiculos"); } else { goView("veiculos"); }
+  toast("Veículo removido");
+}
+
+/* --- Veículos (morador): só a própria unidade --- */
+const MAX_VEICULOS_UNIDADE = 3;
+
+function renderVeiculosMorador(){
+  const meus=veiculosDaUnidade(morador.cod);
+  const vaga=vagaDaUnidade(morador.cod);
+  return `
+  <div class="topbar"><button class="back" onclick="goView('hub')">←</button><h1>Veículos</h1></div>
+  <div class="view">
+    ${vaga?`
+    <div class="balance-card" style="margin-bottom:16px">
+      <p class="lbl">Minha vaga</p>
+      <p class="val num" style="font-size:30px">${vaga.num}</p>
+      <p class="lbl" style="margin:0">${vaga.tipo} · ${vaga.local} · Unidade ${morador.cod}</p>
+    </div>`:`<div class="empty-note">Nenhuma vaga atribuída à sua unidade.</div>`}
+
+    <div class="card" id="veicFormMorador" style="display:none;padding:16px;margin-bottom:16px">
+      <p style="font-weight:700;font-size:13.5px;margin:0 0 12px">Novo veículo</p>
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <div><label>Placa</label><input id="vmPlaca" placeholder="ABC1D23 ou ABC-1234" maxlength="8" style="text-transform:uppercase"></div>
+        <div><label>Modelo</label><input id="vmModelo" placeholder="Ex: Honda Civic"></div>
+        <div><label>Cor</label><input id="vmCor" placeholder="Ex: Prata"></div>
+        <div><label>Tipo</label><select id="vmTipo">${Object.keys(tiposVeiculo).map(t=>`<option>${t}</option>`).join("")}</select></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-ghost" onclick="toggleVeicFormMorador(false)">Cancelar</button>
+        <button class="btn-primary" onclick="addVeiculoMorador()">Cadastrar</button>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:0"><h2>Meus veículos</h2><span class="see-all">${meus.length} de ${MAX_VEICULOS_UNIDADE}</span></div>
+    ${meus.length?`<div class="card list-card">
+      ${meus.map(v=>{
+        const i=veiculos.indexOf(v);
+        return `<div class="list-row">
+          <div class="list-ic" style="background:var(--blue-bg)">${tiposVeiculo[v.tipo]}</div>
+          <div class="list-body">
+            <p class="t1 mono" style="letter-spacing:.04em">${formataPlaca(v.placa)}</p>
+            <p class="t2">${v.modelo} · ${v.cor}</p>
+            <p class="t2">Vaga ${v.vaga||'—'}</p>
+          </div>
+          <button class="see-all" style="color:var(--red)" onclick="removerVeiculo(${i},'morador')">Remover</button>
+        </div>`;
+      }).join("")}
+    </div>`:`<div class="empty-note">Você ainda não cadastrou nenhum veículo.</div>`}
+
+    <div class="tip-card">
+      <p class="t1">Mantenha a placa atualizada</p>
+      <p>A portaria usa o cadastro para liberar a entrada na garagem. Veículos não cadastrados são tratados como visitantes.</p>
+    </div>
+  </div>
+  <button class="fab" onclick="toggleVeicFormMorador(true)">+</button>`;
+}
+function toggleVeicFormMorador(show){
+  const p=document.getElementById("veicFormMorador");
+  if(p){ p.style.display = show ? "block":"none"; if(show) document.getElementById("vmPlaca").focus(); }
+}
+function addVeiculoMorador(){
+  const placa=document.getElementById("vmPlaca").value.trim();
+  const modelo=document.getElementById("vmModelo").value.trim();
+  const cor=document.getElementById("vmCor").value.trim()||"—";
+  const tipo=document.getElementById("vmTipo").value;
+  if(!placa||!modelo){ toast("Preencha placa e modelo"); return; }
+  if(!placaValida(placa)){ toast("Placa inválida — use ABC1D23 ou ABC-1234"); return; }
+  if(veiculos.some(v=>normalizaPlaca(v.placa)===normalizaPlaca(placa))){ toast("Esta placa já está cadastrada"); return; }
+  if(veiculosDaUnidade(morador.cod).length>=MAX_VEICULOS_UNIDADE){
+    toast(`Limite de ${MAX_VEICULOS_UNIDADE} veículos por unidade`); return;
+  }
+  const vaga=vagaDaUnidade(morador.cod);
+  veiculos.push({placa:normalizaPlaca(placa),modelo,cor,tipo,unidade:morador.cod,vaga:vaga?vaga.num:null});
+  goView("veiculos");
+  toast("Veículo cadastrado");
 }
 
 /* ============================================================
@@ -2006,6 +2318,7 @@ function renderAdminRelatorios(){
   const totDesp=meses.reduce((s,m)=>s+m.despesa,0);
   const inadMedia=(meses.reduce((s,m)=>s+m.inad,0)/meses.length).toFixed(1).replace('.',',');
   const totalInad=inadimplentes.reduce((s,d)=>s+d.valor,0);
+  const verInad=podeVerInadimplencia();
   const totDespCat=despesasPorCategoria.reduce((s,d)=>s+d.valor,0);
   const maxV=Math.max(...meses.map(m=>Math.max(m.receita,m.despesa)));
   return `
@@ -2021,7 +2334,9 @@ function renderAdminRelatorios(){
     ${kpi("Receita acumulada",fmtBRL(totRec),meses.length+" meses","up","💰","var(--green-bg)")}
     ${kpi("Despesa acumulada",fmtBRL(totDesp),meses.length+" meses","down","🧾","var(--red-bg)")}
     ${kpi("Resultado",fmtBRL(totRec-totDesp),totRec>totDesp?"superávit":"déficit",totRec>totDesp?"up":"down","📈","var(--blue-bg)")}
-    ${kpi("Inadimplência média",inadMedia+"%",fmtBRL(totalInad)+" em aberto","down","📉","var(--amber-bg)")}
+    ${verInad
+      ? kpi("Inadimplência média",inadMedia+"%",fmtBRL(totalInad)+" em aberto","down","📉","var(--amber-bg)")
+      : kpi("Arrecadação média",fmtBRL(totRec/meses.length),"por mês no período","up","🏦","var(--blue-bg)")}
   </div>
   <div class="admin-grid" style="grid-template-columns:1.4fr 1fr">
     <div class="panel">
@@ -2035,17 +2350,30 @@ function renderAdminRelatorios(){
       <div class="chart-labels">${meses.map(m=>`<span>${m.mes}</span>`).join("")}</div>
     </div>
     <div class="panel">
-      <div class="panel-head"><h3>Evolução da inadimplência</h3></div>
-      ${meses.map(m=>`
-        <div class="mini-row" style="gap:12px">
-          <span style="width:34px;font-size:11.5px;font-weight:700;color:var(--ink-soft)">${m.mes}</span>
-          <div style="flex:1">
-            <div class="progress-track" style="margin:0">
-              <div class="progress-fill" style="width:${m.inad/20*100}%;background:${m.inad>12?'var(--red)':'var(--amber)'}"></div>
+      <div class="panel-head"><h3>${verInad?'Evolução da inadimplência':'Resultado mensal'}</h3></div>
+      ${verInad
+        ? meses.map(m=>`
+          <div class="mini-row" style="gap:12px">
+            <span style="width:34px;font-size:11.5px;font-weight:700;color:var(--ink-soft)">${m.mes}</span>
+            <div style="flex:1">
+              <div class="progress-track" style="margin:0">
+                <div class="progress-fill" style="width:${m.inad/20*100}%;background:${m.inad>12?'var(--red)':'var(--amber)'}"></div>
+              </div>
             </div>
-          </div>
-          <strong class="mono" style="font-size:12px;width:46px;text-align:right">${String(m.inad).replace('.',',')}%</strong>
-        </div>`).join("")}
+            <strong class="mono" style="font-size:12px;width:46px;text-align:right">${String(m.inad).replace('.',',')}%</strong>
+          </div>`).join("")
+        : meses.map(m=>{
+            const saldo=m.receita-m.despesa, maxSaldo=Math.max(...meses.map(x=>x.receita-x.despesa));
+            return `<div class="mini-row" style="gap:12px">
+              <span style="width:34px;font-size:11.5px;font-weight:700;color:var(--ink-soft)">${m.mes}</span>
+              <div style="flex:1">
+                <div class="progress-track" style="margin:0">
+                  <div class="progress-fill" style="width:${saldo/maxSaldo*100}%;background:${saldo>0?'var(--green)':'var(--red)'}"></div>
+                </div>
+              </div>
+              <strong class="mono" style="font-size:12px;width:78px;text-align:right">${fmtBRL(saldo)}</strong>
+            </div>`;
+          }).join("")}
     </div>
   </div>
   <div class="bottom-grid" style="grid-template-columns:1fr 1.2fr">
@@ -2064,15 +2392,16 @@ function renderAdminRelatorios(){
         </div>`).join("")}
     </div>
     <div class="panel">
-      <div class="panel-head"><h3>Unidades inadimplentes</h3><span class="see-all">${inadimplentes.length} unidades</span></div>
-      <table class="datatable">
+      <div class="panel-head"><h3>Unidades inadimplentes</h3>${verInad?`<span class="see-all">${inadimplentes.length} unidades</span>`:''}</div>
+      ${verInad?`<table class="datatable">
         <tr><th>Unidade</th><th>Morador</th><th>Meses</th><th>Valor</th></tr>
         ${inadimplentes.map(d=>`<tr>
           <td class="mono">${d.unidade}</td><td>${d.morador}</td>
           <td><span class="badge ${d.meses>=3?'b-red':'b-amber'}">${d.meses} ${d.meses===1?'mês':'meses'}</span></td>
           <td class="mono">${fmtBRL(d.valor)}</td></tr>`).join("")}
         <tr><td colspan="3" style="font-weight:700">Total em aberto</td><td class="mono" style="font-weight:700">${fmtBRL(totalInad)}</td></tr>
-      </table>
+      </table>`
+      :painelRestrito("A relação de unidades em atraso identifica moradores nominalmente e fica disponível apenas para o síndico. Cada morador consulta a própria situação em Financeiro.")}
     </div>
   </div>`;
 }
@@ -2189,7 +2518,7 @@ const adminRenderers={
   unidades:renderAdminUnidades,
   reservas:renderAdminReservas, ocorrencias:renderAdminOcorrencias, sugestoes:renderAdminSugestoes,
   encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes,
-  avisos:renderAdminAvisos,
+  avisos:renderAdminAvisos, veiculos:renderAdminVeiculos,
   assembleias:renderAdminAssembleias, documentos:renderAdminDocumentos,
   manutencoes:renderAdminManutencoes, relatorios:renderAdminRelatorios,
   configuracoes:renderAdminConfiguracoes
@@ -2199,12 +2528,12 @@ const administrativoRenderers={
   unidades:renderAdminUnidades, reservas:renderAdminReservas, ocorrencias:renderAdminOcorrencias,
   sugestoes:renderAdminSugestoes,
   encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes,
-  avisos:renderAdminAvisos,
+  avisos:renderAdminAvisos, veiculos:renderAdminVeiculos,
   documentos:renderAdminDocumentos, relatorios:renderAdminRelatorios
 };
 const porteiroRenderers={
   dashboard:renderPorteiroDashboard, moradores:renderAdminMoradores, reservas:renderAdminReservas,
-  encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes
+  encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes, veiculos:renderAdminVeiculos
 };
 const rendererMap={sindico:adminRenderers, administrativo:administrativoRenderers, porteiro:porteiroRenderers};
 

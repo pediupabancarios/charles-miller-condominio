@@ -40,6 +40,8 @@ Estado atual: **protótipo** — dados mockados no próprio `index.html`, sem ba
   - `renderDashboard/AdminFinanceiro/AdminMoradores/AdminReservas/AdminOcorrencias/`
     `AdminSugestoes/AdminEncomendas/AdminVisitantes/AdminUnidades/PorteiroDashboard()`
   - `renderAdminAvisos()` — publicar/editar/fixar/remover aviso (síndico e administrativo)
+  - `renderAdminVeiculos()` — cadastro de veículos + mapa de vagas (também na portaria)
+  - `podeVerInadimplencia()` / `painelRestrito()` — ver **Privacidade** abaixo
   - `renderAdminAssembleias/AdminDocumentos/AdminManutencoes/AdminRelatorios/AdminConfiguracoes()`
   - `temModulo(v)` — o módulo existe no menu do perfil atual? (`goAdmin` bloqueia o que não existe)
 - **Troca de perfil:** `#roleSwitch` no topo → `setRole('resident'|'porteiro'|'administrativo'|'sindico')`
@@ -47,15 +49,38 @@ Estado atual: **protótipo** — dados mockados no próprio `index.html`, sem ba
   `donut()`, `toast(msg)`, `sw()` (switch), `fmtBRL()`, `fmtData()`, `diasAte()`, `somaISO()`
 - **PWA:** registro do SW + `beforeinstallprompt` → `showInstallBanner()` / `hideInstallBanner()`
 
+## Privacidade — inadimplência
+Quem deve em qual unidade é dado pessoal. A regra está em `podeVerInadimplencia()`
+(hoje: apenas `sindico`) e é aplicada em **três** telas — mexeu numa, confira as outras:
+
+| Tela | Síndico | Administrativo | Morador |
+|---|---|---|---|
+| Dashboard (KPI) | Inadimplência R$ | Saldo em caixa | — |
+| Financeiro (boletos do mês) | unidade + nome | linha em atraso mascarada (`•••`) | só a própria unidade |
+| Relatórios | KPI, evolução e lista nominal | Arrecadação média + resultado mensal; lista bloqueada | — |
+
+A portaria não tem Financeiro nem Relatórios. **Ao adicionar qualquer tela nova com
+dado financeiro por unidade, passe por `podeVerInadimplencia()`.** Em produção isso
+tem de virar RLS no Postgres — a checagem no cliente não protege nada sozinha.
+
+## Unidades e vagas
+- Código: `codUnidade(andar,apto,torre)` → `802-A`, `1401-B` — **sem zero à esquerda no andar**
+- `todasUnidades()` gera as 104; `UNIDADES_DESOCUPADAS` lista as 3 sem morador
+- `vagas`: 1 privativa por unidade (`A-01`…`A-52` Subsolo 1, `B-01`…`B-52` Subsolo 2)
+  + 6 de visitante no pátio. Vaga de unidade desocupada fica livre.
+- Placa aceita Mercosul (`ABC1D23`) e antiga (`ABC1234`) — `placaValida()` / `formataPlaca()`
+- Limite de `MAX_VEICULOS_UNIDADE` (3) veículos por unidade
+
 ## Perfis e permissões (protótipo — sem auth real)
-- **Morador:** própria unidade — financeiro, reservas, avisos, ocorrências, sugestões, encomendas
-- **Portaria:** moradores, reservas, encomendas, visitantes
-- **Administrativo:** tudo do síndico exceto assembleias / manutenções / configurações
-- **Síndico:** acesso total (dashboard, financeiro, unidades, relatórios, configurações, etc.)
+- **Morador:** própria unidade — financeiro, reservas, avisos, ocorrências, sugestões,
+  encomendas, assembleias (voto), documentos, veículos
+- **Portaria:** moradores, reservas, encomendas, visitantes, veículos e vagas
+- **Administrativo:** tudo do síndico exceto assembleias / manutenções / configurações,
+  **e sem os dados de inadimplência** (ver Privacidade)
+- **Síndico:** acesso total
 
 ## Regras de negócio / dados do prédio
-- 2 torres (A e B), 26 andares, 2 apts por andar → **104 unidades**
-- Código de unidade: `AABB-T` (andar 2 díg + apto 2 díg + torre), ex. `802-A`, `1401-B`
+- 2 torres (A e B), 26 andares, 2 apts por andar → **104 unidades** (ver Unidades e vagas)
 - Áreas comuns reserváveis: Salão de Festas, Churrasqueira 1/2, Quadra Poliesportiva
 - Status de reserva: Pendente → Confirmada
 - Status de sugestão: Em análise → Aprovada / Recusada → Implementada
@@ -94,14 +119,14 @@ Todos os módulos do menu de cada perfil estão implementados — `adminStub()` 
 no código apenas como rede de segurança para views não registradas.
 
 Ainda são placeholder (mostram só um toast): no hub do morador — Visitantes,
-Veículos, Fale com o síndico, Configurações; e no financeiro — Pix, 2ª via,
-histórico e os botões de pagamento.
+Fale com o síndico, Configurações; e no financeiro — Pix, 2ª via, histórico
+e os botões de pagamento.
 
-Sidebar do síndico: 15 módulos · administrativo: 12 · portaria: 5.
+Sidebar do síndico: 16 módulos · administrativo: 13 · portaria: 6.
 
 ## Próximos passos
 1. **Autenticação real** — hoje o seletor de perfil no topo troca de papel sem login
 2. **Backend (Supabase)** — todo o estado vive em memória e some ao recarregar
-3. Módulo de **Veículos/vagas** e **cadastro de visitante autorizado** pelo morador
+3. **Cadastro de visitante autorizado** pelo morador (pré-autorização / QR)
 4. Upload real de documentos (hoje o `<input type=file>` só lê o tamanho)
 5. Envio real das notificações (Web Push) — hoje o toggle só controla o texto do toast
