@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Charles Miller · App do Condomínio</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0e1b33">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Charles Miller">
+<link rel="icon" href="icon-192.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-950:#0e1b33;
+  --navy-900:#152544;
+  --navy-800:#1c3159;
+  --navy-700:#28417a;
+  --gold-500:#c79a3d;
+  --gold-400:#d9b25f;
+  --gold-100:#f6ecd6;
+  --paper:#f4f2ec;
+  --card:#ffffff;
+  --ink:#1c1c1c;
+  --ink-soft:#5c5f66;
+  --line:#e6e2d6;
+  --green:#2f8f5b;
+  --green-bg:#e7f4ec;
+  --red:#c14a3f;
+  --red-bg:#fbeae7;
+  --amber:#b9822c;
+  --amber-bg:#f8ecd8;
+  --blue:#3a6ea8;
+  --blue-bg:#e9f1fa;
+  --radius-lg:20px;
+  --radius-md:14px;
+  --radius-sm:9px;
+  --shadow:0 1px 2px rgba(14,27,51,.04), 0 8px 24px -12px rgba(14,27,51,.18);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.display{font-family:'Fraunces',serif;letter-spacing:-.01em;}
+.num,.mono{font-family:'IBM Plex Mono',monospace;}
+button{font-family:inherit;cursor:pointer;}
+a{color:inherit;text-decoration:none;}
+
+/* ---------- Role switcher shell ---------- */
+#roleSwitch{
+  position:fixed;top:10px;right:10px;left:10px;z-index:500;
+  background:var(--navy-950);border-radius:999px;padding:4px;
+  display:flex;gap:2px;box-shadow:var(--shadow);
+  max-width:460px;margin:0 auto;overflow-x:auto;
+}
+#roleSwitch::-webkit-scrollbar{display:none;}
+#roleSwitch button{
+  border:none;background:transparent;color:#b9c2d6;font-weight:600;font-size:11px;
+  padding:8px 10px;border-radius:999px;transition:.2s;white-space:nowrap;flex:1;
+}
+#roleSwitch button.active{background:var(--gold-500);color:var(--navy-950);}
+@media (min-width:900px){
+  #roleSwitch{left:auto;right:14px;max-width:none;}
+  #roleSwitch button{font-size:12.5px;padding:8px 14px;}
+}
+
+/* ---------- Resident app frame ---------- */
+#residentApp{max-width:460px;margin:0 auto;min-height:100vh;background:var(--paper);position:relative;padding-bottom:88px;padding-top:44px;}
+.status-bar{display:flex;justify-content:space-between;align-items:center;padding:10px 20px 0;font-size:12px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;}
+
+.topbar{display:flex;align-items:center;gap:12px;padding:18px 20px 6px;}
+.topbar .back{width:34px;height:34px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;border:1px solid var(--line);font-size:16px;}
+.topbar h1{font-size:19px;margin:0;font-weight:600;}
+
+.view{padding:0 20px 10px;animation:fade .25s ease;}
+@keyframes fade{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* --- Home hero --- */
+.hero{
+  background:linear-gradient(160deg,var(--navy-950),var(--navy-800) 70%);
+  border-radius:0 0 28px 28px;padding:52px 20px 26px;color:#fff;position:relative;overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;right:-40px;top:-30px;width:220px;height:220px;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(199,154,61,.35), transparent 60%);
+}
+.hero .greet{font-family:'Fraunces',serif;font-size:26px;font-weight:600;margin:0 0 2px;}
+.hero .sub{font-size:13px;color:#b9c2d6;margin:0 0 18px;}
+.bell{position:absolute;top:52px;right:20px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.bell .dot{position:absolute;top:-2px;right:-2px;background:var(--red);color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.unit-card{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+  border-radius:var(--radius-md);padding:14px 16px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(6px);
+}
+.unit-badge{width:44px;height:44px;border-radius:12px;background:var(--gold-500);color:var(--navy-950);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;font-size:15px;}
+.unit-card .t1{font-weight:600;font-size:14.5px;}
+.unit-card .t2{font-size:12px;color:#b9c2d6;}
+
+.section-title{display:flex;justify-content:space-between;align-items:baseline;margin:26px 0 12px;}
+.section-title h2{font-size:15.5px;margin:0;font-weight:700;}
+.section-title .see-all{font-size:12.5px;color:var(--navy-700);font-weight:600;}
+
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px;}
+.quick-item{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:none;}
+.quick-item .ic{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:21px;}
+.quick-item span{font-size:11px;color:var(--ink-soft);font-weight:600;text-align:center;}
+
+.card{background:var(--card);border-radius:var(--radius-md);border:1px solid var(--line);box-shadow:var(--shadow);}
+.list-card{padding:6px 14px;}
+.list-row{display:flex;gap:12px;align-items:flex-start;padding:13px 2px;border-bottom:1px solid var(--line);}
+.list-row:last-child{border-bottom:none;}
+.list-ic{width:40px;height:40px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.list-body{flex:1;min-width:0;}
+.list-body .t1{font-size:13.5px;font-weight:600;margin:0 0 2px;}
+.list-body .t2{font-size:11.5px;color:var(--ink-soft);margin:0;}
+.badge{font-size:10px;font-weight:700;padding:4px 9px;border-radius:999px;white-space:nowrap;height:fit-content;}
+.b-green{background:var(--green-bg);color:var(--green);}
+.b-blue{background:var(--blue-bg);color:var(--blue);}
+.b-red{background:var(--red-bg);color:var(--red);}
+.b-amber{background:var(--amber-bg);color:var(--amber);}
+.b-navy{background:var(--navy-900);color:#fff;}
+
+.date-chip{width:44px;text-align:center;flex:none;}
+.date-chip .d{font-family:'Fraunces',serif;font-weight:700;font-size:19px;line-height:1;}
+.date-chip .m{font-size:9.5px;color:var(--ink-soft);text-transform:uppercase;font-weight:700;}
+
+/* --- tabs --- */
+.tabs{display:flex;gap:6px;background:var(--navy-900);padding:4px;border-radius:999px;margin-bottom:16px;}
+.tabs button{flex:1;border:none;background:transparent;color:#b9c2d6;font-weight:600;font-size:12.5px;padding:9px 6px;border-radius:999px;}
+.tabs button.active{background:var(--gold-500);color:var(--navy-950);}
+.filters{display:flex;gap:8px;overflow-x:auto;margin-bottom:16px;padding-bottom:2px;}
+.filters::-webkit-scrollbar{display:none;}
+.chip{border:1px solid var(--line);background:var(--card);padding:8px 15px;border-radius:999px;font-size:12.5px;font-weight:600;white-space:nowrap;color:var(--ink-soft);}
+.chip.active{background:var(--navy-950);color:#fff;border-color:var(--navy-950);}
+
+/* --- financeiro --- */
+.balance-card{background:linear-gradient(155deg,var(--navy-950),var(--navy-700));border-radius:var(--radius-lg);padding:22px;color:#fff;margin-bottom:18px;}
+.balance-card .lbl{font-size:12px;color:#b9c2d6;margin:0 0 6px;}
+.balance-card .val{font-family:'Fraunces',serif;font-size:32px;font-weight:600;margin:0 0 16px;}
+.pay-all{background:var(--gold-500);color:var(--navy-950);border:none;padding:11px 18px;border-radius:11px;font-weight:700;font-size:13px;}
+.bill-card{padding:16px;margin-bottom:12px;}
+.bill-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.bill-top .t1{font-weight:700;font-size:14px;margin:0 0 3px;}
+.bill-top .t2{font-size:11.5px;color:var(--red);margin:0;font-weight:600;}
+.bill-top .val{font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:16px;}
+.bill-actions{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px dashed var(--line);}
+.pay-btn{background:var(--navy-950);color:#fff;border:none;padding:9px 16px;border-radius:9px;font-size:12.5px;font-weight:700;}
+.actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0;}
+.action-card{padding:14px;display:flex;align-items:center;gap:10px;}
+.action-card .ic{font-size:18px;}
+.action-card .t1{font-size:12.5px;font-weight:700;margin:0;}
+.action-card .t2{font-size:10.5px;color:var(--ink-soft);margin:0;}
+.tip-card{background:var(--gold-100);border:1px solid var(--gold-400);border-radius:var(--radius-md);padding:15px;margin-top:18px;}
+.tip-card p{margin:0;font-size:12.5px;color:#5c4a1c;}
+.tip-card .t1{font-weight:700;margin-bottom:4px;}
+
+/* --- calendar --- */
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.cal-head .nav{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;}
+.cal-grid .dow{font-size:10px;color:var(--ink-soft);font-weight:700;padding-bottom:6px;}
+.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:12.5px;position:relative;color:var(--ink);}
+.cal-day.dim{color:#c9c6ba;}
+.cal-day.today{border:1.5px solid var(--navy-950);font-weight:700;}
+.cal-day.sel{background:var(--navy-950);color:#fff;font-weight:700;}
+.cal-day .evt{position:absolute;bottom:4px;width:4px;height:4px;border-radius:50%;}
+.legend{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:14px;font-size:11px;color:var(--ink-soft);}
+.legend span{display:inline-flex;align-items:center;gap:5px;}
+.legend i{width:7px;height:7px;border-radius:50%;display:inline-block;}
+
+.fab{position:fixed;bottom:100px;right:calc(50% - 230px + 20px);width:52px;height:52px;border-radius:16px;background:var(--navy-950);color:var(--gold-400);border:none;font-size:22px;box-shadow:var(--shadow);z-index:60;}
+
+/* --- bottom nav --- */
+.bottomnav{position:fixed;bottom:0;left:0;right:0;max-width:460px;margin:0 auto;background:var(--card);border-top:1px solid var(--line);display:flex;padding:8px 4px 12px;z-index:80;}
+.bottomnav button{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;color:#9a9a94;font-size:10px;font-weight:600;padding:6px 0;}
+.bottomnav button.active{color:var(--navy-950);}
+.bottomnav .ico{font-size:18px;}
+.bottomnav button.central .ico{width:38px;height:38px;background:var(--navy-950);color:var(--gold-400);border-radius:12px;display:flex;align-items:center;justify-content:center;margin-bottom:1px;}
+.bottomnav button.central.active .ico{background:var(--gold-500);color:var(--navy-950);}
+
+.empty-note{text-align:center;padding:30px 10px;color:var(--ink-soft);font-size:12.5px;}
+
+/* =================== ADMIN =================== */
+#adminApp{display:none;min-height:100vh;}
+#adminApp.show{display:flex;}
+#staffApp{display:none;min-height:100vh;}
+#staffApp.show{display:flex;}
+.sidebar{width:238px;flex:none;background:var(--navy-950);color:#fff;min-height:100vh;padding:22px 14px;position:sticky;top:0;height:100vh;overflow-y:auto;}
+.sb-brand{display:flex;align-items:center;gap:10px;padding:4px 10px 22px;}
+.sb-brand .mark{width:36px;height:36px;background:var(--gold-500);border-radius:10px;color:var(--navy-950);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;}
+.sb-brand .t1{font-family:'Fraunces',serif;font-weight:600;font-size:14.5px;line-height:1.1;}
+.sb-brand .t2{font-size:10.5px;color:#8ea0c4;}
+.sb-user{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border-radius:12px;padding:10px 12px;margin-bottom:18px;}
+.sb-user img,.sb-user .av{width:34px;height:34px;border-radius:50%;background:var(--gold-400);color:var(--navy-950);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none;}
+.sb-user .t1{font-size:12.5px;font-weight:700;}
+.sb-user .t2{font-size:10px;color:#8ea0c4;}
+.sb-nav a{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;font-size:13px;font-weight:500;color:#c3cde3;margin-bottom:2px;}
+.sb-nav a .ico{width:18px;text-align:center;font-size:14px;}
+.sb-nav a.active{background:var(--gold-500);color:var(--navy-950);font-weight:700;}
+.sb-nav a:hover:not(.active){background:rgba(255,255,255,.06);}
+
+.admin-main{flex:1;padding:26px 32px 60px;min-width:0;}
+.admin-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+.admin-topbar h1{font-size:24px;margin:0;font-weight:600;}
+.datechip{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:9px 16px;font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:8px;}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;}
+.kpi-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);padding:18px;box-shadow:var(--shadow);}
+.kpi-card .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;}
+.kpi-card .lbl{font-size:12px;color:var(--ink-soft);font-weight:600;}
+.kpi-card .ic{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.kpi-card .val{font-family:'Fraunces',serif;font-size:23px;font-weight:600;margin:0;}
+.kpi-card .delta{font-size:11px;font-weight:700;margin-top:4px;}
+.delta.up{color:var(--green);}
+.delta.down{color:var(--red);}
+
+.admin-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:16px;margin-bottom:20px;align-items:stretch;}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);padding:18px;box-shadow:var(--shadow);}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+.panel-head h3{margin:0;font-size:14.5px;font-weight:700;}
+.panel-head .see-all{font-size:11.5px;color:var(--navy-700);font-weight:600;}
+.panel-head select{border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 9px;font-family:inherit;background:var(--paper);}
+
+.chart-wrap{display:flex;align-items:flex-end;gap:8px;height:150px;padding-top:6px;}
+.bar-pair{flex:1;display:flex;align-items:flex-end;justify-content:center;gap:3px;height:100%;}
+.bar{width:9px;border-radius:3px 3px 0 0;}
+.bar.rec{background:var(--green);}
+.bar.desp{background:var(--red);opacity:.8;}
+.chart-labels{display:flex;gap:8px;margin-top:6px;}
+.chart-labels span{flex:1;text-align:center;font-size:9.5px;color:var(--ink-soft);}
+.chart-legend{display:flex;gap:16px;font-size:11px;color:var(--ink-soft);margin-bottom:2px;}
+.chart-legend span{display:inline-flex;align-items:center;gap:5px;}
+.chart-legend i{width:7px;height:7px;border-radius:2px;}
+
+.donut-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.donut{width:118px;height:118px;border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;}
+.donut .hole{width:74px;height:74px;background:var(--card);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.donut .hole .n{font-family:'Fraunces',serif;font-size:22px;font-weight:700;line-height:1;}
+.donut .hole .l{font-size:9px;color:var(--ink-soft);}
+.donut-legend{width:100%;font-size:11.5px;margin-top:6px;}
+.donut-legend .row{display:flex;justify-content:space-between;align-items:center;padding:4px 0;}
+.donut-legend .row .k{display:flex;align-items:center;gap:6px;color:var(--ink-soft);}
+.donut-legend i{width:8px;height:8px;border-radius:50%;}
+
+.mini-row{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);}
+.mini-row:last-child{border-bottom:none;}
+.mini-row .t1{font-size:12.5px;font-weight:600;margin:0;}
+.mini-row .t2{font-size:11px;color:var(--ink-soft);margin:0;}
+
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.progress-track{background:var(--line);border-radius:999px;height:6px;overflow:hidden;margin:6px 0;}
+.progress-fill{height:100%;background:var(--navy-950);border-radius:999px;}
+.vote-btn{width:100%;background:var(--navy-950);color:#fff;border:none;padding:11px;border-radius:10px;font-weight:700;font-size:12.5px;margin-top:10px;}
+
+.shortcut-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.shortcut{border:1px solid var(--line);border-radius:12px;padding:13px 8px;text-align:center;background:var(--paper);}
+.shortcut .ic{font-size:17px;margin-bottom:6px;}
+.shortcut span{display:block;font-size:11px;font-weight:700;}
+
+table.datatable{width:100%;border-collapse:collapse;font-size:13px;}
+table.datatable th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);padding:10px 12px;border-bottom:1px solid var(--line);}
+table.datatable td{padding:12px;border-bottom:1px solid var(--line);}
+table.datatable tr:last-child td{border-bottom:none;}
+
+.stub{padding:60px 20px;text-align:center;color:var(--ink-soft);}
+.stub .ic{font-size:34px;margin-bottom:10px;}
+.stub h3{font-family:'Fraunces',serif;color:var(--ink);margin:0 0 6px;}
+
+.staff-mobile-tabs{gap:6px;overflow-x:auto;margin:-8px -14px 18px;padding:0 14px 10px;border-bottom:1px solid var(--line);}
+.staff-mobile-tabs::-webkit-scrollbar{display:none;}
+.staff-mobile-tabs button{border:1px solid var(--line);background:var(--card);padding:7px 13px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;color:var(--ink-soft);}
+.staff-mobile-tabs button.active{background:var(--navy-950);color:#fff;border-color:var(--navy-950);}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
+.form-grid label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);margin-bottom:6px;}
+.form-grid input,.form-grid select{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-family:inherit;font-size:13px;background:var(--paper);}
+.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:4px;}
+.btn-primary{background:var(--navy-950);color:#fff;border:none;padding:10px 20px;border-radius:10px;font-weight:700;font-size:12.5px;}
+.btn-ghost{background:none;border:1px solid var(--line);padding:10px 18px;border-radius:10px;font-weight:600;font-size:12.5px;color:var(--ink-soft);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--navy-950);color:#fff;padding:12px 20px;border-radius:11px;font-size:12.5px;font-weight:600;z-index:999;box-shadow:var(--shadow);}
+
+@media (max-width:1100px){
+  .admin-grid{grid-template-columns:1fr;}
+  .kpi-grid{grid-template-columns:repeat(2,1fr);}
+  .bottom-grid{grid-template-columns:1fr;}
+}
+@media (max-width:760px){
+  .sidebar{display:none;}
+  .admin-main{padding:52px 14px 60px;}
+  .staff-mobile-tabs{display:flex;}
+}
+@media (min-width:761px){
+  .staff-mobile-tabs{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div id="roleSwitch">
+  <button id="btnResident" class="active" onclick="setRole('resident')">Morador</button>
+  <button id="btnPorteiro" onclick="setRole('porteiro')">Portaria</button>
+  <button id="btnAdministrativo" onclick="setRole('administrativo')">Administrativo</button>
+  <button id="btnAdmin" onclick="setRole('sindico')">Síndico</button>
+</div>
+
+<!-- ======================= RESIDENT APP ======================= -->
+<div id="residentApp">
+  <div id="residentViews"></div>
+  <button class="fab" id="fab" style="display:none" onclick="fabAction()">+</button>
+  <div class="bottomnav">
+    <button data-v="home" class="active" onclick="goView('home')"><span class="ico">🏠</span>Início</button>
+    <button data-v="financeiro" onclick="goView('financeiro')"><span class="ico">💳</span>Financeiro</button>
+    <button data-v="hub" class="central" onclick="goView('hub')"><span class="ico">▦</span>Mais</button>
+    <button data-v="reservas" onclick="goView('reservas')"><span class="ico">📅</span>Reservas</button>
+    <button data-v="hub2" onclick="goView('hub')"><span class="ico">⋯</span>Mais</button>
+  </div>
+</div>
+
+<!-- ======================= STAFF APPS (Síndico / Portaria / Administrativo) ======================= -->
+<div id="staffApp">
+  <aside class="sidebar">
+    <div class="sb-brand">
+      <div class="mark">CM</div>
+      <div>
+        <div class="t1">Charles Miller</div>
+        <div class="t2" id="sbSubtitle">Painel do Síndico</div>
+      </div>
+    </div>
+    <div class="sb-user">
+      <div class="av" id="sbUserAv">RC</div>
+      <div>
+        <div class="t1" id="sbUserName">Rodrigo Cahuana</div>
+        <div class="t2" id="sbUserRole">Síndico · Administrador</div>
+      </div>
+    </div>
+    <nav class="sb-nav" id="sbNav"></nav>
+  </aside>
+  <main class="admin-main" id="adminMain"></main>
+</div>
+
+
+<script>
+/* ============================================================
+   MOCK DATA — Condomínio Charles Miller
+   ============================================================ */
+const morador = { nome:"Rodrigo", unidade:"Apto 802 - Torre A", papel:"Proprietário" };
+
+const eventos = [
+  {dia:20,mes:"AGO",titulo:"Assembleia Geral Ordinária",hora:"20/08/2026 às 19:00",local:"Salão de Festas",tag:"Confirmado",tagClass:"b-blue"},
+  {dia:25,mes:"AGO",titulo:"Limpeza da caixa d'água",hora:"25/08/2026 (sábado)",local:"Todo o condomínio",tag:"Informativo",tagClass:"b-amber"},
+];
+
+const reservas = [
+  {ic:"🎉",cor:"#f3e6d8",titulo:"Salão de Festas",morador:"802-A",data:"05/09/2026 · 18:00 às 23:00",num:"Reserva #1187",tag:"Confirmada",tagClass:"b-green"},
+  {ic:"🍖",cor:"#e6efe0",titulo:"Churrasqueira 1",morador:"1401-B",data:"12/09/2026 · 12:00 às 16:00",num:"Reserva #1192",tag:"Confirmada",tagClass:"b-green"},
+  {ic:"🏓",cor:"#e0ebf2",titulo:"Quadra Poliesportiva",morador:"301-A",data:"14/09/2026 · 09:00 às 11:00",num:"Reserva #1201",tag:"Pendente",tagClass:"b-amber"},
+];
+
+const calendarEvents = {5:"reserva",12:"reserva",14:"reserva",20:"assembleia",25:"manutencao",8:"evento"};
+
+const boletos = [
+  {titulo:"Condomínio - Agosto/2026",venc:"Vencimento: 10/08/2026",val:"R$ 412,80"},
+  {titulo:"Fundo de Obras",venc:"Vencimento: 15/08/2026",val:"R$ 95,00"},
+];
+const totalAberto = "R$ 507,80";
+
+const avisos = [
+  {ic:"🚨",cor:"var(--red-bg)",titulo:"Manutenção no reservatório",data:"19/08/2026 - 08:30",corpo:"Amanhã, 20/08, das 09h às 14h, haverá interrupção no abastecimento de água.",tag:"Urgente",tagClass:"b-red",cat:"urgentes"},
+  {ic:"📣",cor:"var(--blue-bg)",titulo:"Convocação de Assembleia",data:"14/08/2026 - 10:15",corpo:"A pauta inclui aprovação do orçamento 2027 e eleição da nova gestão.",tag:"Comunicado",tagClass:"b-blue",cat:"comunicados"},
+  {ic:"🔧",cor:"var(--amber-bg)",titulo:"Manutenção do elevador social",data:"12/08/2026 - 14:45",corpo:"Manutenção preventiva será realizada no elevador social no dia 22/08.",tag:"Manutenção",tagClass:"b-amber",cat:"manutencoes"},
+];
+
+const ocorrencias = [
+  {ic:"💧",cor:"var(--blue-bg)",titulo:"Vazamento na garagem",data:"Abertura: 18/08/2026 - 09:30",local:"Garagem - Subsolo 1",tag:"Em execução",tagClass:"b-amber",cat:"minhas"},
+  {ic:"💡",cor:"var(--amber-bg)",titulo:"Lâmpada queimada",data:"Abertura: 16/08/2026 - 18:20",local:"Corredor - 3º andar",tag:"Aberta",tagClass:"b-blue",cat:"minhas"},
+  {ic:"🔊",cor:"var(--red-bg)",titulo:"Barulho excessivo",data:"Abertura: 15/08/2026 - 22:15",local:"Apto 102 - Torre A",tag:"Resolvida",tagClass:"b-green",cat:"condominio"},
+];
+
+const encomendas = [
+  {titulo:"Encomenda #38821",data:"Recebida em 18/08/2026 - 11:20",loja:"Mercado Livre",tag:"Em armazenamento",tagClass:"b-amber"},
+  {titulo:"Encomenda #38790",data:"Recebida em 17/08/2026 - 15:45",loja:"Amazon",tag:"Em armazenamento",tagClass:"b-amber"},
+  {titulo:"Encomenda #38712",data:"Entregue em 15/08/2026 - 10:30",loja:"Shopee",tag:"Entregue",tagClass:"b-green"},
+];
+
+const sugestoes = [
+  {ic:"💡",cor:"var(--gold-100)",titulo:"Instalar bicicletário coberto",unidade:"802-A",data:"17/08/2026",corpo:"Sugiro um bicicletário coberto perto da garagem para proteger as bikes da chuva.",tag:"Em análise",tagClass:"b-amber",cat:"minhas"},
+  {ic:"🌱",cor:"var(--green-bg)",titulo:"Compostagem no jardim",unidade:"301-A",data:"14/08/2026",corpo:"Criar uma composteira comunitária para reduzir o lixo orgânico do condomínio.",tag:"Aprovada",tagClass:"b-green",cat:"condominio"},
+  {ic:"🔐",cor:"var(--blue-bg)",titulo:"Fechadura digital no salão de festas",unidade:"1401-B",data:"10/08/2026",corpo:"Trocar a chave física do salão por fechadura digital com senha por reserva.",tag:"Implementada",tagClass:"b-navy",cat:"condominio"},
+];
+
+const moradoresLista = [
+  {nome:"Rodrigo Cahuana",unidade:"802-A",papel:"Proprietário · Síndico"},
+  {nome:"João Neto",unidade:"1401-B",papel:"Proprietário · Subsíndico"},
+  {nome:"Marina Costa",unidade:"301-A",papel:"Locatária"},
+  {nome:"Eduardo Lima",unidade:"1502-B",papel:"Proprietário"},
+  {nome:"Fernanda Alves",unidade:"202-A",papel:"Proprietária"},
+];
+
+const visitantes = [
+  {nome:"Carlos Mendes",unidade:"301-A",motivo:"Visita",entrada:"09:40",saida:"11:15"},
+  {nome:"Paula Ribeiro",unidade:"1502-B",motivo:"Entrega",entrada:"10:05",saida:null},
+  {nome:"Técnico NET",unidade:"202-A",motivo:"Prestador de serviço",entrada:"08:20",saida:"09:00"},
+];
+
+/* ============================================================
+   RESIDENT APP RENDERING
+   ============================================================ */
+let currentView = "home";
+
+function iconBg(hex){return `style="background:${hex}"`;}
+
+function renderHome(){
+  return `
+  <div class="hero">
+    <div class="bell">🔔<span class="dot">3</span></div>
+    <p class="greet">Olá, ${morador.nome} 👋</p>
+    <p class="sub">Bem-vindo ao Residencial Charles Miller</p>
+    <div class="unit-card">
+      <div class="unit-badge">CM</div>
+      <div>
+        <div class="t1">Meu Apartamento</div>
+        <div class="t2">${morador.unidade} · ${morador.papel}</div>
+      </div>
+    </div>
+  </div>
+  <div class="view">
+    <div class="section-title"><h2>Acesso rápido</h2></div>
+    <div class="quick-grid">
+      ${quick("💳","Financeiro","#e7f4ec","#2f8f5b","financeiro")}
+      ${quick("📅","Reservas","#e9f1fa","#3a6ea8","reservas")}
+      ${quick("📣","Avisos","#f8ecd8","#b9822c","avisos")}
+      ${quick("⚠️","Ocorrências","#fbeae7","#c14a3f","ocorrencias")}
+      ${quick("💡","Sugestões","#f6ecd6","#b9822c","sugestoes")}
+      ${quick("📦","Encomendas","#f3e6d8","#a3652f","encomendas")}
+      ${quick("👥","Visitantes","#e6e0f2","#6d4fa8","hub")}
+      ${quick("🚗","Veículos","#e0ebf2","#3a6ea8","hub")}
+      ${quick("▦","Mais","#eceae2","#5c5f66","hub")}
+    </div>
+    <div class="section-title"><h2>Próximos eventos</h2><span class="see-all">Ver todos</span></div>
+    <div class="card list-card">
+      ${eventos.map(e=>`
+        <div class="list-row">
+          <div class="date-chip"><div class="d">${e.dia}</div><div class="m">${e.mes}</div></div>
+          <div class="list-body"><p class="t1">${e.titulo}</p><p class="t2">${e.local} · ${e.hora}</p></div>
+          <span class="badge ${e.tagClass}">${e.tag}</span>
+        </div>`).join("")}
+    </div>
+  </div>`;
+}
+function quick(ic,label,bg,color,view){
+  return `<button class="quick-item" onclick="goView('${view}')"><div class="ic" style="background:${bg};color:${color}">${ic}</div><span>${label}</span></button>`;
+}
+
+function renderReservas(){
+  return `
+  <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Reservas</h1></div>
+  <div class="view">
+    <div class="tabs">
+      <button class="active" onclick="switchTab(this,'minhas-r')">Minhas reservas</button>
+      <button onclick="switchTab(this,'cal-r')">Calendário geral</button>
+    </div>
+    <div id="minhas-r">
+      <div class="section-title" style="margin-top:0"><h2>Minhas reservas</h2></div>
+      <div class="card list-card">
+        ${reservas.map(r=>`
+          <div class="list-row">
+            <div class="list-ic" style="background:${r.cor}">${r.ic}</div>
+            <div class="list-body"><p class="t1">${r.titulo}</p><p class="t2">${r.data}</p><p class="t2">${r.num}</p></div>
+            <span class="badge ${r.tagClass}">${r.tag}</span>
+          </div>`).join("")}
+      </div>
+      <div class="section-title"><h2>Calendário do condomínio</h2></div>
+      ${calendar()}
+    </div>
+    <div id="cal-r" style="display:none">
+      ${calendar()}
+      <div class="section-title"><h2>Eventos do mês</h2></div>
+      <div class="card list-card">
+        ${eventos.map(e=>`<div class="list-row"><div class="date-chip"><div class="d">${e.dia}</div><div class="m">${e.mes}</div></div><div class="list-body"><p class="t1">${e.titulo}</p><p class="t2">${e.local}</p></div></div>`).join("")}
+      </div>
+    </div>
+  </div>
+  <button class="fab" style="display:flex;align-items:center;justify-content:center" onclick="alert('Nova solicitação de reserva (protótipo)')">+</button>`;
+}
+
+function calendar(){
+  const dow=["D","S","T","Q","Q","S","S"];
+  let cells="";
+  const startOffset=5; // Aug 2026 starts on Saturday -> just illustrative offset
+  const daysInMonth=31;
+  const prevTailDays=["27","28","29","30","31"];
+  prevTailDays.forEach(d=>cells+=`<div class="cal-day dim">${d}</div>`);
+  for(let d=1;d<=daysInMonth;d++){
+    let cls="cal-day"+(d===19?" today":"")+(d===20?" sel":"");
+    let dot="";
+    if(calendarEvents[d]){
+      const map={reserva:"#3a6ea8",evento:"#6d4fa8",manutencao:"#b9822c",assembleia:"#152544"};
+      dot=`<span class="evt" style="background:${map[calendarEvents[d]]}"></span>`;
+    }
+    cells+=`<div class="${cls}">${d}${dot}</div>`;
+  }
+  return `
+  <div class="card" style="padding:16px">
+    <div class="cal-head">
+      <button class="nav">‹</button>
+      <strong style="font-size:13.5px">Agosto 2026</strong>
+      <button class="nav">›</button>
+    </div>
+    <div class="cal-grid">
+      ${dow.map(d=>`<div class="dow">${d}</div>`).join("")}
+      ${cells}
+    </div>
+    <div class="legend">
+      <span><i style="background:#3a6ea8"></i>Reservas</span>
+      <span><i style="background:#6d4fa8"></i>Eventos</span>
+      <span><i style="background:#b9822c"></i>Manutenções</span>
+      <span><i style="background:#152544"></i>Assembleias</span>
+    </div>
+  </div>`;
+}
+
+function renderFinanceiro(){
+  return `
+  <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Financeiro</h1></div>
+  <div class="view">
+    <div class="balance-card">
+      <p class="lbl">Total em aberto</p>
+      <p class="val num">${totalAberto}</p>
+      <button class="pay-all" onclick="alert('Pagamento consolidado (protótipo)')">Pagar tudo · ${boletos.length} boletos</button>
+    </div>
+    <div class="section-title" style="margin-top:6px"><h2>Boletos em aberto</h2><span class="see-all">Ver todos</span></div>
+    ${boletos.map(b=>`
+      <div class="card bill-card">
+        <div class="bill-top">
+          <div><p class="t1">${b.titulo}</p><p class="t2">${b.venc}</p></div>
+          <p class="val num">${b.val}</p>
+        </div>
+        <div class="bill-actions">
+          <span style="font-size:11px;color:var(--ink-soft)">▤ Boleto</span>
+          <button class="pay-btn" onclick="alert('Pagar boleto (protótipo)')">Pagar</button>
+        </div>
+      </div>`).join("")}
+    <div class="actions-grid">
+      ${actionCard("🕒","Histórico","Pagamentos")}
+      ${actionCard("🧾","2ª via de boleto","Emita agora")}
+      ${actionCard("◈","Pix","Pague com Pix")}
+      ${actionCard("📄","Taxas extras","Aprovadas")}
+    </div>
+    <div class="tip-card">
+      <p class="t1">Contas em dia, condomínio ainda melhor!</p>
+      <p>Mantenha seus boletos em dia e contribua para o Fundo de Obras 2027.</p>
+    </div>
+  </div>`;
+}
+function actionCard(ic,t1,t2){return `<div class="card action-card"><span class="ic">${ic}</span><div><p class="t1">${t1}</p><p class="t2">${t2}</p></div></div>`;}
+
+function renderAvisos(){
+  return `
+  <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Avisos</h1></div>
+  <div class="view">
+    <div class="filters" id="avisoFilters">
+      ${["Todos","Comunicados","Manutenções","Urgentes"].map((f,i)=>`<button class="chip ${i===0?'active':''}" onclick="filterList(this,'avisoFilters','avisoList','${f==='Todos'?'':f.toLowerCase().replace('ç','c').slice(0,-1)}')">${f}</button>`).join("")}
+    </div>
+    <div class="card list-card" id="avisoList">
+      ${avisos.map(a=>`
+        <div class="list-row" data-cat="${a.cat}">
+          <div class="list-ic" style="background:${a.cor}">${a.ic}</div>
+          <div class="list-body"><p class="t1">${a.titulo}</p><p class="t2">${a.data}</p><p class="t2">${a.corpo}</p></div>
+          <span class="badge ${a.tagClass}">${a.tag}</span>
+        </div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function renderOcorrencias(){
+  return `
+  <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Ocorrências</h1></div>
+  <div class="view">
+    <div class="tabs">
+      <button class="active" onclick="switchTab(this,'minhas-o')">Minhas</button>
+      <button onclick="switchTab(this,'cond-o')">Condomínio</button>
+      <button onclick="switchTab(this,'hist-o')">Histórico</button>
+    </div>
+    <div id="minhas-o" class="card list-card">
+      ${ocorrencias.filter(o=>o.cat==='minhas').map(rowOcorrencia).join("")}
+    </div>
+    <div id="cond-o" class="card list-card" style="display:none">
+      ${ocorrencias.map(rowOcorrencia).join("")}
+    </div>
+    <div id="hist-o" class="card list-card" style="display:none">
+      ${ocorrencias.filter(o=>o.tag==='Resolvida').map(rowOcorrencia).join("")}
+    </div>
+  </div>
+  <button class="fab" style="display:flex;align-items:center;justify-content:center" onclick="alert('Abrir nova ocorrência (protótipo)')">+</button>`;
+}
+function rowOcorrencia(o){
+  return `<div class="list-row"><div class="list-ic" style="background:${o.cor}">${o.ic}</div><div class="list-body"><p class="t1">${o.titulo}</p><p class="t2">${o.data}</p><p class="t2">${o.local}</p></div><span class="badge ${o.tagClass}">${o.tag}</span></div>`;
+}
+
+function renderSugestoes(){
+  return `
+  <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Sugestões</h1></div>
+  <div class="view">
+    <div class="card" id="sugFormPanel" style="display:none;padding:16px;margin-bottom:16px">
+      <p style="font-weight:700;font-size:13.5px;margin:0 0 12px">Nova sugestão</p>
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <div><label>Título</label><input id="sfTitulo" placeholder="Ex: Ampliar horário da academia"></div>
+        <div><label>Descrição</label><input id="sfDescricao" placeholder="Descreva sua sugestão"></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-ghost" onclick="toggleSugForm(false)">Cancelar</button>
+        <button class="btn-primary" onclick="addSugestao()">Enviar sugestão</button>
+      </div>
+    </div>
+    <div class="tabs">
+      <button class="active" onclick="switchTab(this,'minhas-s')">Minhas</button>
+      <button onclick="switchTab(this,'cond-s')">Do condomínio</button>
+    </div>
+    <div id="minhas-s" class="card list-card">
+      ${sugestoes.filter(s=>s.cat==='minhas').map(rowSugestao).join("") || `<div class="empty-note">Você ainda não enviou nenhuma sugestão.</div>`}
+    </div>
+    <div id="cond-s" class="card list-card" style="display:none">
+      ${sugestoes.map(rowSugestao).join("")}
+    </div>
+  </div>
+  <button class="fab" style="display:flex;align-items:center;justify-content:center" onclick="toggleSugForm(true)">+</button>`;
+}
+function rowSugestao(s){
+  return `<div class="list-row"><div class="list-ic" style="background:${s.cor}">${s.ic}</div><div class="list-body"><p class="t1">${s.titulo}</p><p class="t2">${s.unidade} · ${s.data}</p><p class="t2">${s.corpo}</p></div><span class="badge ${s.tagClass}">${s.tag}</span></div>`;
+}
+function toggleSugForm(show){
+  const panel=document.getElementById("sugFormPanel");
+  if(panel) panel.style.display = show ? "block":"none";
+}
+function addSugestao(){
+  const titulo=document.getElementById("sfTitulo").value.trim();
+  const descricao=document.getElementById("sfDescricao").value.trim();
+  if(!titulo){ return; }
+  sugestoes.unshift({ic:"💡",cor:"var(--gold-100)",titulo,unidade:morador.unidade.replace("Apto ","").replace(" - Torre A"," - A").replace(" - Torre B"," - B"),data:new Date().toLocaleDateString('pt-BR'),corpo:descricao||"Sem descrição adicional.",tag:"Em análise",tagClass:"b-amber",cat:"minhas"});
+  goView("sugestoes");
+}
+
+function renderEncomendas(){
+  return `
+  <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Encomendas</h1></div>
+  <div class="view">
+    <div class="filters" id="encFilters">
+      ${["Todas","Recebidas","Entregues"].map((f,i)=>`<button class="chip ${i===0?'active':''}" onclick="filterEnc(this,'${f}')">${f}</button>`).join("")}
+    </div>
+    <div class="card list-card" id="encList">
+      ${encomendas.map(e=>`
+        <div class="list-row" data-tag="${e.tag}">
+          <div class="list-ic" style="background:#f3e6d8">📦</div>
+          <div class="list-body"><p class="t1">${e.titulo}</p><p class="t2">${e.data}</p><p class="t2">${e.loja}</p></div>
+          <span class="badge ${e.tagClass}">${e.tag}</span>
+        </div>`).join("")}
+    </div>
+  </div>`;
+}
+function filterEnc(btn,f){
+  document.querySelectorAll('#encFilters .chip').forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#encList .list-row').forEach(r=>{
+    if(f==='Todas'){r.style.display='flex';}
+    else if(f==='Recebidas'){r.style.display = r.dataset.tag==='Em armazenamento' ? 'flex':'none';}
+    else{r.style.display = r.dataset.tag==='Entregue' ? 'flex':'none';}
+  });
+}
+
+function renderHub(){
+  const items=[
+    ["👥","Visitantes"],["🚗","Veículos"],["📄","Documentos"],["🏢","Assembleias"],
+    ["🔧","Manutenções"],["📋","Regimento"],["💬","Fale com o síndico"],["⚙️","Configurações"]
+  ];
+  return `
+  <div class="topbar"><h1>Mais opções</h1></div>
+  <div class="view">
+    <div class="quick-grid" style="grid-template-columns:repeat(4,1fr)">
+      ${items.map(([ic,label])=>`<button class="quick-item" onclick="alert('${label} (protótipo)')"><div class="ic" style="background:#eceae2;color:#5c5f66">${ic}</div><span>${label}</span></button>`).join("")}
+    </div>
+  </div>`;
+}
+
+const viewMap={home:renderHome,reservas:renderReservas,financeiro:renderFinanceiro,avisos:renderAvisos,ocorrencias:renderOcorrencias,sugestoes:renderSugestoes,encomendas:renderEncomendas,hub:renderHub};
+const fabViews=["reservas","ocorrencias"];
+
+function goView(v){
+  currentView=v;
+  document.getElementById("residentViews").innerHTML=viewMap[v]();
+  document.querySelectorAll(".bottomnav button").forEach(b=>b.classList.remove("active"));
+  const match=document.querySelector(`.bottomnav button[data-v="${v}"]`);
+  if(match) match.classList.add("active");
+  else if(v==='avisos'||v==='encomendas') document.querySelectorAll('.bottomnav button')[2].classList.add('active');
+  window.scrollTo(0,0);
+}
+function switchTab(btn,targetId){
+  const tabs=btn.parentElement;
+  tabs.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  const siblings=tabs.parentElement.querySelectorAll(":scope > div[id]");
+  siblings.forEach(s=>s.style.display = s.id===targetId ? "block":"none");
+}
+function filterList(btn,filtersId,listId,cat){
+  document.querySelectorAll(`#${filtersId} .chip`).forEach(c=>c.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll(`#${listId} .list-row`).forEach(r=>{
+    r.style.display = (cat===''|| r.dataset.cat===cat) ? 'flex':'none';
+  });
+}
+function fabAction(){alert("Ação rápida (protótipo)");}
+
+/* ============================================================
+   ADMIN APP
+   ============================================================ */
+const sbItemsSindico=[
+  ["dashboard","▦","Dashboard"],["financeiro","💳","Financeiro"],["moradores","👥","Moradores"],
+  ["unidades","🏢","Unidades"],["reservas","📅","Reservas"],["ocorrencias","⚠️","Ocorrências"],
+  ["sugestoes","💡","Sugestões"],
+  ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"],["assembleias","🗳️","Assembleias"],
+  ["documentos","📄","Documentos"],["manutencoes","🔧","Manutenções"],["relatorios","📊","Relatórios"],
+  ["configuracoes","⚙️","Configurações"]
+];
+const sbItemsAdministrativo=[
+  ["dashboard","▦","Dashboard"],["financeiro","💳","Financeiro"],["moradores","👥","Moradores"],
+  ["unidades","🏢","Unidades"],["reservas","📅","Reservas"],["ocorrencias","⚠️","Ocorrências"],
+  ["sugestoes","💡","Sugestões"],
+  ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"],
+  ["documentos","📄","Documentos"],["relatorios","📊","Relatórios"]
+];
+const sbItemsPorteiro=[
+  ["dashboard","▦","Painel da portaria"],["moradores","👥","Moradores"],["reservas","📅","Reservas"],
+  ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"]
+];
+
+const staffRoles={
+  sindico:{items:sbItemsSindico,subtitle:"Painel do Síndico",av:"RC",name:"Rodrigo Cahuana",role:"Síndico · Administrador"},
+  administrativo:{items:sbItemsAdministrativo,subtitle:"Administrativo",av:"AD",name:"Equipe Administrativa",role:"Escritório · Charles Miller"},
+  porteiro:{items:sbItemsPorteiro,subtitle:"Portaria",av:"PT",name:"Portaria",role:"Plantão · Charles Miller"}
+};
+let currentStaffRole="sindico";
+let staffViewByRole={sindico:"dashboard",administrativo:"dashboard",porteiro:"dashboard"};
+
+function buildSidebar(){
+  const cfg=staffRoles[currentStaffRole];
+  const view=staffViewByRole[currentStaffRole];
+  document.getElementById("sbSubtitle").textContent=cfg.subtitle;
+  document.getElementById("sbUserAv").textContent=cfg.av;
+  document.getElementById("sbUserName").textContent=cfg.name;
+  document.getElementById("sbUserRole").textContent=cfg.role;
+  document.getElementById("sbNav").innerHTML = cfg.items.map(([id,ic,label])=>
+    `<a href="#" class="${id===view?'active':''}" onclick="goAdmin('${id}');return false;"><span class="ico">${ic}</span>${label}</a>`
+  ).join("");
+}
+
+function mobileTabs(){
+  const cfg=staffRoles[currentStaffRole];
+  const view=staffViewByRole[currentStaffRole];
+  return `<div class="staff-mobile-tabs">${cfg.items.map(([id,ic,label])=>
+    `<button class="${id===view?'active':''}" onclick="goAdmin('${id}')">${ic} ${label}</button>`
+  ).join("")}</div>`;
+}
+
+function goAdmin(v){
+  staffViewByRole[currentStaffRole]=v;
+  buildSidebar();
+  const renderers=rendererMap[currentStaffRole];
+  const body = renderers[v] ? renderers[v]() : adminStub(v);
+  document.getElementById("adminMain").innerHTML = mobileTabs() + body;
+  window.scrollTo(0,0);
+}
+
+function adminTopbar(title){
+  return `<div class="admin-topbar"><h1>${title}</h1><div class="datechip">📅 Hoje, 19 de agosto de 2026</div></div>`;
+}
+
+function renderDashboard(){
+  return `
+  ${adminTopbar("Dashboard")}
+  <div class="kpi-grid">
+    ${kpi("Receitas do mês","R$ 138.240,00","+9% vs mês anterior","up","💰","var(--green-bg)")}
+    ${kpi("Despesas do mês","R$ 94.610,00","-3% vs mês anterior","down","🧾","var(--red-bg)")}
+    ${kpi("Inadimplência","R$ 21.340,00","12,8% da receita","down","📉","var(--amber-bg)")}
+    ${kpi("Unidades","104","97% ocupadas","up","🏢","var(--blue-bg)")}
+  </div>
+  <div class="admin-grid">
+    <div class="panel">
+      <div class="panel-head"><h3>Fluxo de caixa</h3><select><option>Mês atual</option></select></div>
+      <div class="chart-legend"><span><i style="background:var(--green)"></i>Receitas</span><span><i style="background:var(--red)"></i>Despesas</span></div>
+      ${cashChart()}
+    </div>
+
+    <div class="panel">
+      <div class="panel-head"><h3>Ocorrências</h3><span class="see-all">Ver todas</span></div>
+      ${donut()}
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Reservas próximas</h3><span class="see-all">Ver todas</span></div>
+      ${reservas.map(r=>`<div class="mini-row"><div class="list-ic" style="background:${r.cor};width:34px;height:34px;font-size:14px">${r.ic}</div><div><p class="t1">${r.titulo}</p><p class="t2">${r.data}</p></div></div>`).join("")}
+    </div>
+  </div>
+  <div class="bottom-grid">
+    <div class="panel">
+      <div class="panel-head"><h3>Avisos recentes</h3><span class="see-all">Ver todos</span></div>
+      ${avisos.map(a=>`<div class="mini-row"><div class="list-ic" style="background:${a.cor};width:34px;height:34px;font-size:14px">${a.ic}</div><div style="flex:1"><p class="t1">${a.titulo}</p><p class="t2">${a.data}</p></div><span class="badge ${a.tagClass}" style="font-size:9px">${a.tag}</span></div>`).join("")}
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Assembleias</h3><span class="see-all">Ver todas</span></div>
+      <div class="mini-row" style="border:none;padding-bottom:2px">
+        <div class="list-ic" style="background:var(--gold-100);width:34px;height:34px;font-size:14px">🗳️</div>
+        <div><p class="t1">Assembleia Geral Ordinária</p><p class="t2">20/08/2026 - 19:00 · Salão de Festas</p></div>
+      </div>
+      <p style="font-size:11.5px;color:var(--ink-soft);margin:12px 0 4px">Participação · 71% (74 de 104)</p>
+      <div class="progress-track"><div class="progress-fill" style="width:71%"></div></div>
+      <button class="vote-btn" onclick="alert('Acessar votação (protótipo)')">Acessar votação</button>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Atalhos rápidos</h3></div>
+      <div class="shortcut-grid">
+        ${shortcut("📅","Nova reserva")}${shortcut("📣","Novo aviso")}${shortcut("⚠️","Nova ocorrência")}
+        ${shortcut("👤","Novo morador")}${shortcut("💳","Relatório financeiro")}${shortcut("🧾","Prestação de contas")}
+      </div>
+    </div>
+  </div>`;
+}
+function kpi(lbl,val,delta,dir,ic,bg){
+  return `<div class="kpi-card"><div class="top"><span class="lbl">${lbl}</span><span class="ic" style="background:${bg}">${ic}</span></div><p class="val num">${val}</p><p class="delta ${dir}">${dir==='up'?'▲':'▼'} ${delta}</p></div>`;
+}
+function shortcut(ic,label){return `<button class="shortcut" onclick="alert('${label} (protótipo)')"><div class="ic">${ic}</div><span>${label}</span></button>`;}
+
+function cashChart(){
+  const data=[
+    [40,22],[55,30],[35,45],[60,25],[48,38],[70,20]
+  ];
+  const labels=["01/08","06/08","11/08","16/08","21/08","31/08"];
+  const bars=data.map(([r,d])=>`<div class="bar-pair"><div class="bar rec" style="height:${r}%"></div><div class="bar desp" style="height:${d}%"></div></div>`).join("");
+  return `<div class="chart-wrap">${bars}</div><div class="chart-labels">${labels.map(l=>`<span>${l}</span>`).join("")}</div>`;
+}
+
+function donut(){
+  // 24 total: 8 abertas, 10 em execução, 6 resolvidas
+  const abertas=8,execucao=10,resolvidas=6,total=24;
+  const p1=abertas/total*360, p2=execucao/total*360;
+  const grad=`conic-gradient(var(--blue) 0deg ${p1}deg, var(--amber) ${p1}deg ${p1+p2}deg, var(--green) ${p1+p2}deg 360deg)`;
+  return `
+  <div class="donut-wrap">
+    <div class="donut" style="background:${grad}"><div class="hole"><span class="n">${total}</span><span class="l">Total</span></div></div>
+    <div class="donut-legend">
+      <div class="row"><span class="k"><i style="background:var(--blue)"></i>Abertas</span><strong>${abertas}</strong></div>
+      <div class="row"><span class="k"><i style="background:var(--amber)"></i>Em execução</span><strong>${execucao}</strong></div>
+      <div class="row"><span class="k"><i style="background:var(--green)"></i>Resolvidas</span><strong>${resolvidas}</strong></div>
+    </div>
+  </div>`;
+}
+
+function renderAdminFinanceiro(){
+  return `
+  ${adminTopbar("Financeiro")}
+  <div class="kpi-grid">
+    ${kpi("Receitas do mês","R$ 138.240,00","+9% vs mês anterior","up","💰","var(--green-bg)")}
+    ${kpi("Despesas do mês","R$ 94.610,00","-3% vs mês anterior","down","🧾","var(--red-bg)")}
+    ${kpi("Inadimplência","R$ 21.340,00","12,8% da receita","down","📉","var(--amber-bg)")}
+    ${kpi("Saldo em caixa","R$ 187.920,00","+5% vs mês anterior","up","🏦","var(--blue-bg)")}
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>Boletos do mês</h3><span class="see-all">Exportar</span></div>
+    <table class="datatable">
+      <tr><th>Unidade</th><th>Morador</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr>
+      <tr><td>802-A</td><td>Rodrigo Cahuana</td><td>10/08/2026</td><td class="mono">R$ 412,80</td><td><span class="badge b-green">Pago</span></td></tr>
+      <tr><td>1401-B</td><td>João Neto</td><td>10/08/2026</td><td class="mono">R$ 412,80</td><td><span class="badge b-green">Pago</span></td></tr>
+      <tr><td>301-A</td><td>Marina Costa</td><td>10/08/2026</td><td class="mono">R$ 398,50</td><td><span class="badge b-red">Em atraso</span></td></tr>
+      <tr><td>1502-B</td><td>Eduardo Lima</td><td>10/08/2026</td><td class="mono">R$ 445,10</td><td><span class="badge b-amber">Pendente</span></td></tr>
+      <tr><td>202-A</td><td>Fernanda Alves</td><td>10/08/2026</td><td class="mono">R$ 398,50</td><td><span class="badge b-green">Pago</span></td></tr>
+    </table>
+  </div>`;
+}
+
+function renderAdminMoradores(){
+  return `
+  ${adminTopbar("Moradores")}
+  <div class="panel" id="moradorFormPanel" style="display:none;margin-bottom:16px">
+    <div class="panel-head"><h3>Cadastrar novo morador</h3></div>
+    <div class="form-grid">
+      <div><label>Nome completo</label><input id="mfNome" placeholder="Ex: Ana Souza"></div>
+      <div><label>Unidade (ex: 1201-A)</label><input id="mfUnidade" placeholder="Ex: 1201-A"></div>
+      <div><label>Papel</label><select id="mfPapel"><option>Proprietário</option><option>Proprietária</option><option>Locatário</option><option>Locatária</option></select></div>
+      <div><label>Telefone</label><input id="mfTelefone" placeholder="(83) 9 9999-9999"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="toggleMoradorForm(false)">Cancelar</button>
+      <button class="btn-primary" onclick="addMorador()">Salvar morador</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>Todos os moradores</h3><span class="see-all" onclick="toggleMoradorForm(true)" style="cursor:pointer">+ Novo morador</span></div>
+    <table class="datatable">
+      <tr><th>Nome</th><th>Unidade</th><th>Papel</th><th></th></tr>
+      ${moradoresLista.map(m=>`<tr><td>${m.nome}</td><td class="mono">${m.unidade}</td><td>${m.papel}</td><td><span class="see-all">Ver perfil</span></td></tr>`).join("")}
+    </table>
+  </div>`;
+}
+function toggleMoradorForm(show){
+  document.getElementById("moradorFormPanel").style.display = show ? "block":"none";
+}
+function addMorador(){
+  const nome=document.getElementById("mfNome").value.trim();
+  const unidade=document.getElementById("mfUnidade").value.trim();
+  const papel=document.getElementById("mfPapel").value;
+  const tel=document.getElementById("mfTelefone").value.trim();
+  if(!nome||!unidade){ toast("Preencha nome e unidade"); return; }
+  moradoresLista.unshift({nome,unidade,papel:papel+(tel?" · "+tel:"")});
+  goAdmin("moradores");
+  toast("Morador cadastrado com sucesso");
+}
+
+function renderAdminReservas(){
+  return `
+  ${adminTopbar("Reservas")}
+  <div class="panel" id="reservaFormPanel" style="display:none;margin-bottom:16px">
+    <div class="panel-head"><h3>Nova reserva</h3></div>
+    <div class="form-grid">
+      <div><label>Área comum</label><select id="rfArea"><option>Salão de Festas</option><option>Churrasqueira 1</option><option>Churrasqueira 2</option><option>Quadra Poliesportiva</option></select></div>
+      <div><label>Unidade / Morador</label><input id="rfMorador" placeholder="Ex: 1201-A"></div>
+      <div><label>Data</label><input id="rfData" type="date"></div>
+      <div><label>Horário</label><input id="rfHora" placeholder="Ex: 18:00 às 23:00"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="toggleReservaForm(false)">Cancelar</button>
+      <button class="btn-primary" onclick="addReserva()">Criar reserva</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>Reservas da semana</h3><span class="see-all" onclick="toggleReservaForm(true)" style="cursor:pointer">+ Nova reserva</span></div>
+    <table class="datatable">
+      <tr><th>Área</th><th>Unidade</th><th>Data</th><th>Status</th><th></th></tr>
+      ${reservas.map((r,i)=>`<tr><td>${r.titulo}</td><td class="mono">${r.morador||'802-A'}</td><td>${r.data}</td><td><span class="badge ${r.tagClass}">${r.tag}</span></td><td>${r.tag==='Pendente'?`<span class="see-all" style="cursor:pointer" onclick="confirmReserva(${i})">Confirmar</span>`:''}</td></tr>`).join("")}
+    </table>
+  </div>`;
+}
+function toggleReservaForm(show){
+  document.getElementById("reservaFormPanel").style.display = show ? "block":"none";
+}
+function confirmReserva(i){
+  reservas[i].tag="Confirmada"; reservas[i].tagClass="b-green";
+  goAdmin("reservas");
+  toast("Reserva confirmada");
+}
+function addReserva(){
+  const area=document.getElementById("rfArea").value;
+  const morador=document.getElementById("rfMorador").value.trim();
+  const data=document.getElementById("rfData").value;
+  const hora=document.getElementById("rfHora").value.trim();
+  if(!morador||!data){ toast("Preencha unidade e data"); return; }
+  const icones={"Salão de Festas":["🎉","#f3e6d8"],"Churrasqueira 1":["🍖","#e6efe0"],"Churrasqueira 2":["🍖","#e6efe0"],"Quadra Poliesportiva":["🏓","#e0ebf2"]};
+  const [ic,cor]=icones[area];
+  reservas.unshift({ic,cor,titulo:area,morador,data:`${data.split('-').reverse().join('/')} · ${hora||'a definir'}`,num:"Reserva #"+(1200+reservas.length+1),tag:"Confirmada",tagClass:"b-green"});
+  goAdmin("reservas");
+  toast("Reserva criada");
+}
+
+function renderAdminOcorrencias(){
+  return `
+  ${adminTopbar("Ocorrências")}
+  <div class="admin-grid" style="grid-template-columns:1fr 2fr">
+    <div class="panel">${donut()}</div>
+    <div class="panel">
+      <div class="panel-head"><h3>Todas as ocorrências</h3><span class="see-all">+ Registrar</span></div>
+      <table class="datatable">
+        <tr><th>Ocorrência</th><th>Local</th><th>Abertura</th><th>Status</th></tr>
+        ${ocorrencias.map(o=>`<tr><td>${o.titulo}</td><td>${o.local}</td><td>${o.data.replace('Abertura: ','')}</td><td><span class="badge ${o.tagClass}">${o.tag}</span></td></tr>`).join("")}
+      </table>
+    </div>
+  </div>`;
+}
+
+function renderAdminSugestoes(){
+  const statusOpts=["Em análise","Aprovada","Recusada","Implementada"];
+  const statusClass={"Em análise":"b-amber","Aprovada":"b-green","Recusada":"b-red","Implementada":"b-navy"};
+  return `
+  ${adminTopbar("Sugestões")}
+  <div class="panel">
+    <div class="panel-head"><h3>Sugestões dos moradores</h3><span class="see-all">${sugestoes.length} no total</span></div>
+    <table class="datatable">
+      <tr><th>Sugestão</th><th>Unidade</th><th>Data</th><th>Status</th></tr>
+      ${sugestoes.map((s,i)=>`<tr><td>${s.titulo}<br><span style="color:var(--ink-soft);font-size:11.5px">${s.corpo}</span></td><td class="mono">${s.unidade}</td><td>${s.data}</td><td>
+        <select onchange="updateSugestaoStatus(${i},this.value)" style="border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 8px;font-family:inherit;background:var(--paper)">
+          ${statusOpts.map(op=>`<option ${op===s.tag?'selected':''}>${op}</option>`).join("")}
+        </select>
+      </td></tr>`).join("")}
+    </table>
+  </div>`;
+}
+function updateSugestaoStatus(i,novoStatus){
+  const statusClass={"Em análise":"b-amber","Aprovada":"b-green","Recusada":"b-red","Implementada":"b-navy"};
+  sugestoes[i].tag=novoStatus;
+  sugestoes[i].tagClass=statusClass[novoStatus];
+  toast("Status da sugestão atualizado");
+}
+
+function renderAdminEncomendas(){
+  return `
+  ${adminTopbar("Encomendas")}
+  <div class="panel" id="encFormPanel" style="display:none;margin-bottom:16px">
+    <div class="panel-head"><h3>Registrar chegada</h3></div>
+    <div class="form-grid">
+      <div><label>Loja / Remetente</label><input id="efLoja" placeholder="Ex: Mercado Livre"></div>
+      <div><label>Unidade destino</label><input id="efUnidade" placeholder="Ex: 1201-A"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="toggleEncForm(false)">Cancelar</button>
+      <button class="btn-primary" onclick="addEncomenda()">Registrar</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>Encomendas na portaria</h3><span class="see-all" onclick="toggleEncForm(true)" style="cursor:pointer">+ Registrar chegada</span></div>
+    <table class="datatable">
+      <tr><th>Encomenda</th><th>Loja</th><th>Data</th><th>Status</th><th></th></tr>
+      ${encomendas.map((e,i)=>`<tr><td>${e.titulo}</td><td>${e.loja}</td><td>${e.data}</td><td><span class="badge ${e.tagClass}">${e.tag}</span></td><td>${e.tag!=='Entregue'?`<span class="see-all" style="cursor:pointer" onclick="marcarEntregue(${i})">Marcar retirada</span>`:''}</td></tr>`).join("")}
+    </table>
+  </div>`;
+}
+function toggleEncForm(show){document.getElementById("encFormPanel").style.display = show ? "block":"none";}
+function addEncomenda(){
+  const loja=document.getElementById("efLoja").value.trim();
+  const unidade=document.getElementById("efUnidade").value.trim();
+  if(!loja||!unidade){ toast("Preencha loja e unidade"); return; }
+  encomendas.unshift({titulo:"Encomenda #"+(38800+encomendas.length+1),data:"Recebida em "+new Date().toLocaleDateString('pt-BR')+" · "+unidade,loja,tag:"Em armazenamento",tagClass:"b-amber"});
+  goAdmin("encomendas");
+  toast("Chegada registrada");
+}
+function marcarEntregue(i){
+  encomendas[i].tag="Entregue"; encomendas[i].tagClass="b-green";
+  goAdmin("encomendas");
+  toast("Encomenda marcada como retirada");
+}
+
+function renderAdminVisitantes(){
+  return `
+  ${adminTopbar("Visitantes")}
+  <div class="panel" id="visFormPanel" style="display:none;margin-bottom:16px">
+    <div class="panel-head"><h3>Registrar entrada</h3></div>
+    <div class="form-grid">
+      <div><label>Nome do visitante</label><input id="vfNome" placeholder="Ex: Carlos Mendes"></div>
+      <div><label>Unidade visitada</label><input id="vfUnidade" placeholder="Ex: 1201-A"></div>
+      <div><label>Documento</label><input id="vfDoc" placeholder="RG ou CPF"></div>
+      <div><label>Motivo</label><input id="vfMotivo" placeholder="Ex: Visita, entrega, prestador"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="toggleVisForm(false)">Cancelar</button>
+      <button class="btn-primary" onclick="addVisitante()">Registrar entrada</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>Visitantes hoje</h3><span class="see-all" onclick="toggleVisForm(true)" style="cursor:pointer">+ Registrar entrada</span></div>
+    <table class="datatable">
+      <tr><th>Nome</th><th>Unidade</th><th>Motivo</th><th>Entrada</th><th>Status</th></tr>
+      ${visitantes.map((v,i)=>`<tr><td>${v.nome}</td><td class="mono">${v.unidade}</td><td>${v.motivo}</td><td>${v.entrada}</td><td>${v.saida?`<span class="badge b-green">Saída ${v.saida}</span>`:`<span class="see-all" style="cursor:pointer" onclick="registrarSaida(${i})">Registrar saída</span>`}</td></tr>`).join("")}
+    </table>
+  </div>`;
+}
+function toggleVisForm(show){document.getElementById("visFormPanel").style.display = show ? "block":"none";}
+function addVisitante(){
+  const nome=document.getElementById("vfNome").value.trim();
+  const unidade=document.getElementById("vfUnidade").value.trim();
+  const motivo=document.getElementById("vfMotivo").value.trim()||"Visita";
+  if(!nome||!unidade){ toast("Preencha nome e unidade"); return; }
+  visitantes.unshift({nome,unidade,motivo,entrada:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),saida:null});
+  goAdmin("visitantes");
+  toast("Entrada registrada");
+}
+function registrarSaida(i){
+  visitantes[i].saida=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  goAdmin("visitantes");
+  toast("Saída registrada");
+}
+
+function toast(msg){
+  const old=document.querySelector(".toast"); if(old) old.remove();
+  const t=document.createElement("div"); t.className="toast"; t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),2200);
+}
+
+function renderAdminUnidades(){
+  function torreBlock(torre){
+    let rows="";
+    for(let andar=26;andar>=1;andar--){
+      const c1=`${andar<10?'0'+andar:andar}01-${torre}`;
+      const cod2=`${andar<10?'0'+andar:andar}02-${torre}`;
+      rows+=`<div class="mini-row"><div style="width:34px;text-align:center;font-size:11px;color:var(--ink-soft);font-weight:700">${andar}º</div><div style="flex:1;display:flex;gap:8px"><span class="badge b-blue" style="font-family:'IBM Plex Mono',monospace">${c1}</span><span class="badge b-blue" style="font-family:'IBM Plex Mono',monospace">${cod2}</span></div></div>`;
+    }
+    return rows;
+  }
+  return `
+  ${adminTopbar("Unidades")}
+  <div class="kpi-grid">
+    ${kpi("Total de unidades","104","2 torres · 26 andares","up","🏢","var(--blue-bg)")}
+    ${kpi("Torre A","52","2 aptos por andar","up","🅰️","var(--green-bg)")}
+    ${kpi("Torre B","52","2 aptos por andar","up","🅱️","var(--amber-bg)")}
+    ${kpi("Ocupação","97%","101 de 104 ocupadas","up","👥","var(--blue-bg)")}
+  </div>
+  <div class="admin-grid" style="grid-template-columns:1fr 1fr">
+    <div class="panel">
+      <div class="panel-head"><h3>Torre A</h3><span class="see-all">26 andares</span></div>
+      <div style="max-height:420px;overflow-y:auto">${torreBlock('A')}</div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Torre B</h3><span class="see-all">26 andares</span></div>
+      <div style="max-height:420px;overflow-y:auto">${torreBlock('B')}</div>
+    </div>
+  </div>`;
+}
+
+function renderPorteiroDashboard(){
+  const pendentes=reservas.filter(r=>r.tag==='Pendente').length;
+  const emArmazenamento=encomendas.filter(e=>e.tag==='Em armazenamento').length;
+  return `
+  ${adminTopbar("Painel da portaria")}
+  <div class="kpi-grid">
+    ${kpi("Reservas pendentes",String(pendentes),"aguardando confirmação","down","📅","var(--amber-bg)")}
+    ${kpi("Encomendas em espera",String(emArmazenamento),"aguardando retirada","down","📦","var(--blue-bg)")}
+    ${kpi("Visitantes hoje",String(visitantes.length),"registrados na portaria","up","🪪","var(--green-bg)")}
+    ${kpi("Unidades","104","2 torres · 26 andares","up","🏢","var(--blue-bg)")}
+  </div>
+  <div class="panel" style="margin-bottom:16px">
+    <div class="panel-head"><h3>Atalhos</h3></div>
+    <div class="shortcut-grid">
+      <button class="shortcut" onclick="goAdmin('moradores');toggleMoradorForm(true)"><div class="ic">👤</div><span>Cadastrar morador</span></button>
+      <button class="shortcut" onclick="goAdmin('reservas');toggleReservaForm(true)"><div class="ic">📅</div><span>Nova reserva</span></button>
+      <button class="shortcut" onclick="goAdmin('encomendas');toggleEncForm(true)"><div class="ic">📦</div><span>Registrar encomenda</span></button>
+      <button class="shortcut" onclick="goAdmin('visitantes');toggleVisForm(true)"><div class="ic">🪪</div><span>Registrar visitante</span></button>
+    </div>
+  </div>
+  <div class="admin-grid" style="grid-template-columns:1fr 1fr">
+    <div class="panel">
+      <div class="panel-head"><h3>Reservas aguardando confirmação</h3><span class="see-all">Ver todas</span></div>
+      ${reservas.filter(r=>r.tag==='Pendente').map(r=>`<div class="mini-row"><div class="list-ic" style="background:${r.cor};width:34px;height:34px;font-size:14px">${r.ic}</div><div style="flex:1"><p class="t1">${r.titulo}</p><p class="t2">${r.data}</p></div></div>`).join("") || `<p style="font-size:12.5px;color:var(--ink-soft)">Nenhuma reserva pendente.</p>`}
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Encomendas recentes</h3><span class="see-all">Ver todas</span></div>
+      ${encomendas.slice(0,4).map(e=>`<div class="mini-row"><div class="list-ic" style="background:#f3e6d8;width:34px;height:34px;font-size:14px">📦</div><div style="flex:1"><p class="t1">${e.titulo}</p><p class="t2">${e.loja}</p></div><span class="badge ${e.tagClass}" style="font-size:9px">${e.tag}</span></div>`).join("")}
+    </div>
+  </div>`;
+}
+
+function adminStub(v){
+  const found=staffRoles[currentStaffRole].items.find(i=>i[0]===v);
+  return `${adminTopbar(found[2])}<div class="panel stub"><div class="ic">${found[1]}</div><h3>${found[2]}</h3><p>Módulo em construção — próxima etapa do protótipo.</p></div>`;
+}
+
+const adminRenderers={
+  dashboard:renderDashboard, financeiro:renderAdminFinanceiro, moradores:renderAdminMoradores,
+  unidades:renderAdminUnidades,
+  reservas:renderAdminReservas, ocorrencias:renderAdminOcorrencias, sugestoes:renderAdminSugestoes,
+  encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes
+};
+const administrativoRenderers={
+  dashboard:renderDashboard, financeiro:renderAdminFinanceiro, moradores:renderAdminMoradores,
+  unidades:renderAdminUnidades, reservas:renderAdminReservas, ocorrencias:renderAdminOcorrencias,
+  sugestoes:renderAdminSugestoes,
+  encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes
+};
+const porteiroRenderers={
+  dashboard:renderPorteiroDashboard, moradores:renderAdminMoradores, reservas:renderAdminReservas,
+  encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes
+};
+const rendererMap={sindico:adminRenderers, administrativo:administrativoRenderers, porteiro:porteiroRenderers};
+
+/* ============================================================
+   ROLE SWITCH
+   ============================================================ */
+function setRole(role){
+  const resident=document.getElementById("residentApp");
+  const staff=document.getElementById("staffApp");
+  document.getElementById("btnResident").classList.toggle("active",role==="resident");
+  document.getElementById("btnAdmin").classList.toggle("active",role==="sindico");
+  document.getElementById("btnPorteiro").classList.toggle("active",role==="porteiro");
+  document.getElementById("btnAdministrativo").classList.toggle("active",role==="administrativo");
+  if(role==="resident"){
+    resident.style.display="block"; staff.classList.remove("show");
+    goView(currentView);
+  } else {
+    resident.style.display="none"; staff.classList.add("show");
+    currentStaffRole=role;
+    buildSidebar(); goAdmin(staffViewByRole[role]);
+  }
+}
+
+/* init */
+goView("home");
+
+/* ============================================================
+   PWA — instalação e service worker
+   ============================================================ */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js").catch(()=>{});
+  });
+}
+
+let deferredInstallPrompt = null;
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  showInstallBanner();
+});
+window.addEventListener("appinstalled", () => {
+  deferredInstallPrompt = null;
+  hideInstallBanner();
+});
+
+function showInstallBanner(){
+  if (document.getElementById("installBanner")) return;
+  if (window.matchMedia("(display-mode: standalone)").matches) return;
+  const banner = document.createElement("div");
+  banner.id = "installBanner";
+  banner.style.cssText = "position:fixed;left:12px;right:12px;bottom:12px;max-width:436px;margin:0 auto;background:var(--navy-950);color:#fff;border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 30px rgba(0,0,0,.3);z-index:1000;";
+  banner.innerHTML = `
+    <div style="width:38px;height:38px;border-radius:10px;background:var(--gold-500);color:var(--navy-950);display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;flex:none">CM</div>
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:700;font-size:13px">Instalar o app do Charles Miller</div>
+      <div style="font-size:11.5px;color:#b9c2d6">Acesse direto da tela inicial, sem precisar do navegador</div>
+    </div>
+    <button id="installBtn" style="background:var(--gold-500);color:var(--navy-950);border:none;padding:9px 14px;border-radius:10px;font-weight:700;font-size:12px;flex:none">Instalar</button>
+    <button id="dismissInstallBtn" style="background:none;border:none;color:#8ea0c4;font-size:18px;padding:0 4px;flex:none">×</button>
+  `;
+  document.body.appendChild(banner);
+  document.getElementById("installBtn").onclick = async () => {
+    if (!deferredInstallPrompt) return;
+    deferredInstallPrompt.prompt();
+    await deferredInstallPrompt.userChoice;
+    deferredInstallPrompt = null;
+    hideInstallBanner();
+  };
+  document.getElementById("dismissInstallBtn").onclick = hideInstallBanner;
+}
+function hideInstallBanner(){
+  const b = document.getElementById("installBanner");
+  if (b) b.remove();
+}
+</script>
+</body>
+</html>
