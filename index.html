@@ -178,6 +178,7 @@ button.see-all,.see-all[onclick]{cursor:pointer;}
 .legend span{display:inline-flex;align-items:center;gap:5px;}
 .legend i{width:7px;height:7px;border-radius:50%;display:inline-block;}
 
+.fab.oculto{display:none;}
 .fab{position:fixed;bottom:100px;right:max(20px,calc(50% - 230px + 20px));width:52px;height:52px;border-radius:16px;background:var(--navy-950);color:var(--gold-400);border:none;font-size:22px;box-shadow:var(--shadow);z-index:60;display:flex;align-items:center;justify-content:center;}
 
 /* --- bottom nav --- */
@@ -270,6 +271,22 @@ table.datatable th{text-align:left;font-size:11px;text-transform:uppercase;lette
 table.datatable td{padding:12px;border-bottom:1px solid var(--line);}
 table.datatable tr:last-child td{border-bottom:none;}
 .inline-select{border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 8px;font-family:inherit;background:var(--paper);}
+
+/* --- visitantes autorizados --- */
+.dias-semana{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;}
+.dias-semana .dia{border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);
+  border-radius:9px;padding:9px 0;font-size:11px;font-weight:700;min-width:0;}
+.dias-semana .dia.on{background:var(--navy-950);border-color:var(--navy-950);color:#fff;}
+.aut-card{padding:15px 16px;margin-bottom:12px;}
+.aut-top{display:flex;gap:12px;align-items:flex-start;}
+.aut-top .t1{font-size:14px;font-weight:700;margin:0 0 3px;}
+.aut-top .t2{font-size:11.5px;color:var(--ink-soft);margin:0;}
+.aut-cod{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+  margin-top:13px;padding-top:12px;border-top:1px dashed var(--line);}
+.aut-cod .lbl{display:block;font-size:10px;color:var(--ink-soft);text-transform:uppercase;
+  letter-spacing:.04em;font-weight:700;margin-bottom:2px;}
+.aut-cod strong{font-size:17px;letter-spacing:.08em;}
+.aut-usos{margin:10px 0 0;font-size:11px;color:var(--green);font-weight:600;}
 
 /* --- mapa de vagas --- */
 .vaga-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(108px,1fr));gap:8px;max-height:460px;overflow-y:auto;padding-right:2px;}
@@ -519,6 +536,21 @@ const vagas = (function(){
   return lista;
 })();
 
+/* --- Visitantes pré-autorizados pelo morador --- */
+const diasSemana = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+const motivosVisita = ["Visita","Prestador de serviço","Entrega","Diarista","Cuidador(a)","Transporte por app"];
+const autorizacoes = [
+  {id:1,unidade:"802-A",nome:"Ana Paula Ferreira",doc:"123.456.789-00",motivo:"Diarista",
+   tipo:"recorrente",de:"2026-08-01",ate:"2026-12-31",dias:[2,4],codigo:"CM-7K2P",
+   cancelada:false,usos:[{data:"2026-08-25",hora:"08:05"}]},
+  {id:2,unidade:"802-A",nome:"Marcos Vinícius Alves",doc:"987.654.321-00",motivo:"Visita",
+   tipo:"unica",data:"2026-08-27",codigo:"CM-3B9X",cancelada:false,usos:[]},
+  {id:3,unidade:"1401-B",nome:"Equipe Climatiza Ar",doc:"CNPJ 09.876.543/0001-21",motivo:"Prestador de serviço",
+   tipo:"periodo",de:"2026-08-26",ate:"2026-08-29",codigo:"CM-5T4Q",cancelada:false,usos:[]},
+  {id:4,unidade:"301-A",nome:"Juliana Reis",doc:"111.222.333-44",motivo:"Visita",
+   tipo:"unica",data:"2026-08-20",codigo:"CM-9W4M",cancelada:false,usos:[{data:"2026-08-20",hora:"19:30"}]},
+];
+
 const tiposVeiculo = {Carro:"🚗",Moto:"🏍️",Bicicleta:"🚲"};
 const veiculos = [
   {placa:"QAB1D23",modelo:"Honda Civic",cor:"Prata",tipo:"Carro",unidade:"802-A",vaga:"A-16"},
@@ -663,7 +695,7 @@ function renderHome(){
       ${quick("⚠️","Ocorrências","#fbeae7","#c14a3f","ocorrencias")}
       ${quick("💡","Sugestões","#f6ecd6","#b9822c","sugestoes")}
       ${quick("📦","Encomendas","#f3e6d8","#a3652f","encomendas")}
-      ${quick("👥","Visitantes","#e6e0f2","#6d4fa8","hub")}
+      ${quick("👥","Visitantes","#e6e0f2","#6d4fa8","autorizacoes")}
       ${quick("🚗","Veículos","#e0ebf2","#3a6ea8","veiculos")}
       ${quick("▦","Mais","#eceae2","#5c5f66","hub")}
     </div>
@@ -901,6 +933,7 @@ function rowSugestao(s){
 function toggleSugForm(show){
   const panel=document.getElementById("sugFormPanel");
   if(panel) panel.style.display = show ? "block":"none";
+  ocultarFab(show);
 }
 function addSugestao(){
   const titulo=document.getElementById("sfTitulo").value.trim();
@@ -943,7 +976,7 @@ function renderHub(){
   const items=[
     ["🗳️","Assembleias","assembleias"],["📄","Documentos","documentos"],
     ["💡","Sugestões","sugestoes"],["📦","Encomendas","encomendas"],
-    ["👥","Visitantes",null],["🚗","Veículos","veiculos"],
+    ["👥","Visitantes","autorizacoes"],["🚗","Veículos","veiculos"],
     ["💬","Fale com o síndico",null],["⚙️","Configurações",null]
   ];
   return `
@@ -1061,7 +1094,8 @@ function filtrarDocMorador(c){ filtroDocMorador=c; goView("documentos"); }
 const viewMap={home:renderHome,reservas:renderReservas,financeiro:renderFinanceiro,avisos:renderAvisos,
   ocorrencias:renderOcorrencias,sugestoes:renderSugestoes,encomendas:renderEncomendas,hub:renderHub,
   assembleias:renderAssembleiasMorador,documentos:renderDocumentosMorador,
-  veiculos:renderVeiculosMorador};
+  veiculos:renderVeiculosMorador,
+  autorizacoes:renderAutorizacoesMorador};
 
 function goView(v){
   const render=viewMap[v];
@@ -1377,7 +1411,9 @@ function renderAdminReservas(){
   <div class="panel" id="reservaFormPanel" style="display:none;margin-bottom:16px">
     <div class="panel-head"><h3>Nova reserva</h3></div>
     <div class="form-grid">
-      <div><label>Área comum</label><select id="rfArea"><option>Salão de Festas</option><option>Churrasqueira 1</option><option>Churrasqueira 2</option><option>Quadra Poliesportiva</option></select></div>
+      <div><label>Área comum</label><select id="rfArea">${
+        config.areas.filter(a=>a.ativa).map(a=>`<option>${a.nome}</option>`).join("")
+      }</select></div>
       <div><label>Unidade / Morador</label><input id="rfMorador" placeholder="Ex: 1201-A"></div>
       <div><label>Data</label><input id="rfData" type="date"></div>
       <div><label>Horário</label><input id="rfHora" placeholder="Ex: 18:00 às 23:00"></div>
@@ -1391,7 +1427,7 @@ function renderAdminReservas(){
     <div class="panel-head"><h3>Reservas da semana</h3><button class="see-all" onclick="toggleReservaForm(true)">+ Nova reserva</button></div>
     <table class="datatable">
       <tr><th>Área</th><th>Unidade</th><th>Data</th><th>Status</th><th></th></tr>
-      ${reservas.map((r,i)=>`<tr><td>${r.titulo}</td><td class="mono">${r.morador||'802-A'}</td><td>${r.data}</td><td><span class="badge ${r.tagClass}">${r.tag}</span></td><td>${r.tag==='Pendente'?`<button class="see-all" onclick="confirmReserva(${i})">Confirmar</button>`:''}</td></tr>`).join("")}
+      ${reservas.map((r,i)=>`<tr><td>${r.titulo}</td><td class="mono">${r.morador||'—'}</td><td>${r.data}</td><td><span class="badge ${r.tagClass}">${r.tag}</span></td><td>${r.tag==='Pendente'?`<button class="see-all" onclick="confirmReserva(${i})">Confirmar</button>`:''}</td></tr>`).join("")}
     </table>
   </div>`;
 }
@@ -1403,15 +1439,32 @@ function confirmReserva(i){
   goAdmin("reservas");
   toast("Reserva confirmada");
 }
+/* ícone/cor por área; áreas novas caem no padrão em vez de quebrar */
+const iconesArea={"Salão de Festas":["🎉","#f3e6d8"],"Churrasqueira 1":["🍖","#e6efe0"],
+  "Churrasqueira 2":["🍖","#e6efe0"],"Quadra Poliesportiva":["🏓","#e0ebf2"],
+  "Espaço Gourmet":["🍽️","#f3e6d8"]};
+function iconeArea(nome){return iconesArea[nome]||["🏛️","#eceae2"];}
+
 function addReserva(){
   const area=document.getElementById("rfArea").value;
-  const morador=document.getElementById("rfMorador").value.trim();
+  const unidade=document.getElementById("rfMorador").value.trim().toUpperCase();
   const data=document.getElementById("rfData").value;
   const hora=document.getElementById("rfHora").value.trim();
-  if(!morador||!data){ toast("Preencha unidade e data"); return; }
-  const icones={"Salão de Festas":["🎉","#f3e6d8"],"Churrasqueira 1":["🍖","#e6efe0"],"Churrasqueira 2":["🍖","#e6efe0"],"Quadra Poliesportiva":["🏓","#e0ebf2"]};
-  const [ic,cor]=icones[area];
-  reservas.unshift({ic,cor,titulo:area,morador,data:`${data.split('-').reverse().join('/')} · ${hora||'a definir'}`,num:"Reserva #"+(1200+reservas.length+1),tag:"Confirmada",tagClass:"b-green"});
+  if(!unidade||!data){ toast("Preencha unidade e data"); return; }
+  if(!area){ toast("Nenhuma área comum está liberada para reserva"); return; }
+  const cfg=config.areas.find(a=>a.nome===area);
+  const antecedencia=diasAte(data);
+  if(antecedencia<0){ toast("A data não pode estar no passado"); return; }
+  if(cfg && antecedencia<cfg.antec){
+    toast(`${area} exige ${cfg.antec} dias de antecedência`); return;
+  }
+  if(reservas.some(r=>r.titulo===area && r.data.startsWith(fmtData(data)) && r.tag!=="Cancelada")){
+    toast(`${area} já está reservada em ${fmtData(data)}`); return;
+  }
+  const [ic,cor]=iconeArea(area);
+  reservas.unshift({ic,cor,titulo:area,morador:unidade,
+    data:`${fmtData(data)} · ${hora||'a definir'}`,
+    num:"Reserva #"+(1200+reservas.length+1),tag:"Confirmada",tagClass:"b-green"});
   goAdmin("reservas");
   toast("Reserva criada");
 }
@@ -1529,26 +1582,43 @@ function marcarEntregue(i){
 }
 
 function renderAdminVisitantes(){
+  CTX_AUTORIZACAO="admin";
+  const dentro=visitantes.filter(v=>!v.saida).length;
   return `
   ${adminTopbar("Visitantes")}
+  <div class="kpi-grid">
+    ${kpi("Autorizados hoje",String(autorizadasHoje().length),"liberação sem ligar ao morador","up","✅","var(--green-bg)")}
+    ${kpi("Entradas hoje",String(visitantes.length),"registradas na portaria","up","🪪","var(--blue-bg)")}
+    ${kpi("Ainda no condomínio",String(dentro),"sem registro de saída","down","🕒","var(--amber-bg)")}
+    ${kpi("Autorizações ativas",String(autorizacoes.filter(a=>!a.cancelada&&ultimaDataAutorizacao(a)>=hojeISO()).length),"vigentes no total","up","📋","var(--gold-100)")}
+  </div>
+
+  ${painelAutorizacoes()}
+
   <div class="panel" id="visFormPanel" style="display:none;margin-bottom:16px">
-    <div class="panel-head"><h3>Registrar entrada</h3></div>
+    <div class="panel-head"><h3>Registrar entrada sem autorização prévia</h3></div>
     <div class="form-grid">
       <div><label>Nome do visitante</label><input id="vfNome" placeholder="Ex: Carlos Mendes"></div>
       <div><label>Unidade visitada</label><input id="vfUnidade" placeholder="Ex: 1201-A"></div>
       <div><label>Documento</label><input id="vfDoc" placeholder="RG ou CPF"></div>
-      <div><label>Motivo</label><input id="vfMotivo" placeholder="Ex: Visita, entrega, prestador"></div>
+      <div><label>Motivo</label><select id="vfMotivo">${motivosVisita.map(m=>`<option>${m}</option>`).join("")}</select></div>
     </div>
     <div class="form-actions">
       <button class="btn-ghost" onclick="toggleVisForm(false)">Cancelar</button>
       <button class="btn-primary" onclick="addVisitante()">Registrar entrada</button>
     </div>
   </div>
+
   <div class="panel">
-    <div class="panel-head"><h3>Visitantes hoje</h3><button class="see-all" onclick="toggleVisForm(true)">+ Registrar entrada</button></div>
+    <div class="panel-head"><h3>Entradas de hoje</h3><button class="see-all" onclick="toggleVisForm(true)">+ Registrar entrada</button></div>
     <table class="datatable">
-      <tr><th>Nome</th><th>Unidade</th><th>Motivo</th><th>Entrada</th><th>Status</th></tr>
-      ${visitantes.map((v,i)=>`<tr><td>${v.nome}</td><td class="mono">${v.unidade}</td><td>${v.motivo}</td><td>${v.entrada}</td><td>${v.saida?`<span class="badge b-green">Saída ${v.saida}</span>`:`<button class="see-all" onclick="registrarSaida(${i})">Registrar saída</button>`}</td></tr>`).join("")}
+      <tr><th>Nome</th><th>Unidade</th><th>Motivo</th><th>Origem</th><th>Entrada</th><th>Status</th></tr>
+      ${visitantes.map((v,i)=>`<tr>
+        <td>${v.nome}</td><td class="mono">${v.unidade}</td><td>${v.motivo}</td>
+        <td>${v.autorizado?'<span class="badge b-green">Pré-autorizado</span>':'<span class="badge b-blue">Portaria</span>'}</td>
+        <td class="mono">${v.entrada}</td>
+        <td>${v.saida?`<span class="badge b-green">Saída ${v.saida}</span>`:`<button class="see-all" onclick="registrarSaida(${i})">Registrar saída</button>`}</td>
+      </tr>`).join("")}
     </table>
   </div>`;
 }
@@ -1673,6 +1743,253 @@ function somaISO(iso,meses){
   const d=new Date(iso+"T00:00:00");
   d.setMonth(d.getMonth()+meses);
   return d.toISOString().slice(0,10);
+}
+
+/* ============================================================
+   MÓDULO: VISITANTES AUTORIZADOS (pré-autorização pelo morador)
+   ============================================================ */
+
+/* a autorização vale na data informada? */
+function autorizadaEm(a,iso){
+  if(a.cancelada) return false;
+  if(a.tipo==="unica") return a.data===iso;
+  if(iso<a.de || iso>a.ate) return false;
+  if(a.tipo==="periodo") return true;
+  // recorrente: precisa cair num dos dias da semana escolhidos
+  return a.dias.includes(new Date(iso+"T00:00:00").getDay());
+}
+function ultimaDataAutorizacao(a){ return a.tipo==="unica" ? a.data : a.ate; }
+
+function statusAutorizacao(a){
+  const hoje=hojeISO();
+  if(a.cancelada) return {txt:"Cancelada",cls:"b-navy",ativa:false};
+  if(a.tipo==="unica" && a.usos.length) return {txt:"Utilizada",cls:"b-green",ativa:false};
+  if(ultimaDataAutorizacao(a)<hoje) return {txt:"Expirada",cls:"b-red",ativa:false};
+  if(autorizadaEm(a,hoje)) return {txt:"Válida hoje",cls:"b-green",ativa:true};
+  return {txt:"Agendada",cls:"b-blue",ativa:false};
+}
+
+function descreveValidade(a){
+  if(a.tipo==="unica") return "Somente em "+fmtData(a.data);
+  if(a.tipo==="periodo") return `De ${fmtData(a.de)} a ${fmtData(a.ate)}`;
+  const d=[...a.dias].sort().map(i=>diasSemana[i]).join(", ");
+  return `${d} · até ${fmtData(a.ate)}`;
+}
+
+function autorizacoesDaUnidade(u){return autorizacoes.filter(a=>a.unidade===u);}
+function autorizadasHoje(){return autorizacoes.filter(a=>autorizadaEm(a,hojeISO()));}
+
+function novoCodigoAutorizacao(){
+  const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // sem I,O,0,1 para não confundir na portaria
+  let cod;
+  do{
+    cod="CM-"+Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join("");
+  } while(autorizacoes.some(a=>a.codigo===cod));
+  return cod;
+}
+
+/* --- Morador: autoriza e acompanha --- */
+function renderAutorizacoesMorador(){
+  CTX_AUTORIZACAO="morador";
+  const minhas=autorizacoesDaUnidade(morador.cod)
+    .sort((a,b)=>(statusAutorizacao(b).ativa?1:0)-(statusAutorizacao(a).ativa?1:0));
+  const ativas=minhas.filter(a=>statusAutorizacao(a).ativa).length;
+  return `
+  <div class="topbar"><button class="back" onclick="goView('hub')">←</button><h1>Visitantes</h1></div>
+  <div class="view">
+    <div class="card" id="autFormPanel" style="display:none;padding:16px;margin-bottom:16px">
+      <p style="font-weight:700;font-size:13.5px;margin:0 0 12px">Autorizar visitante</p>
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <div><label>Nome completo</label><input id="atNome" placeholder="Ex: Ana Paula Ferreira"></div>
+        <div><label>Documento (opcional)</label><input id="atDoc" placeholder="CPF ou RG"></div>
+        <div><label>Motivo</label><select id="atMotivo">${motivosVisita.map(m=>`<option>${m}</option>`).join("")}</select></div>
+        <div><label>Tipo de autorização</label>
+          <select id="atTipo" onchange="atualizarCamposAut()">
+            <option value="unica">Visita única — um dia</option>
+            <option value="periodo">Período — vários dias seguidos</option>
+            <option value="recorrente">Recorrente — dias da semana</option>
+          </select>
+        </div>
+        <div id="atCampoData"><label>Data da visita</label><input id="atData" type="date" min="${hojeISO()}"></div>
+        <div id="atCampoDe" style="display:none"><label>De</label><input id="atDe" type="date" min="${hojeISO()}"></div>
+        <div id="atCampoAte" style="display:none"><label>Até</label><input id="atAte" type="date" min="${hojeISO()}"></div>
+        <div id="atCampoDias" style="display:none">
+          <label>Dias da semana</label>
+          <div class="dias-semana">
+            ${diasSemana.map((d,i)=>`<button type="button" class="dia" data-dia="${i}" onclick="alternarDiaSemana(this)">${d}</button>`).join("")}
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-ghost" onclick="toggleAutForm(false)">Cancelar</button>
+        <button class="btn-primary" onclick="addAutorizacao()">Gerar autorização</button>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:0">
+      <h2>Autorizações</h2><span class="see-all">${ativas} ${ativas===1?'válida hoje':'válidas hoje'}</span>
+    </div>
+    ${minhas.length?minhas.map(a=>{
+      const st=statusAutorizacao(a);
+      return `
+      <div class="card aut-card">
+        <div class="aut-top">
+          <div style="flex:1;min-width:0">
+            <p class="t1">${a.nome}</p>
+            <p class="t2">${a.motivo}${a.doc&&a.doc!=="—"?" · "+a.doc:""}</p>
+            <p class="t2">${descreveValidade(a)}</p>
+          </div>
+          <span class="badge ${st.cls}">${st.txt}</span>
+        </div>
+        <div class="aut-cod">
+          <div>
+            <span class="lbl">Código na portaria</span>
+            <strong class="mono">${a.codigo}</strong>
+          </div>
+          <div style="display:flex;gap:10px">
+            <button class="see-all" onclick="compartilharCodigo(${a.id})">Compartilhar</button>
+            ${st.ativa||statusAutorizacao(a).txt==="Agendada"
+              ? `<button class="see-all" style="color:var(--red)" onclick="cancelarAutorizacao(${a.id})">Cancelar</button>`:''}
+          </div>
+        </div>
+        ${a.usos.length?`<p class="t2 aut-usos">Última entrada: ${fmtData(a.usos[a.usos.length-1].data)} às ${a.usos[a.usos.length-1].hora}${a.usos.length>1?` · ${a.usos.length} entradas`:''}</p>`:''}
+      </div>`;
+    }).join(""):`<div class="empty-note">Você ainda não autorizou nenhum visitante.</div>`}
+
+    <div class="tip-card">
+      <p class="t1">Como funciona</p>
+      <p>Envie o código ao visitante. Na chegada, a portaria confere o código e libera a entrada sem precisar ligar para você.</p>
+    </div>
+  </div>
+  <button class="fab" onclick="toggleAutForm(true)">+</button>`;
+}
+
+function toggleAutForm(show){
+  const p=document.getElementById("autFormPanel");
+  if(!p) return;
+  p.style.display = show ? "block":"none";
+  ocultarFab(show);
+  if(show){ atualizarCamposAut(); document.getElementById("atNome").focus(); }
+}
+function alternarDiaSemana(btn){ btn.classList.toggle("on"); }
+/* o FAB flutua sobre o conteúdo e cobriria os botões do formulário aberto */
+function ocultarFab(esconder){
+  const f=document.querySelector("#residentViews .fab");
+  if(f) f.classList.toggle("oculto",!!esconder);
+}
+function atualizarCamposAut(){
+  const tipo=document.getElementById("atTipo").value;
+  document.getElementById("atCampoData").style.display = tipo==="unica" ? "block":"none";
+  document.getElementById("atCampoDe").style.display   = tipo==="unica" ? "none":"block";
+  document.getElementById("atCampoAte").style.display  = tipo==="unica" ? "none":"block";
+  document.getElementById("atCampoDias").style.display = tipo==="recorrente" ? "block":"none";
+}
+function addAutorizacao(){
+  const nome=document.getElementById("atNome").value.trim();
+  const doc=document.getElementById("atDoc").value.trim()||"—";
+  const motivo=document.getElementById("atMotivo").value;
+  const tipo=document.getElementById("atTipo").value;
+  if(!nome){ toast("Informe o nome do visitante"); return; }
+
+  const hoje=hojeISO();
+  const nova={id:Math.max(0,...autorizacoes.map(a=>a.id))+1,
+    unidade:morador.cod,nome,doc,motivo,tipo,codigo:novoCodigoAutorizacao(),cancelada:false,usos:[]};
+
+  if(tipo==="unica"){
+    const data=document.getElementById("atData").value;
+    if(!data){ toast("Escolha a data da visita"); return; }
+    if(data<hoje){ toast("A data não pode estar no passado"); return; }
+    nova.data=data;
+  } else {
+    const de=document.getElementById("atDe").value, ate=document.getElementById("atAte").value;
+    if(!de||!ate){ toast("Informe o período de validade"); return; }
+    if(ate<de){ toast("A data final não pode ser anterior à inicial"); return; }
+    if(ate<hoje){ toast("O período informado já passou"); return; }
+    nova.de=de; nova.ate=ate;
+    if(tipo==="recorrente"){
+      const dias=[...document.querySelectorAll("#atCampoDias .dia.on")].map(b=>Number(b.dataset.dia));
+      if(!dias.length){ toast("Escolha ao menos um dia da semana"); return; }
+      nova.dias=dias;
+    }
+  }
+  autorizacoes.unshift(nova);
+  goView("autorizacoes");
+  toast(`Autorização criada · código ${nova.codigo}`);
+}
+function compartilharCodigo(id){
+  const a=autorizacoes.find(x=>x.id===id);
+  if(!a) return;
+  const msg=`${a.nome}, sua entrada no Condomínio Charles Miller está autorizada. Código na portaria: ${a.codigo} (${descreveValidade(a)}).`;
+  if(navigator.share){ navigator.share({text:msg}).catch(()=>{}); return; }
+  if(navigator.clipboard){ navigator.clipboard.writeText(msg).then(()=>toast("Mensagem copiada")).catch(()=>toast(a.codigo)); return; }
+  toast(`Código ${a.codigo}`);
+}
+function cancelarAutorizacao(id){
+  const a=autorizacoes.find(x=>x.id===id);
+  if(!a) return;
+  if(!confirm(`Cancelar a autorização de ${a.nome}? O código ${a.codigo} deixará de valer.`)) return;
+  a.cancelada=true;
+  if(CTX_AUTORIZACAO==="admin"){ goAdmin("visitantes"); } else { goView("autorizacoes"); }
+  toast("Autorização cancelada");
+}
+/* de qual tela a ação partiu — o cancelamento existe nos dois lados */
+let CTX_AUTORIZACAO="morador";
+
+/* --- Portaria: confere o código e libera --- */
+let buscaAutorizacao="";
+
+function painelAutorizacoes(){
+  const termo=buscaAutorizacao.trim().toUpperCase();
+  const hoje=autorizadasHoje();
+  const lista=termo
+    ? autorizacoes.filter(a=>a.codigo.includes(termo)||a.nome.toUpperCase().includes(termo)||a.unidade.includes(termo))
+    : hoje;
+  return `
+  <div class="panel" style="margin-bottom:16px">
+    <div class="panel-head">
+      <h3>Visitantes autorizados${termo?"":" · hoje"}</h3>
+      <span class="see-all">${hoje.length} ${hoje.length===1?'liberado hoje':'liberados hoje'}</span>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:14px">
+      <input id="buscaAut" class="cell-input" style="width:100%;max-width:320px" placeholder="Buscar por código, nome ou unidade"
+             value="${buscaAutorizacao}" oninput="buscarAutorizacao(this.value)">
+      ${termo?`<button class="btn-ghost" onclick="buscarAutorizacao('')">Limpar</button>`:''}
+    </div>
+    ${lista.length?`<table class="datatable">
+      <tr><th>Código</th><th>Visitante</th><th>Unidade</th><th>Motivo</th><th>Validade</th><th>Status</th><th></th></tr>
+      ${lista.map(a=>{
+        const st=statusAutorizacao(a);
+        return `<tr>
+          <td class="mono" style="font-weight:700">${a.codigo}</td>
+          <td>${a.nome}${a.doc&&a.doc!=="—"?`<br><span style="color:var(--ink-soft);font-size:11px">${a.doc}</span>`:''}</td>
+          <td class="mono">${a.unidade}</td>
+          <td>${a.motivo}</td>
+          <td>${descreveValidade(a)}</td>
+          <td><span class="badge ${st.cls}">${st.txt}</span></td>
+          <td style="white-space:nowrap">${st.ativa
+            ? `<button class="see-all" onclick="liberarEntrada(${a.id})">Liberar entrada</button>`
+            : `<span style="color:var(--ink-soft);font-size:11px">—</span>`}</td>
+        </tr>`;
+      }).join("")}
+    </table>`:`<div class="empty-note">${termo?`Nenhuma autorização encontrada para "${buscaAutorizacao}".`:'Nenhum visitante autorizado para hoje.'}</div>`}
+  </div>`;
+}
+function buscarAutorizacao(v){
+  buscaAutorizacao=v;
+  goAdmin("visitantes");
+  const inp=document.getElementById("buscaAut");
+  if(inp){ inp.focus(); inp.setSelectionRange(inp.value.length,inp.value.length); }
+}
+function liberarEntrada(id){
+  const a=autorizacoes.find(x=>x.id===id);
+  if(!a){ toast("Autorização não encontrada"); return; }
+  const st=statusAutorizacao(a);
+  if(!st.ativa){ toast(`Autorização ${st.txt.toLowerCase()} — entrada não liberada`); return; }
+  const hora=horaAgora();
+  a.usos.push({data:hojeISO(),hora});
+  visitantes.unshift({nome:a.nome,unidade:a.unidade,motivo:a.motivo,entrada:hora,saida:null,autorizado:true});
+  goAdmin("visitantes");
+  toast(`Entrada liberada · ${a.nome} (${a.unidade})`);
 }
 
 /* ============================================================
@@ -1850,7 +2167,10 @@ function renderVeiculosMorador(){
 }
 function toggleVeicFormMorador(show){
   const p=document.getElementById("veicFormMorador");
-  if(p){ p.style.display = show ? "block":"none"; if(show) document.getElementById("vmPlaca").focus(); }
+  if(!p) return;
+  p.style.display = show ? "block":"none";
+  ocultarFab(show);
+  if(show) document.getElementById("vmPlaca").focus();
 }
 function addVeiculoMorador(){
   const placa=document.getElementById("vmPlaca").value.trim();

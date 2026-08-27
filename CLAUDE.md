@@ -24,10 +24,14 @@ Estado atual: **protótipo** — dados mockados no próprio `index.html`, sem ba
 - **Dados mock** no topo: `morador`, `eventos`, `reservas`, `boletos`, `avisos`,
   `ocorrencias`, `encomendas`, `sugestoes`, `moradoresLista`, `visitantes`, `calendarEvents`,
   `assembleias`, `documentos`, `manutencoes`, `serieFinanceira`, `despesasPorCategoria`,
-  `inadimplentes`, `config`
+  `inadimplentes`, `config`, `autorizacoes`, `vagas`, `veiculos`, `boletosDoMes`
 - **App do Morador** (mobile, `#residentApp`):
   - `renderHome/Reservas/Financeiro/Avisos/Ocorrencias/Sugestoes/Encomendas/Hub()` — retornam string HTML
   - `renderAssembleiasMorador()` — pauta + votação (`votar()`); `renderDocumentosMorador()` — biblioteca
+  - `renderVeiculosMorador()` — própria vaga e veículos
+  - `renderAutorizacoesMorador()` — pré-autoriza visitantes e acompanha os códigos
+  - `ocultarFab(bool)` — o FAB cobre os botões de qualquer formulário aberto; todo
+    `toggle*Form` do morador precisa chamá-lo
   - `viewMap{}` — mapeia nome da view → função render
   - `goView(v)` — troca a view em `#residentViews`, atualiza a bottom nav
   - `switchTab()`, `filterList()`, `filterEnc()` — abas e filtros dentro das views
@@ -41,6 +45,8 @@ Estado atual: **protótipo** — dados mockados no próprio `index.html`, sem ba
     `AdminSugestoes/AdminEncomendas/AdminVisitantes/AdminUnidades/PorteiroDashboard()`
   - `renderAdminAvisos()` — publicar/editar/fixar/remover aviso (síndico e administrativo)
   - `renderAdminVeiculos()` — cadastro de veículos + mapa de vagas (também na portaria)
+  - `painelAutorizacoes()` — embutido em `renderAdminVisitantes()`: busca por código/nome/
+    unidade e `liberarEntrada()`, que registra o uso e cria a entrada em `visitantes`
   - `podeVerInadimplencia()` / `painelRestrito()` — ver **Privacidade** abaixo
   - `renderAdminAssembleias/AdminDocumentos/AdminManutencoes/AdminRelatorios/AdminConfiguracoes()`
   - `temModulo(v)` — o módulo existe no menu do perfil atual? (`goAdmin` bloqueia o que não existe)
@@ -63,6 +69,18 @@ A portaria não tem Financeiro nem Relatórios. **Ao adicionar qualquer tela nov
 dado financeiro por unidade, passe por `podeVerInadimplencia()`.** Em produção isso
 tem de virar RLS no Postgres — a checagem no cliente não protege nada sozinha.
 
+## Visitantes autorizados
+O morador pré-autoriza; a portaria confere o código e libera sem ligar para ele.
+- Três tipos: `unica` (campo `data`), `periodo` (`de`/`ate`), `recorrente` (`de`/`ate` + `dias`,
+  índices 0–6 de `diasSemana`). `autorizadaEm(a,iso)` é a única fonte da regra de validade.
+- `statusAutorizacao()` deriva tudo da data + usos: Cancelada → Utilizada (só `unica`) →
+  Expirada → Válida hoje → Agendada. **Não** guarde status no registro.
+- Código `CM-XXXX` gerado por `novoCodigoAutorizacao()`, sem `I`, `O`, `0` e `1` para não
+  confundir na leitura da portaria — mantenha isso ao criar códigos de exemplo.
+- `liberarEntrada()` registra o uso **e** cria o visitante em `visitantes` com
+  `autorizado:true`, que vira o badge "Pré-autorizado" na tabela de entradas.
+- `CTX_AUTORIZACAO` diz de qual tela o cancelamento partiu (morador ou portaria).
+
 ## Unidades e vagas
 - Código: `codUnidade(andar,apto,torre)` → `802-A`, `1401-B` — **sem zero à esquerda no andar**
 - `todasUnidades()` gera as 104; `UNIDADES_DESOCUPADAS` lista as 3 sem morador
@@ -81,7 +99,9 @@ tem de virar RLS no Postgres — a checagem no cliente não protege nada sozinha
 
 ## Regras de negócio / dados do prédio
 - 2 torres (A e B), 26 andares, 2 apts por andar → **104 unidades** (ver Unidades e vagas)
-- Áreas comuns reserváveis: Salão de Festas, Churrasqueira 1/2, Quadra Poliesportiva
+- Áreas comuns reserváveis: vêm de `config.areas` (só as `ativa`). `addReserva()` valida
+  data no passado, antecedência mínima da área e conflito de mesma área/data.
+  Ícone por `iconeArea()`, com padrão para áreas novas.
 - Status de reserva: Pendente → Confirmada
 - Status de sugestão: Em análise → Aprovada / Recusada → Implementada
 - Status de encomenda: Em armazenamento → Entregue
@@ -118,15 +138,16 @@ Depois abrir http://localhost:8000
 Todos os módulos do menu de cada perfil estão implementados — `adminStub()` continua
 no código apenas como rede de segurança para views não registradas.
 
-Ainda são placeholder (mostram só um toast): no hub do morador — Visitantes,
-Fale com o síndico, Configurações; e no financeiro — Pix, 2ª via, histórico
-e os botões de pagamento.
+Ainda são placeholder (mostram só um toast): no hub do morador — Fale com o
+síndico e Configurações; e no financeiro — Pix, 2ª via, histórico e os botões
+de pagamento.
 
 Sidebar do síndico: 16 módulos · administrativo: 13 · portaria: 6.
+Views do morador: 12.
 
 ## Próximos passos
 1. **Autenticação real** — hoje o seletor de perfil no topo troca de papel sem login
 2. **Backend (Supabase)** — todo o estado vive em memória e some ao recarregar
-3. **Cadastro de visitante autorizado** pelo morador (pré-autorização / QR)
-4. Upload real de documentos (hoje o `<input type=file>` só lê o tamanho)
-5. Envio real das notificações (Web Push) — hoje o toggle só controla o texto do toast
+3. Upload real de documentos (hoje o `<input type=file>` só lê o tamanho)
+4. Envio real das notificações (Web Push) — hoje o toggle só controla o texto do toast
+5. QR code para a autorização (hoje o visitante apresenta o código digitado)
