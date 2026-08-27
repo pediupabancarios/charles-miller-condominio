@@ -271,6 +271,40 @@ table.datatable td{padding:12px;border-bottom:1px solid var(--line);}
 table.datatable tr:last-child td{border-bottom:none;}
 .inline-select{border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 8px;font-family:inherit;background:var(--paper);}
 
+/* --- assembleias --- */
+.ass-card{border:1px solid var(--line);border-radius:var(--radius-md);padding:14px 16px;margin-bottom:12px;}
+.ass-card:last-child{margin-bottom:0;}
+.ass-head{display:flex;align-items:center;gap:12px;cursor:pointer;}
+.ass-head .t1{font-size:13.5px;font-weight:700;margin:0 0 2px;}
+.ass-head .t2{font-size:11.5px;color:var(--ink-soft);margin:0;}
+.ass-head .chevron{color:var(--ink-soft);font-size:12px;width:12px;}
+.quorum-lbl{font-size:11px;color:var(--ink-soft);margin:12px 0 5px;}
+.ass-body{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);}
+.pauta{border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 14px;margin-bottom:10px;background:var(--paper);}
+.pauta:last-child{margin-bottom:0;}
+.pauta-top{display:flex;gap:12px;align-items:flex-start;margin-bottom:11px;}
+.pauta-top .t1{font-size:13px;font-weight:700;margin:0 0 3px;}
+.pauta-top .t2{font-size:11.5px;color:var(--ink-soft);margin:0;line-height:1.45;}
+.voto-bar{display:flex;height:8px;border-radius:999px;overflow:hidden;background:var(--line);}
+.voto-bar>div{height:100%;}
+.voto-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:11px;color:var(--ink-soft);}
+.voto-legend span{display:inline-flex;align-items:center;gap:5px;}
+.voto-legend i{width:8px;height:8px;border-radius:2px;}
+.voto-btns{display:flex;gap:8px;margin-top:12px;}
+.voto-btns button{flex:1;border:1px solid var(--line);background:var(--card);padding:10px;border-radius:9px;font-size:12.5px;font-weight:700;color:var(--ink-soft);}
+.voto-btns button.sim.sel{background:var(--green-bg);border-color:var(--green);color:var(--green);}
+.voto-btns button.nao.sel{background:var(--red-bg);border-color:var(--red);color:var(--red);}
+.voto-btns button.abst.sel{background:var(--navy-900);border-color:var(--navy-900);color:#fff;}
+
+/* --- inputs em célula de tabela --- */
+.cell-input{width:96px;border:1px solid var(--line);border-radius:8px;padding:7px 9px;font-family:inherit;font-size:12.5px;background:var(--paper);}
+
+/* --- switch --- */
+.switch{width:42px;height:24px;border-radius:999px;border:none;background:var(--line);position:relative;flex:none;transition:background .18s;padding:0;}
+.switch span{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .18s;box-shadow:0 1px 3px rgba(0,0,0,.2);}
+.switch.on{background:var(--green);}
+.switch.on span{transform:translateX(18px);}
+
 .stub{padding:60px 20px;text-align:center;color:var(--ink-soft);}
 .stub .ic{font-size:34px;margin-bottom:10px;}
 .stub h3{font-family:'Fraunces',serif;color:var(--ink);margin:0 0 6px;}
@@ -409,6 +443,112 @@ const visitantes = [
   {nome:"Paula Ribeiro",unidade:"1502-B",motivo:"Entrega",entrada:"10:05",saida:null},
   {nome:"Técnico NET",unidade:"202-A",motivo:"Prestador de serviço",entrada:"08:20",saida:"09:00"},
 ];
+
+const TOTAL_UNIDADES = 104;
+
+/* --- Assembleias: cada pauta é votada em separado --- */
+const assembleias = [
+  {id:1,titulo:"Assembleia Geral Ordinária",data:"2026-09-20",hora:"19:00",local:"Salão de Festas",
+   status:"Votação aberta",
+   pauta:[
+     {id:11,titulo:"Aprovação do orçamento 2027",desc:"Previsão de receitas e despesas para o exercício de 2027, com reajuste de 6,2% na taxa condominial.",sim:41,nao:12,abst:5,meuVoto:null},
+     {id:12,titulo:"Eleição da nova gestão",desc:"Chapa única: Rodrigo Cahuana (síndico) e João Neto (subsíndico), mandato de 2 anos.",sim:48,nao:4,abst:6,meuVoto:null},
+     {id:13,titulo:"Obra de impermeabilização da laje",desc:"Orçamento de R$ 186.000,00, custeado pelo Fundo de Obras em 12 parcelas.",sim:29,nao:22,abst:7,meuVoto:null}
+   ]},
+  {id:2,titulo:"Assembleia Geral Extraordinária",data:"2026-11-08",hora:"10:00",local:"Salão de Festas",
+   status:"Agendada",
+   pauta:[
+     {id:21,titulo:"Instalação de câmeras na garagem",desc:"Proposta de 12 câmeras com gravação em nuvem por 30 dias.",sim:0,nao:0,abst:0,meuVoto:null}
+   ]},
+  {id:3,titulo:"Assembleia Geral Ordinária 2025",data:"2025-09-18",hora:"19:00",local:"Salão de Festas",
+   status:"Encerrada",
+   pauta:[
+     {id:31,titulo:"Aprovação das contas de 2025",desc:"Prestação de contas do exercício encerrado.",sim:63,nao:8,abst:3,meuVoto:"sim"},
+     {id:32,titulo:"Reforma do playground",desc:"Substituição dos brinquedos e do piso emborrachado.",sim:58,nao:11,abst:5,meuVoto:"sim"}
+   ]}
+];
+
+/* --- Documentos --- */
+const documentos = [
+  {nome:"Convenção do Condomínio",cat:"Institucional",tipo:"PDF",tam:"1,2 MB",data:"12/03/2024"},
+  {nome:"Regimento Interno",cat:"Institucional",tipo:"PDF",tam:"680 KB",data:"12/03/2024"},
+  {nome:"Ata da AGO 2025",cat:"Atas",tipo:"PDF",tam:"420 KB",data:"25/09/2025"},
+  {nome:"Ata da AGE 03/2026",cat:"Atas",tipo:"PDF",tam:"310 KB",data:"14/03/2026"},
+  {nome:"Prestação de contas · Julho/2026",cat:"Financeiro",tipo:"PDF",tam:"890 KB",data:"05/08/2026"},
+  {nome:"Balancete · 1º semestre 2026",cat:"Financeiro",tipo:"XLSX",tam:"156 KB",data:"10/07/2026"},
+  {nome:"Contrato · Portaria 24h",cat:"Contratos",tipo:"PDF",tam:"1,8 MB",data:"01/02/2026"},
+  {nome:"Contrato · Manutenção de elevadores",cat:"Contratos",tipo:"PDF",tam:"940 KB",data:"15/01/2026"},
+  {nome:"Apólice de seguro predial",cat:"Contratos",tipo:"PDF",tam:"2,1 MB",data:"20/04/2026"},
+  {nome:"Planta baixa · Pavimento tipo",cat:"Técnico",tipo:"PDF",tam:"3,4 MB",data:"08/11/2023"},
+  {nome:"AVCB · Corpo de Bombeiros",cat:"Técnico",tipo:"PDF",tam:"520 KB",data:"30/05/2026"}
+];
+const catsDocumento = ["Institucional","Atas","Financeiro","Contratos","Técnico"];
+
+/* --- Manutenções preventivas --- */
+const manutencoes = [
+  {item:"Elevador social · Torre A",cat:"Elevadores",period:"Mensal",ultima:"2026-08-12",prox:"2026-09-12",resp:"ThyssenKrupp",custo:1850},
+  {item:"Elevador social · Torre B",cat:"Elevadores",period:"Mensal",ultima:"2026-08-12",prox:"2026-09-12",resp:"ThyssenKrupp",custo:1850},
+  {item:"Limpeza da caixa d'água",cat:"Hidráulica",period:"Semestral",ultima:"2026-02-25",prox:"2026-08-25",resp:"HidroClean",custo:3200},
+  {item:"Recarga de extintores",cat:"Incêndio",period:"Anual",ultima:"2025-11-10",prox:"2026-11-10",resp:"Extinpar",custo:4700},
+  {item:"Teste da bomba de incêndio",cat:"Incêndio",period:"Mensal",ultima:"2026-08-05",prox:"2026-09-05",resp:"Extinpar",custo:600},
+  {item:"Dedetização das áreas comuns",cat:"Higiene",period:"Trimestral",ultima:"2026-06-18",prox:"2026-09-18",resp:"Sanivet",custo:1400},
+  {item:"Limpeza de calhas e ralos",cat:"Hidráulica",period:"Trimestral",ultima:"2026-05-02",prox:"2026-08-02",resp:"Equipe interna",custo:0},
+  {item:"Manutenção do portão da garagem",cat:"Acessos",period:"Trimestral",ultima:"2026-07-14",prox:"2026-10-14",resp:"PortAuto",custo:980},
+  {item:"Inspeção do gerador",cat:"Elétrica",period:"Semestral",ultima:"2026-04-20",prox:"2026-10-20",resp:"GenPower",custo:2600}
+];
+const periodicidades = {"Mensal":1,"Bimestral":2,"Trimestral":3,"Semestral":6,"Anual":12};
+
+/* --- Séries para os relatórios --- */
+const serieFinanceira = [
+  {mes:"Mar",receita:129400,despesa:98200,inad:9.4},
+  {mes:"Abr",receita:131800,despesa:91500,inad:10.1},
+  {mes:"Mai",receita:127900,despesa:104300,inad:11.8},
+  {mes:"Jun",receita:134600,despesa:88900,inad:11.2},
+  {mes:"Jul",receita:126800,despesa:97400,inad:13.5},
+  {mes:"Ago",receita:138240,despesa:94610,inad:12.8}
+];
+const despesasPorCategoria = [
+  {cat:"Pessoal e encargos",valor:41200,cor:"var(--navy-700)"},
+  {cat:"Manutenção",valor:18400,cor:"var(--blue)"},
+  {cat:"Água e energia",valor:16800,cor:"var(--amber)"},
+  {cat:"Limpeza e insumos",valor:9300,cor:"var(--green)"},
+  {cat:"Administração",valor:8910,cor:"var(--gold-500)"}
+];
+const inadimplentes = [
+  {unidade:"301-A",morador:"Marina Costa",meses:3,valor:1195.50},
+  {unidade:"1102-B",morador:"Ricardo Sanches",meses:2,valor:825.60},
+  {unidade:"0704-A",morador:"Helena Braga",meses:2,valor:797.00},
+  {unidade:"1802-B",morador:"Tiago Moreira",meses:1,valor:445.10},
+  {unidade:"0503-A",morador:"Bruno Tavares",meses:1,valor:412.80}
+];
+
+/* --- Configurações --- */
+const config = {
+  condominio:{nome:"Residencial Charles Miller",cnpj:"12.345.678/0001-90",
+    endereco:"Av. Charles Miller, 1200 — João Pessoa/PB",torres:2,andares:26,unidades:TOTAL_UNIDADES},
+  taxas:[
+    {nome:"Taxa condominial · 2 quartos",valor:398.50},
+    {nome:"Taxa condominial · 3 quartos",valor:412.80},
+    {nome:"Taxa condominial · cobertura",valor:445.10},
+    {nome:"Fundo de reserva (10%)",valor:41.28},
+    {nome:"Fundo de obras",valor:95.00}
+  ],
+  areas:[
+    {nome:"Salão de Festas",cap:80,taxa:250,antec:30,ativa:true},
+    {nome:"Churrasqueira 1",cap:20,taxa:80,antec:15,ativa:true},
+    {nome:"Churrasqueira 2",cap:20,taxa:80,antec:15,ativa:true},
+    {nome:"Quadra Poliesportiva",cap:20,taxa:0,antec:7,ativa:true},
+    {nome:"Espaço Gourmet",cap:30,taxa:150,antec:15,ativa:false}
+  ],
+  notificacoes:[
+    {chave:"avisos",label:"Avisos e comunicados",desc:"Notificar moradores a cada novo aviso publicado",ativo:true},
+    {chave:"boletos",label:"Vencimento de boletos",desc:"Lembrete 3 dias antes do vencimento",ativo:true},
+    {chave:"encomendas",label:"Chegada de encomendas",desc:"Avisar o morador quando a portaria registrar",ativo:true},
+    {chave:"reservas",label:"Confirmação de reservas",desc:"Notificar aprovação ou recusa da reserva",ativo:true},
+    {chave:"assembleias",label:"Convocação de assembleias",desc:"Notificar abertura de pauta e votação",ativo:true},
+    {chave:"visitantes",label:"Entrada de visitantes",desc:"Avisar o morador a cada entrada autorizada",ativo:false}
+  ]
+};
 
 /* ============================================================
    RESIDENT APP RENDERING
@@ -705,20 +845,128 @@ function filterEnc(btn,f){
 }
 
 function renderHub(){
+  // [ícone, rótulo, view de destino] — sem view = ainda não implementado
   const items=[
-    ["👥","Visitantes"],["🚗","Veículos"],["📄","Documentos"],["🏢","Assembleias"],
-    ["🔧","Manutenções"],["📋","Regimento"],["💬","Fale com o síndico"],["⚙️","Configurações"]
+    ["🗳️","Assembleias","assembleias"],["📄","Documentos","documentos"],
+    ["💡","Sugestões","sugestoes"],["📦","Encomendas","encomendas"],
+    ["👥","Visitantes",null],["🚗","Veículos",null],
+    ["💬","Fale com o síndico",null],["⚙️","Configurações",null]
   ];
   return `
   <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Mais opções</h1></div>
   <div class="view">
     <div class="quick-grid" style="grid-template-columns:repeat(4,1fr)">
-      ${items.map(([ic,label])=>`<button class="quick-item" onclick="toast('${label} (protótipo)')"><div class="ic" style="background:#eceae2;color:#5c5f66">${ic}</div><span>${label}</span></button>`).join("")}
+      ${items.map(([ic,label,view])=>`<button class="quick-item" onclick="${view?`goView('${view}')`:`toast('${label} (protótipo)')`}"><div class="ic" style="background:#eceae2;color:#5c5f66">${ic}</div><span>${label}</span></button>`).join("")}
     </div>
   </div>`;
 }
 
-const viewMap={home:renderHome,reservas:renderReservas,financeiro:renderFinanceiro,avisos:renderAvisos,ocorrencias:renderOcorrencias,sugestoes:renderSugestoes,encomendas:renderEncomendas,hub:renderHub};
+/* --- Assembleias (morador): consulta a pauta e vota --- */
+function renderAssembleiasMorador(){
+  const ativa=assembleias.filter(a=>a.status==="Votação aberta");
+  const outras=assembleias.filter(a=>a.status!=="Votação aberta");
+  return `
+  <div class="topbar"><button class="back" onclick="goView('hub')">←</button><h1>Assembleias</h1></div>
+  <div class="view">
+    <div class="tabs">
+      <button class="active" onclick="switchTab(this,'abertas-a')">Votação aberta${ativa.length?' ('+ativa.length+')':''}</button>
+      <button onclick="switchTab(this,'outras-a')">Agendadas e encerradas</button>
+    </div>
+    <div id="abertas-a" class="tab-panel">
+      ${ativa.length?ativa.map(cardAssembleiaMorador).join(""):`<div class="empty-note">Nenhuma votação aberta no momento.</div>`}
+    </div>
+    <div id="outras-a" class="tab-panel" style="display:none">
+      ${outras.length?outras.map(cardAssembleiaMorador).join(""):`<div class="empty-note">Nada por aqui.</div>`}
+    </div>
+  </div>`;
+}
+
+function cardAssembleiaMorador(a){
+  const podeVotar=a.status==="Votação aberta";
+  return `
+  <div class="card" style="padding:16px;margin-bottom:12px">
+    <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:6px">
+      <div class="list-ic" style="background:var(--gold-100)">🗳️</div>
+      <div style="flex:1;min-width:0">
+        <p class="t1" style="font-size:14px;font-weight:700;margin:0 0 3px">${a.titulo}</p>
+        <p class="t2" style="font-size:11.5px;color:var(--ink-soft);margin:0">${fmtData(a.data)} às ${a.hora} · ${a.local}</p>
+      </div>
+      <span class="badge ${statusAssembleia(a)}">${a.status}</span>
+    </div>
+    ${a.pauta.map(p=>`
+      <div class="pauta">
+        <p class="t1" style="font-size:13px;font-weight:700;margin:0 0 3px">${p.titulo}</p>
+        <p class="t2" style="font-size:11.5px;color:var(--ink-soft);margin:0 0 11px;line-height:1.45">${p.desc}</p>
+        ${podeVotar?`
+          <div class="voto-btns">
+            <button class="sim ${p.meuVoto==='sim'?'sel':''}" onclick="votar(${a.id},${p.id},'sim')">Sim</button>
+            <button class="nao ${p.meuVoto==='nao'?'sel':''}" onclick="votar(${a.id},${p.id},'nao')">Não</button>
+            <button class="abst ${p.meuVoto==='abst'?'sel':''}" onclick="votar(${a.id},${p.id},'abst')">Abster-se</button>
+          </div>
+          ${p.meuVoto?`<p class="t2" style="font-size:11px;color:var(--green);margin:9px 0 0;font-weight:600">✓ Seu voto foi registrado — você pode alterá-lo até o encerramento</p>`:''}
+        `:`
+          <div class="voto-bar">
+            <div style="width:${totalVotos(p)?p.sim/totalVotos(p)*100:0}%;background:var(--green)"></div>
+            <div style="width:${totalVotos(p)?p.nao/totalVotos(p)*100:0}%;background:var(--red)"></div>
+            <div style="width:${totalVotos(p)?p.abst/totalVotos(p)*100:0}%;background:var(--line)"></div>
+          </div>
+          <div class="voto-legend">
+            <span><i style="background:var(--green)"></i>Sim ${p.sim}</span>
+            <span><i style="background:var(--red)"></i>Não ${p.nao}</span>
+            <span><i style="background:var(--line)"></i>Abstenções ${p.abst}</span>
+          </div>
+          ${p.meuVoto?`<p class="t2" style="font-size:11px;color:var(--ink-soft);margin:8px 0 0">Seu voto: <strong>${{sim:'Sim',nao:'Não',abst:'Abstenção'}[p.meuVoto]}</strong></p>`:''}
+        `}
+      </div>`).join("")}
+  </div>`;
+}
+
+function votar(idAss,idPauta,voto){
+  const a=assembleias.find(x=>x.id===idAss);
+  if(!a || a.status!=="Votação aberta"){ toast("Esta votação não está aberta"); return; }
+  const p=a.pauta.find(x=>x.id===idPauta);
+  if(!p) return;
+  if(p.meuVoto===voto){ toast("Você já votou assim nesta pauta"); return; }
+  if(p.meuVoto) p[p.meuVoto]--;   // troca de voto: retira o anterior
+  p[voto]++;
+  p.meuVoto=voto;
+  const abaAtiva=[...document.querySelectorAll("#residentViews .tabs button")].findIndex(b=>b.classList.contains("active"));
+  goView("assembleias");
+  if(abaAtiva>0){
+    const abas=document.querySelectorAll("#residentViews .tabs button");
+    if(abas[abaAtiva]) abas[abaAtiva].click();
+  }
+  toast(`Voto registrado: ${{sim:'Sim',nao:'Não',abst:'Abstenção'}[voto]}`);
+}
+
+/* --- Documentos (morador): consulta e download --- */
+let filtroDocMorador="Todos";
+function renderDocumentosMorador(){
+  const cats=["Todos",...catsDocumento];
+  const lista=filtroDocMorador==="Todos"?documentos:documentos.filter(d=>d.cat===filtroDocMorador);
+  return `
+  <div class="topbar"><button class="back" onclick="goView('hub')">←</button><h1>Documentos</h1></div>
+  <div class="view">
+    <div class="filters">
+      ${cats.map(c=>`<button class="chip ${c===filtroDocMorador?'active':''}" onclick="filtrarDocMorador('${c}')">${c}</button>`).join("")}
+    </div>
+    ${lista.length?`<div class="card list-card">
+      ${lista.map(d=>{
+        const i=documentos.indexOf(d);
+        return `<button class="list-row" style="width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--line)" onclick="baixarDocumento(${i})">
+          <div class="list-ic" style="background:var(--blue-bg)">${iconeDoc(d.tipo)}</div>
+          <div class="list-body"><p class="t1">${d.nome}</p><p class="t2">${d.cat} · ${d.tipo} · ${d.tam}</p><p class="t2">Publicado em ${d.data}</p></div>
+          <span class="badge b-blue">Baixar</span>
+        </button>`;
+      }).join("")}
+    </div>`:`<div class="empty-note">Nenhum documento nesta categoria.</div>`}
+  </div>`;
+}
+function filtrarDocMorador(c){ filtroDocMorador=c; goView("documentos"); }
+
+const viewMap={home:renderHome,reservas:renderReservas,financeiro:renderFinanceiro,avisos:renderAvisos,
+  ocorrencias:renderOcorrencias,sugestoes:renderSugestoes,encomendas:renderEncomendas,hub:renderHub,
+  assembleias:renderAssembleiasMorador,documentos:renderDocumentosMorador};
 
 function goView(v){
   const render=viewMap[v];
@@ -852,13 +1100,21 @@ function renderDashboard(){
     </div>
     <div class="panel">
       <div class="panel-head"><h3>Assembleias</h3>${temModulo('assembleias')?`<button class="see-all" onclick="goAdmin('assembleias')">Ver todas</button>`:''}</div>
-      <div class="mini-row" style="border:none;padding-bottom:2px">
-        <div class="list-ic" style="background:var(--gold-100);width:34px;height:34px;font-size:14px">🗳️</div>
-        <div><p class="t1">Assembleia Geral Ordinária</p><p class="t2">20/08/2026 - 19:00 · Salão de Festas</p></div>
-      </div>
-      <p style="font-size:11.5px;color:var(--ink-soft);margin:12px 0 4px">Participação · 71% (74 de 104)</p>
-      <div class="progress-track"><div class="progress-fill" style="width:71%"></div></div>
-      <button class="vote-btn" onclick="toast('Acessar votação (protótipo)')">Acessar votação</button>
+      ${(()=>{
+        const a=assembleias.find(x=>x.status==="Votação aberta")||assembleias.find(x=>x.status==="Agendada")||assembleias[0];
+        if(!a) return `<div class="empty-note">Nenhuma assembleia cadastrada.</div>`;
+        const votos=votosAssembleia(a), pct=Math.round(votos/TOTAL_UNIDADES*100);
+        return `
+        <div class="mini-row" style="border:none;padding-bottom:2px">
+          <div class="list-ic" style="background:var(--gold-100);width:34px;height:34px;font-size:14px">🗳️</div>
+          <div><p class="t1">${a.titulo}</p><p class="t2">${fmtData(a.data)} - ${a.hora} · ${a.local}</p></div>
+        </div>
+        <p style="font-size:11.5px;color:var(--ink-soft);margin:12px 0 4px">Participação · ${pct}% (${votos} de ${TOTAL_UNIDADES})</p>
+        <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+        ${temModulo('assembleias')
+          ? `<button class="vote-btn" onclick="assembleiaAberta=${a.id};goAdmin('assembleias')">Acessar votação</button>`
+          : `<button class="vote-btn" onclick="toast('Somente o síndico gerencia assembleias')">Acessar votação</button>`}`;
+      })()}
     </div>
     <div class="panel">
       <div class="panel-head"><h3>Atalhos rápidos</h3></div>
@@ -868,7 +1124,7 @@ function renderDashboard(){
         ${shortcut("⚠️","Nova ocorrência","goAdmin('ocorrencias');toggleOcorrenciaForm(true)")}
         ${shortcut("👤","Novo morador","goAdmin('moradores');toggleMoradorForm(true)")}
         ${shortcut("💳","Relatório financeiro","goAdmin('financeiro')")}
-        ${shortcut("🧾","Prestação de contas")}
+        ${shortcut("🧾","Prestação de contas","goAdmin('relatorios')")}
       </div>
     </div>
   </div>`;
@@ -1253,17 +1509,511 @@ function adminStub(v){
   return `${adminTopbar(found[2])}<div class="panel stub"><div class="ic">${found[1]}</div><h3>${found[2]}</h3><p>Módulo em construção — próxima etapa do protótipo.</p></div>`;
 }
 
+/* ============================================================
+   HELPERS DE FORMATAÇÃO E DATA
+   ============================================================ */
+function fmtBRL(v){return v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});}
+function fmtData(iso){const [a,m,d]=iso.split('-');return `${d}/${m}/${a}`;}
+function hojeISO(){const d=new Date();return d.toISOString().slice(0,10);}
+function diasAte(iso){
+  const alvo=new Date(iso+"T00:00:00"), hoje=new Date(); hoje.setHours(0,0,0,0);
+  return Math.round((alvo-hoje)/86400000);
+}
+function somaISO(iso,meses){
+  const d=new Date(iso+"T00:00:00");
+  d.setMonth(d.getMonth()+meses);
+  return d.toISOString().slice(0,10);
+}
+
+/* ============================================================
+   MÓDULO: ASSEMBLEIAS
+   ============================================================ */
+let assembleiaAberta = null;   // id da assembleia expandida
+
+function statusAssembleia(a){
+  return {"Votação aberta":"b-green","Agendada":"b-blue","Encerrada":"b-navy"}[a.status]||"b-amber";
+}
+function totalVotos(item){return item.sim+item.nao+item.abst;}
+function votosAssembleia(a){
+  // participação = maior nº de votos entre as pautas
+  return a.pauta.reduce((max,p)=>Math.max(max,totalVotos(p)),0);
+}
+
+function renderAdminAssembleias(){
+  const abertas=assembleias.filter(a=>a.status==="Votação aberta").length;
+  const agendadas=assembleias.filter(a=>a.status==="Agendada").length;
+  return `
+  ${adminTopbar("Assembleias")}
+  <div class="kpi-grid">
+    ${kpi("Votações abertas",String(abertas),"aguardando quórum","up","🗳️","var(--green-bg)")}
+    ${kpi("Agendadas",String(agendadas),"ainda sem votação","up","📅","var(--blue-bg)")}
+    ${kpi("Quórum mínimo","50%","+1 unidade · "+Math.floor(TOTAL_UNIDADES/2+1)+" votos","up","👥","var(--amber-bg)")}
+    ${kpi("Unidades votantes",String(TOTAL_UNIDADES),"1 voto por unidade","up","🏢","var(--blue-bg)")}
+  </div>
+  <div class="panel" id="assFormPanel" style="display:none;margin-bottom:16px">
+    <div class="panel-head"><h3>Convocar assembleia</h3></div>
+    <div class="form-grid">
+      <div><label>Título</label><input id="afTitulo" placeholder="Ex: Assembleia Geral Extraordinária"></div>
+      <div><label>Local</label><input id="afLocal" placeholder="Ex: Salão de Festas"></div>
+      <div><label>Data</label><input id="afData" type="date"></div>
+      <div><label>Horário</label><input id="afHora" type="time"></div>
+      <div style="grid-column:1/-1"><label>Primeira pauta</label><input id="afPauta" placeholder="Ex: Aprovação do orçamento 2027"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="toggleAssForm(false)">Cancelar</button>
+      <button class="btn-primary" onclick="addAssembleia()">Convocar</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>Assembleias</h3><button class="see-all" onclick="toggleAssForm(true)">+ Convocar assembleia</button></div>
+    ${assembleias.map(a=>cardAssembleia(a)).join("")}
+  </div>`;
+}
+
+function cardAssembleia(a){
+  const votos=votosAssembleia(a);
+  const pct=Math.round(votos/TOTAL_UNIDADES*100);
+  const quorumOk=votos>TOTAL_UNIDADES/2;
+  const expandida=assembleiaAberta===a.id;
+  return `
+  <div class="ass-card">
+    <div class="ass-head" onclick="toggleAssembleia(${a.id})">
+      <div class="list-ic" style="background:var(--gold-100)">🗳️</div>
+      <div style="flex:1;min-width:0">
+        <p class="t1">${a.titulo}</p>
+        <p class="t2">${fmtData(a.data)} às ${a.hora} · ${a.local} · ${a.pauta.length} ${a.pauta.length===1?'item de pauta':'itens de pauta'}</p>
+      </div>
+      <span class="badge ${statusAssembleia(a)}">${a.status}</span>
+      <span class="chevron">${expandida?'▾':'▸'}</span>
+    </div>
+    <p class="quorum-lbl">Participação · ${pct}% (${votos} de ${TOTAL_UNIDADES})
+      <strong style="color:${quorumOk?'var(--green)':'var(--amber)'}">${quorumOk?'quórum atingido':'sem quórum'}</strong></p>
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%;background:${quorumOk?'var(--green)':'var(--amber)'}"></div></div>
+    ${expandida?`<div class="ass-body">
+      ${a.pauta.map(p=>pautaAdmin(a,p)).join("")}
+      <div class="form-actions" style="margin-top:14px">
+        ${a.status==="Agendada"?`<button class="btn-primary" onclick="mudarStatusAssembleia(${a.id},'Votação aberta')">Abrir votação</button>`:''}
+        ${a.status==="Votação aberta"?`<button class="btn-primary" onclick="mudarStatusAssembleia(${a.id},'Encerrada')">Encerrar votação</button>`:''}
+        ${a.status==="Encerrada"?`<button class="btn-ghost" onclick="toast('Ata gerada (protótipo)')">Gerar ata</button>`:''}
+      </div>
+    </div>`:''}
+  </div>`;
+}
+
+function pautaAdmin(a,p){
+  const t=totalVotos(p);
+  const barra=(n,cor)=>`<div style="width:${t?n/t*100:0}%;background:${cor}"></div>`;
+  const resultado = t===0 ? "Sem votos" : (p.sim>p.nao?"Aprovada":(p.nao>p.sim?"Rejeitada":"Empate"));
+  const resCls = t===0?"b-blue":(p.sim>p.nao?"b-green":(p.nao>p.sim?"b-red":"b-amber"));
+  return `
+  <div class="pauta">
+    <div class="pauta-top">
+      <div style="flex:1;min-width:0"><p class="t1">${p.titulo}</p><p class="t2">${p.desc}</p></div>
+      <span class="badge ${resCls}">${resultado}</span>
+    </div>
+    <div class="voto-bar">${barra(p.sim,'var(--green)')}${barra(p.nao,'var(--red)')}${barra(p.abst,'var(--line)')}</div>
+    <div class="voto-legend">
+      <span><i style="background:var(--green)"></i>Sim ${p.sim}</span>
+      <span><i style="background:var(--red)"></i>Não ${p.nao}</span>
+      <span><i style="background:var(--line)"></i>Abstenções ${p.abst}</span>
+      <span style="margin-left:auto">${t} ${t===1?'voto':'votos'}</span>
+    </div>
+  </div>`;
+}
+
+function toggleAssembleia(id){
+  assembleiaAberta = assembleiaAberta===id ? null : id;
+  goAdmin("assembleias");
+}
+function toggleAssForm(show){
+  const p=document.getElementById("assFormPanel");
+  if(p) p.style.display = show ? "block":"none";
+}
+function addAssembleia(){
+  const titulo=document.getElementById("afTitulo").value.trim();
+  const local=document.getElementById("afLocal").value.trim()||"Salão de Festas";
+  const data=document.getElementById("afData").value;
+  const hora=document.getElementById("afHora").value||"19:00";
+  const pauta=document.getElementById("afPauta").value.trim();
+  if(!titulo||!data){ toast("Preencha título e data"); return; }
+  const id=Math.max(0,...assembleias.map(a=>a.id))+1;
+  assembleias.unshift({id,titulo,data,hora,local,status:"Agendada",
+    pauta: pauta?[{id:id*10+1,titulo:pauta,desc:"Item incluído na convocação.",sim:0,nao:0,abst:0,meuVoto:null}]:[]});
+  assembleiaAberta=id;
+  goAdmin("assembleias");
+  toast("Assembleia convocada");
+}
+function mudarStatusAssembleia(id,novo){
+  const a=assembleias.find(x=>x.id===id);
+  if(!a) return;
+  a.status=novo;
+  goAdmin("assembleias");
+  toast(novo==="Votação aberta"?"Votação aberta aos moradores":"Votação encerrada");
+}
+
+/* ============================================================
+   MÓDULO: DOCUMENTOS
+   ============================================================ */
+let filtroDocumento="Todos";
+
+function iconeDoc(tipo){return tipo==="XLSX"?"📊":"📄";}
+
+function renderAdminDocumentos(){
+  const cats=["Todos",...catsDocumento];
+  const lista=filtroDocumento==="Todos"?documentos:documentos.filter(d=>d.cat===filtroDocumento);
+  return `
+  ${adminTopbar("Documentos")}
+  <div class="panel" id="docFormPanel" style="display:none;margin-bottom:16px">
+    <div class="panel-head"><h3>Publicar documento</h3></div>
+    <div class="form-grid">
+      <div><label>Nome do documento</label><input id="dfNome" placeholder="Ex: Ata da AGE 09/2026"></div>
+      <div><label>Categoria</label><select id="dfCat">${catsDocumento.map(c=>`<option>${c}</option>`).join("")}</select></div>
+      <div><label>Formato</label><select id="dfTipo"><option>PDF</option><option>XLSX</option></select></div>
+      <div><label>Arquivo</label><input id="dfArquivo" type="file"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="toggleDocForm(false)">Cancelar</button>
+      <button class="btn-primary" onclick="addDocumento()">Publicar</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>Biblioteca do condomínio</h3><button class="see-all" onclick="toggleDocForm(true)">+ Publicar documento</button></div>
+    <div class="filters" style="margin-bottom:14px">
+      ${cats.map(c=>`<button class="chip ${c===filtroDocumento?'active':''}" onclick="filtrarDocumentos('${c}')">${c}${c==='Todos'?'':' ('+documentos.filter(d=>d.cat===c).length+')'}</button>`).join("")}
+    </div>
+    ${lista.length?`<table class="datatable">
+      <tr><th>Documento</th><th>Categoria</th><th>Formato</th><th>Publicado</th><th></th></tr>
+      ${lista.map(d=>{
+        const i=documentos.indexOf(d);
+        return `<tr>
+          <td><span style="margin-right:8px">${iconeDoc(d.tipo)}</span>${d.nome}</td>
+          <td>${d.cat}</td>
+          <td class="mono">${d.tipo} · ${d.tam}</td>
+          <td>${d.data}</td>
+          <td style="white-space:nowrap">
+            <button class="see-all" onclick="baixarDocumento(${i})">Baixar</button>
+            <button class="see-all" style="color:var(--red);margin-left:12px" onclick="removerDocumento(${i})">Remover</button>
+          </td></tr>`;
+      }).join("")}
+    </table>`:`<div class="empty-note">Nenhum documento nesta categoria.</div>`}
+  </div>`;
+}
+function filtrarDocumentos(c){ filtroDocumento=c; goAdmin("documentos"); }
+function toggleDocForm(show){
+  const p=document.getElementById("docFormPanel");
+  if(p) p.style.display = show ? "block":"none";
+}
+function addDocumento(){
+  const nome=document.getElementById("dfNome").value.trim();
+  const cat=document.getElementById("dfCat").value;
+  const tipo=document.getElementById("dfTipo").value;
+  const arq=document.getElementById("dfArquivo").files[0];
+  if(!nome){ toast("Informe o nome do documento"); return; }
+  const tam=arq?(arq.size>1048576?(arq.size/1048576).toFixed(1).replace('.',',')+" MB":Math.round(arq.size/1024)+" KB"):"—";
+  documentos.unshift({nome,cat,tipo,tam,data:new Date().toLocaleDateString('pt-BR')});
+  filtroDocumento="Todos";
+  goAdmin("documentos");
+  toast("Documento publicado");
+}
+function baixarDocumento(i){
+  const d=documentos[i];
+  if(d) toast(`Baixando "${d.nome}" (protótipo)`);
+}
+function removerDocumento(i){
+  const d=documentos[i];
+  if(!d) return;
+  if(!confirm(`Remover "${d.nome}" da biblioteca?`)) return;
+  documentos.splice(i,1);
+  goAdmin("documentos");
+  toast("Documento removido");
+}
+
+/* ============================================================
+   MÓDULO: MANUTENÇÕES
+   ============================================================ */
+function statusManutencao(m){
+  const d=diasAte(m.prox);
+  if(d<0)  return {txt:"Atrasada",cls:"b-red",dias:d};
+  if(d<=15)return {txt:"Vence em "+d+"d",cls:"b-amber",dias:d};
+  return {txt:"Em dia",cls:"b-green",dias:d};
+}
+
+function renderAdminManutencoes(){
+  const ordenadas=[...manutencoes].sort((a,b)=>a.prox.localeCompare(b.prox));
+  const atrasadas=manutencoes.filter(m=>statusManutencao(m).dias<0).length;
+  const proximas=manutencoes.filter(m=>{const d=statusManutencao(m).dias;return d>=0&&d<=15;}).length;
+  const custoAnual=manutencoes.reduce((s,m)=>s+m.custo*(12/periodicidades[m.period]),0);
+  return `
+  ${adminTopbar("Manutenções")}
+  <div class="kpi-grid">
+    ${kpi("Atrasadas",String(atrasadas),atrasadas?"exigem ação imediata":"nenhuma pendência","down","⏰","var(--red-bg)")}
+    ${kpi("Próximos 15 dias",String(proximas),"a programar","up","📅","var(--amber-bg)")}
+    ${kpi("Itens no plano",String(manutencoes.length),"manutenção preventiva","up","🔧","var(--blue-bg)")}
+    ${kpi("Custo anual estimado",fmtBRL(custoAnual),"soma das periodicidades","up","💰","var(--green-bg)")}
+  </div>
+  <div class="panel" id="manFormPanel" style="display:none;margin-bottom:16px">
+    <div class="panel-head"><h3>Novo item de manutenção</h3></div>
+    <div class="form-grid">
+      <div><label>Item</label><input id="mnItem" placeholder="Ex: Inspeção do para-raios"></div>
+      <div><label>Categoria</label><input id="mnCat" placeholder="Ex: Elétrica"></div>
+      <div><label>Periodicidade</label><select id="mnPeriod">${Object.keys(periodicidades).map(p=>`<option>${p}</option>`).join("")}</select></div>
+      <div><label>Última execução</label><input id="mnUltima" type="date"></div>
+      <div><label>Responsável</label><input id="mnResp" placeholder="Ex: Equipe interna"></div>
+      <div><label>Custo por execução (R$)</label><input id="mnCusto" type="number" min="0" step="0.01" placeholder="0,00"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="toggleManForm(false)">Cancelar</button>
+      <button class="btn-primary" onclick="addManutencao()">Adicionar ao plano</button>
+    </div>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>Plano de manutenção preventiva</h3><button class="see-all" onclick="toggleManForm(true)">+ Novo item</button></div>
+    <table class="datatable">
+      <tr><th>Item</th><th>Categoria</th><th>Periodicidade</th><th>Última</th><th>Próxima</th><th>Responsável</th><th>Custo</th><th>Status</th><th></th></tr>
+      ${ordenadas.map(m=>{
+        const st=statusManutencao(m), i=manutencoes.indexOf(m);
+        return `<tr>
+          <td>${m.item}</td><td>${m.cat}</td><td>${m.period}</td>
+          <td class="mono">${fmtData(m.ultima)}</td>
+          <td class="mono" style="${st.dias<0?'color:var(--red);font-weight:700':''}">${fmtData(m.prox)}</td>
+          <td>${m.resp}</td>
+          <td class="mono">${m.custo?fmtBRL(m.custo):'—'}</td>
+          <td><span class="badge ${st.cls}">${st.txt}</span></td>
+          <td><button class="see-all" onclick="concluirManutencao(${i})">Registrar execução</button></td>
+        </tr>`;
+      }).join("")}
+    </table>
+  </div>`;
+}
+function toggleManForm(show){
+  const p=document.getElementById("manFormPanel");
+  if(p) p.style.display = show ? "block":"none";
+}
+function addManutencao(){
+  const item=document.getElementById("mnItem").value.trim();
+  const cat=document.getElementById("mnCat").value.trim()||"Geral";
+  const period=document.getElementById("mnPeriod").value;
+  const ultima=document.getElementById("mnUltima").value||hojeISO();
+  const resp=document.getElementById("mnResp").value.trim()||"Equipe interna";
+  const custo=parseFloat(document.getElementById("mnCusto").value)||0;
+  if(!item){ toast("Informe o item de manutenção"); return; }
+  manutencoes.push({item,cat,period,ultima,prox:somaISO(ultima,periodicidades[period]),resp,custo});
+  goAdmin("manutencoes");
+  toast("Item adicionado ao plano");
+}
+function concluirManutencao(i){
+  const m=manutencoes[i];
+  if(!m) return;
+  m.ultima=hojeISO();
+  m.prox=somaISO(m.ultima,periodicidades[m.period]);
+  goAdmin("manutencoes");
+  toast(`Execução registrada · próxima em ${fmtData(m.prox)}`);
+}
+
+/* ============================================================
+   MÓDULO: RELATÓRIOS
+   ============================================================ */
+let periodoRelatorio="6m";
+
+function renderAdminRelatorios(){
+  const meses = periodoRelatorio==="3m" ? serieFinanceira.slice(-3) : serieFinanceira;
+  const totRec=meses.reduce((s,m)=>s+m.receita,0);
+  const totDesp=meses.reduce((s,m)=>s+m.despesa,0);
+  const inadMedia=(meses.reduce((s,m)=>s+m.inad,0)/meses.length).toFixed(1).replace('.',',');
+  const totalInad=inadimplentes.reduce((s,d)=>s+d.valor,0);
+  const totDespCat=despesasPorCategoria.reduce((s,d)=>s+d.valor,0);
+  const maxV=Math.max(...meses.map(m=>Math.max(m.receita,m.despesa)));
+  return `
+  ${adminTopbar("Relatórios")}
+  <div class="admin-topbar" style="margin-top:-10px">
+    <div class="filters" style="margin:0">
+      ${[["3m","Últimos 3 meses"],["6m","Últimos 6 meses"]].map(([k,l])=>
+        `<button class="chip ${k===periodoRelatorio?'active':''}" onclick="mudarPeriodo('${k}')">${l}</button>`).join("")}
+    </div>
+    <button class="btn-primary" onclick="toast('Relatório exportado em PDF (protótipo)')">⬇ Exportar PDF</button>
+  </div>
+  <div class="kpi-grid">
+    ${kpi("Receita acumulada",fmtBRL(totRec),meses.length+" meses","up","💰","var(--green-bg)")}
+    ${kpi("Despesa acumulada",fmtBRL(totDesp),meses.length+" meses","down","🧾","var(--red-bg)")}
+    ${kpi("Resultado",fmtBRL(totRec-totDesp),totRec>totDesp?"superávit":"déficit",totRec>totDesp?"up":"down","📈","var(--blue-bg)")}
+    ${kpi("Inadimplência média",inadMedia+"%",fmtBRL(totalInad)+" em aberto","down","📉","var(--amber-bg)")}
+  </div>
+  <div class="admin-grid" style="grid-template-columns:1.4fr 1fr">
+    <div class="panel">
+      <div class="panel-head"><h3>Receitas × despesas</h3></div>
+      <div class="chart-legend"><span><i style="background:var(--green)"></i>Receitas</span><span><i style="background:var(--red)"></i>Despesas</span></div>
+      <div class="chart-wrap">
+        ${meses.map(m=>`<div class="bar-pair" title="${m.mes}: ${fmtBRL(m.receita)} / ${fmtBRL(m.despesa)}">
+          <div class="bar rec" style="height:${m.receita/maxV*100}%"></div>
+          <div class="bar desp" style="height:${m.despesa/maxV*100}%"></div></div>`).join("")}
+      </div>
+      <div class="chart-labels">${meses.map(m=>`<span>${m.mes}</span>`).join("")}</div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Evolução da inadimplência</h3></div>
+      ${meses.map(m=>`
+        <div class="mini-row" style="gap:12px">
+          <span style="width:34px;font-size:11.5px;font-weight:700;color:var(--ink-soft)">${m.mes}</span>
+          <div style="flex:1">
+            <div class="progress-track" style="margin:0">
+              <div class="progress-fill" style="width:${m.inad/20*100}%;background:${m.inad>12?'var(--red)':'var(--amber)'}"></div>
+            </div>
+          </div>
+          <strong class="mono" style="font-size:12px;width:46px;text-align:right">${String(m.inad).replace('.',',')}%</strong>
+        </div>`).join("")}
+    </div>
+  </div>
+  <div class="bottom-grid" style="grid-template-columns:1fr 1.2fr">
+    <div class="panel">
+      <div class="panel-head"><h3>Despesas por categoria</h3><span class="see-all">${fmtBRL(totDespCat)}</span></div>
+      ${despesasPorCategoria.map(d=>`
+        <div class="mini-row" style="gap:12px">
+          <div style="flex:1">
+            <p class="t1" style="margin-bottom:5px">${d.cat}</p>
+            <div class="progress-track" style="margin:0"><div class="progress-fill" style="width:${d.valor/totDespCat*100}%;background:${d.cor}"></div></div>
+          </div>
+          <div style="text-align:right">
+            <strong class="mono" style="font-size:12.5px">${fmtBRL(d.valor)}</strong>
+            <p class="t2" style="margin:2px 0 0">${Math.round(d.valor/totDespCat*100)}%</p>
+          </div>
+        </div>`).join("")}
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Unidades inadimplentes</h3><span class="see-all">${inadimplentes.length} unidades</span></div>
+      <table class="datatable">
+        <tr><th>Unidade</th><th>Morador</th><th>Meses</th><th>Valor</th></tr>
+        ${inadimplentes.map(d=>`<tr>
+          <td class="mono">${d.unidade}</td><td>${d.morador}</td>
+          <td><span class="badge ${d.meses>=3?'b-red':'b-amber'}">${d.meses} ${d.meses===1?'mês':'meses'}</span></td>
+          <td class="mono">${fmtBRL(d.valor)}</td></tr>`).join("")}
+        <tr><td colspan="3" style="font-weight:700">Total em aberto</td><td class="mono" style="font-weight:700">${fmtBRL(totalInad)}</td></tr>
+      </table>
+    </div>
+  </div>`;
+}
+function mudarPeriodo(p){ periodoRelatorio=p; goAdmin("relatorios"); }
+
+/* ============================================================
+   MÓDULO: CONFIGURAÇÕES
+   ============================================================ */
+function renderAdminConfiguracoes(){
+  const c=config.condominio;
+  return `
+  ${adminTopbar("Configurações")}
+  <div class="admin-grid" style="grid-template-columns:1fr 1fr">
+    <div class="panel">
+      <div class="panel-head"><h3>Dados do condomínio</h3></div>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr">
+        <div style="grid-column:1/-1"><label>Nome</label><input id="cfNome" value="${c.nome}"></div>
+        <div><label>CNPJ</label><input id="cfCnpj" value="${c.cnpj}"></div>
+        <div><label>Unidades</label><input value="${c.unidades}" disabled></div>
+        <div style="grid-column:1/-1"><label>Endereço</label><input id="cfEndereco" value="${c.endereco}"></div>
+        <div><label>Torres</label><input value="${c.torres}" disabled></div>
+        <div><label>Andares por torre</label><input value="${c.andares}" disabled></div>
+      </div>
+      <div class="form-actions"><button class="btn-primary" onclick="salvarCondominio()">Salvar alterações</button></div>
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Taxas vigentes</h3><button class="see-all" onclick="toast('Reajuste em lote (protótipo)')">Reajustar</button></div>
+      <table class="datatable">
+        <tr><th>Taxa</th><th style="text-align:right">Valor mensal</th></tr>
+        ${config.taxas.map((t,i)=>`<tr>
+          <td>${t.nome}</td>
+          <td style="text-align:right"><input class="cell-input mono" type="number" step="0.01" min="0" value="${t.valor.toFixed(2)}" onchange="salvarTaxa(${i},this.value)"></td>
+        </tr>`).join("")}
+      </table>
+    </div>
+  </div>
+  <div class="panel" style="margin-bottom:20px">
+    <div class="panel-head"><h3>Áreas comuns reserváveis</h3><span class="see-all">${config.areas.filter(a=>a.ativa).length} de ${config.areas.length} ativas</span></div>
+    <table class="datatable">
+      <tr><th>Área</th><th>Capacidade</th><th>Taxa de uso</th><th>Antecedência mínima</th><th>Disponível para reserva</th></tr>
+      ${config.areas.map((a,i)=>`<tr>
+        <td>${a.nome}</td>
+        <td class="mono">${a.cap} pessoas</td>
+        <td><input class="cell-input mono" type="number" step="1" min="0" value="${a.taxa}" onchange="salvarArea(${i},'taxa',this.value)"></td>
+        <td><input class="cell-input mono" type="number" step="1" min="0" value="${a.antec}" onchange="salvarArea(${i},'antec',this.value)"> dias</td>
+        <td>${sw('area-'+i,a.ativa,`alternarArea(${i})`)}</td>
+      </tr>`).join("")}
+    </table>
+  </div>
+  <div class="admin-grid" style="grid-template-columns:1.3fr 1fr">
+    <div class="panel">
+      <div class="panel-head"><h3>Notificações aos moradores</h3></div>
+      ${config.notificacoes.map((n,i)=>`
+        <div class="mini-row" style="gap:14px">
+          <div style="flex:1"><p class="t1">${n.label}</p><p class="t2">${n.desc}</p></div>
+          ${sw('notif-'+i,n.ativo,`alternarNotificacao(${i})`)}
+        </div>`).join("")}
+    </div>
+    <div class="panel">
+      <div class="panel-head"><h3>Perfis de acesso</h3></div>
+      ${Object.entries(staffRoles).map(([k,v])=>`
+        <div class="mini-row" style="gap:12px">
+          <div class="av" style="width:34px;height:34px;border-radius:50%;background:var(--gold-400);color:var(--navy-950);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px">${v.av}</div>
+          <div style="flex:1"><p class="t1">${v.subtitle}</p><p class="t2">${v.items.length} módulos liberados</p></div>
+          <span class="badge b-navy">${k}</span>
+        </div>`).join("")}
+      <div class="mini-row" style="gap:12px">
+        <div class="av" style="width:34px;height:34px;border-radius:50%;background:var(--blue-bg);color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px">MO</div>
+        <div style="flex:1"><p class="t1">Morador</p><p class="t2">Acesso restrito à própria unidade</p></div>
+        <span class="badge b-blue">${TOTAL_UNIDADES} contas</span>
+      </div>
+      <div class="tip-card" style="margin-top:14px">
+        <p class="t1">Autenticação ainda não implementada</p>
+        <p>Neste protótipo os perfis são alternados livremente pelo seletor no topo. Em produção, cada perfil exige login próprio.</p>
+      </div>
+    </div>
+  </div>`;
+}
+/* switch (toggle) reutilizável */
+function sw(id,ativo,acao){
+  return `<button class="switch ${ativo?'on':''}" id="${id}" role="switch" aria-checked="${ativo}" onclick="${acao}"><span></span></button>`;
+}
+function salvarCondominio(){
+  config.condominio.nome=document.getElementById("cfNome").value.trim()||config.condominio.nome;
+  config.condominio.cnpj=document.getElementById("cfCnpj").value.trim();
+  config.condominio.endereco=document.getElementById("cfEndereco").value.trim();
+  toast("Dados do condomínio salvos");
+}
+function salvarTaxa(i,valor){
+  const v=parseFloat(valor);
+  if(isNaN(v)||v<0){ toast("Valor inválido"); goAdmin("configuracoes"); return; }
+  config.taxas[i].valor=v;
+  toast(`${config.taxas[i].nome} · ${fmtBRL(v)}`);
+}
+function salvarArea(i,campo,valor){
+  const v=parseInt(valor,10);
+  if(isNaN(v)||v<0){ toast("Valor inválido"); goAdmin("configuracoes"); return; }
+  config.areas[i][campo]=v;
+  toast(`${config.areas[i].nome} atualizada`);
+}
+function alternarArea(i){
+  config.areas[i].ativa=!config.areas[i].ativa;
+  goAdmin("configuracoes");
+  toast(`${config.areas[i].nome} · ${config.areas[i].ativa?'liberada para reserva':'indisponível'}`);
+}
+function alternarNotificacao(i){
+  config.notificacoes[i].ativo=!config.notificacoes[i].ativo;
+  goAdmin("configuracoes");
+  toast(`${config.notificacoes[i].label} · ${config.notificacoes[i].ativo?'ativada':'desativada'}`);
+}
+
 const adminRenderers={
   dashboard:renderDashboard, financeiro:renderAdminFinanceiro, moradores:renderAdminMoradores,
   unidades:renderAdminUnidades,
   reservas:renderAdminReservas, ocorrencias:renderAdminOcorrencias, sugestoes:renderAdminSugestoes,
-  encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes
+  encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes,
+  assembleias:renderAdminAssembleias, documentos:renderAdminDocumentos,
+  manutencoes:renderAdminManutencoes, relatorios:renderAdminRelatorios,
+  configuracoes:renderAdminConfiguracoes
 };
 const administrativoRenderers={
   dashboard:renderDashboard, financeiro:renderAdminFinanceiro, moradores:renderAdminMoradores,
   unidades:renderAdminUnidades, reservas:renderAdminReservas, ocorrencias:renderAdminOcorrencias,
   sugestoes:renderAdminSugestoes,
-  encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes
+  encomendas:renderAdminEncomendas, visitantes:renderAdminVisitantes,
+  documentos:renderAdminDocumentos, relatorios:renderAdminRelatorios
 };
 const porteiroRenderers={
   dashboard:renderPorteiroDashboard, moradores:renderAdminMoradores, reservas:renderAdminReservas,
