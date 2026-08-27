@@ -95,7 +95,7 @@ a{color:inherit;text-decoration:none;}
 }
 .hero .greet{font-family:'Fraunces',serif;font-size:26px;font-weight:600;margin:0 0 2px;}
 .hero .sub{font-size:13px;color:#b9c2d6;margin:0 0 18px;}
-.bell{position:absolute;top:52px;right:20px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.bell{position:absolute;top:52px;right:20px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:inherit;display:flex;align-items:center;justify-content:center;font-size:16px;}
 .bell .dot{position:absolute;top:-2px;right:-2px;background:var(--red);color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
 .unit-card{
   background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
@@ -107,7 +107,8 @@ a{color:inherit;text-decoration:none;}
 
 .section-title{display:flex;justify-content:space-between;align-items:baseline;margin:26px 0 12px;}
 .section-title h2{font-size:15.5px;margin:0;font-weight:700;}
-.section-title .see-all{font-size:12.5px;color:var(--navy-700);font-weight:600;}
+.section-title .see-all{font-size:12.5px;color:var(--navy-700);font-weight:600;background:none;border:none;padding:0;}
+button.see-all,.see-all[onclick]{cursor:pointer;}
 
 .quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px;}
 .quick-item{display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:none;}
@@ -155,7 +156,7 @@ a{color:inherit;text-decoration:none;}
 .bill-actions{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px dashed var(--line);}
 .pay-btn{background:var(--navy-950);color:#fff;border:none;padding:9px 16px;border-radius:9px;font-size:12.5px;font-weight:700;}
 .actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0;}
-.action-card{padding:14px;display:flex;align-items:center;gap:10px;}
+.action-card{padding:14px;display:flex;align-items:center;gap:10px;width:100%;text-align:left;}
 .action-card .ic{font-size:18px;}
 .action-card .t1{font-size:12.5px;font-weight:700;margin:0;}
 .action-card .t2{font-size:10.5px;color:var(--ink-soft);margin:0;}
@@ -177,7 +178,7 @@ a{color:inherit;text-decoration:none;}
 .legend span{display:inline-flex;align-items:center;gap:5px;}
 .legend i{width:7px;height:7px;border-radius:50%;display:inline-block;}
 
-.fab{position:fixed;bottom:100px;right:calc(50% - 230px + 20px);width:52px;height:52px;border-radius:16px;background:var(--navy-950);color:var(--gold-400);border:none;font-size:22px;box-shadow:var(--shadow);z-index:60;}
+.fab{position:fixed;bottom:100px;right:max(20px,calc(50% - 230px + 20px));width:52px;height:52px;border-radius:16px;background:var(--navy-950);color:var(--gold-400);border:none;font-size:22px;box-shadow:var(--shadow);z-index:60;display:flex;align-items:center;justify-content:center;}
 
 /* --- bottom nav --- */
 .bottomnav{position:fixed;bottom:0;left:0;right:0;max-width:460px;margin:0 auto;background:var(--card);border-top:1px solid var(--line);display:flex;padding:8px 4px 12px;z-index:80;}
@@ -190,8 +191,6 @@ a{color:inherit;text-decoration:none;}
 .empty-note{text-align:center;padding:30px 10px;color:var(--ink-soft);font-size:12.5px;}
 
 /* =================== ADMIN =================== */
-#adminApp{display:none;min-height:100vh;}
-#adminApp.show{display:flex;}
 #staffApp{display:none;min-height:100vh;}
 #staffApp.show{display:flex;}
 .sidebar{width:238px;flex:none;background:var(--navy-950);color:#fff;min-height:100vh;padding:22px 14px;position:sticky;top:0;height:100vh;overflow-y:auto;}
@@ -227,7 +226,7 @@ a{color:inherit;text-decoration:none;}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);padding:18px;box-shadow:var(--shadow);}
 .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
 .panel-head h3{margin:0;font-size:14.5px;font-weight:700;}
-.panel-head .see-all{font-size:11.5px;color:var(--navy-700);font-weight:600;}
+.panel-head .see-all,td .see-all{font-size:11.5px;color:var(--navy-700);font-weight:600;background:none;border:none;padding:0;font-family:inherit;}
 .panel-head select{border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 9px;font-family:inherit;background:var(--paper);}
 
 .chart-wrap{display:flex;align-items:flex-end;gap:8px;height:150px;padding-top:6px;}
@@ -270,6 +269,7 @@ table.datatable{width:100%;border-collapse:collapse;font-size:13px;}
 table.datatable th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.03em;color:var(--ink-soft);padding:10px 12px;border-bottom:1px solid var(--line);}
 table.datatable td{padding:12px;border-bottom:1px solid var(--line);}
 table.datatable tr:last-child td{border-bottom:none;}
+.inline-select{border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 8px;font-family:inherit;background:var(--paper);}
 
 .stub{padding:60px 20px;text-align:center;color:var(--ink-soft);}
 .stub .ic{font-size:34px;margin-bottom:10px;}
@@ -315,13 +315,12 @@ table.datatable tr:last-child td{border-bottom:none;}
 <!-- ======================= RESIDENT APP ======================= -->
 <div id="residentApp">
   <div id="residentViews"></div>
-  <button class="fab" id="fab" style="display:none" onclick="fabAction()">+</button>
   <div class="bottomnav">
     <button data-v="home" class="active" onclick="goView('home')"><span class="ico">🏠</span>Início</button>
     <button data-v="financeiro" onclick="goView('financeiro')"><span class="ico">💳</span>Financeiro</button>
     <button data-v="hub" class="central" onclick="goView('hub')"><span class="ico">▦</span>Mais</button>
     <button data-v="reservas" onclick="goView('reservas')"><span class="ico">📅</span>Reservas</button>
-    <button data-v="hub2" onclick="goView('hub')"><span class="ico">⋯</span>Mais</button>
+    <button data-v="avisos" onclick="goView('avisos')"><span class="ico">📣</span>Avisos</button>
   </div>
 </div>
 
@@ -421,7 +420,7 @@ function iconBg(hex){return `style="background:${hex}"`;}
 function renderHome(){
   return `
   <div class="hero">
-    <div class="bell">🔔<span class="dot">3</span></div>
+    <button class="bell" onclick="goView('avisos')">🔔<span class="dot">${avisos.length}</span></button>
     <p class="greet">Olá, ${morador.nome} 👋</p>
     <p class="sub">Bem-vindo ao Residencial Charles Miller</p>
     <div class="unit-card">
@@ -445,7 +444,7 @@ function renderHome(){
       ${quick("🚗","Veículos","#e0ebf2","#3a6ea8","hub")}
       ${quick("▦","Mais","#eceae2","#5c5f66","hub")}
     </div>
-    <div class="section-title"><h2>Próximos eventos</h2><span class="see-all">Ver todos</span></div>
+    <div class="section-title"><h2>Próximos eventos</h2><button class="see-all" onclick="goView('reservas')">Ver todos</button></div>
     <div class="card list-card">
       ${eventos.map(e=>`
         <div class="list-row">
@@ -468,7 +467,7 @@ function renderReservas(){
       <button class="active" onclick="switchTab(this,'minhas-r')">Minhas reservas</button>
       <button onclick="switchTab(this,'cal-r')">Calendário geral</button>
     </div>
-    <div id="minhas-r">
+    <div id="minhas-r" class="tab-panel">
       <div class="section-title" style="margin-top:0"><h2>Minhas reservas</h2></div>
       <div class="card list-card">
         ${reservas.map(r=>`
@@ -481,7 +480,7 @@ function renderReservas(){
       <div class="section-title"><h2>Calendário do condomínio</h2></div>
       ${calendar()}
     </div>
-    <div id="cal-r" style="display:none">
+    <div id="cal-r" class="tab-panel" style="display:none">
       ${calendar()}
       <div class="section-title"><h2>Eventos do mês</h2></div>
       <div class="card list-card">
@@ -489,31 +488,59 @@ function renderReservas(){
       </div>
     </div>
   </div>
-  <button class="fab" style="display:flex;align-items:center;justify-content:center" onclick="alert('Nova solicitação de reserva (protótipo)')">+</button>`;
+  <button class="fab" onclick="toast('Nova solicitação de reserva (protótipo)')">+</button>`;
+}
+
+/* mês exibido no calendário — os eventos mock pertencem a agosto/2026 */
+const MES_EVENTOS={ano:2026,mes:7};
+let calAno=MES_EVENTOS.ano, calMes=MES_EVENTOS.mes;
+const nomesMes=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+
+function calNav(delta){
+  calMes+=delta;
+  if(calMes>11){calMes=0;calAno++;}
+  if(calMes<0){calMes=11;calAno--;}
+  // preserva a aba aberta ao re-renderizar a tela de reservas
+  const abas=[...document.querySelectorAll("#residentViews .tabs button")];
+  const ativa=abas.findIndex(b=>b.classList.contains("active"));
+  goView("reservas");
+  if(ativa>0){
+    const novas=document.querySelectorAll("#residentViews .tabs button");
+    if(novas[ativa]) novas[ativa].click();
+  }
 }
 
 function calendar(){
   const dow=["D","S","T","Q","Q","S","S"];
+  const primeiroDiaSemana=new Date(calAno,calMes,1).getDay();      // 0=domingo
+  const diasNoMes=new Date(calAno,calMes+1,0).getDate();
+  const diasMesAnterior=new Date(calAno,calMes,0).getDate();
+  const hoje=new Date();
+  const mostraEventos = calAno===MES_EVENTOS.ano && calMes===MES_EVENTOS.mes;
   let cells="";
-  const startOffset=5; // Aug 2026 starts on Saturday -> just illustrative offset
-  const daysInMonth=31;
-  const prevTailDays=["27","28","29","30","31"];
-  prevTailDays.forEach(d=>cells+=`<div class="cal-day dim">${d}</div>`);
-  for(let d=1;d<=daysInMonth;d++){
-    let cls="cal-day"+(d===19?" today":"")+(d===20?" sel":"");
+  // cauda do mês anterior, para alinhar o dia 1 na coluna correta
+  for(let i=primeiroDiaSemana;i>0;i--){
+    cells+=`<div class="cal-day dim">${diasMesAnterior-i+1}</div>`;
+  }
+  for(let d=1;d<=diasNoMes;d++){
+    const ehHoje = d===hoje.getDate() && calMes===hoje.getMonth() && calAno===hoje.getFullYear();
+    let cls="cal-day"+(ehHoje?" today":"");
     let dot="";
-    if(calendarEvents[d]){
+    if(mostraEventos && calendarEvents[d]){
       const map={reserva:"#3a6ea8",evento:"#6d4fa8",manutencao:"#b9822c",assembleia:"#152544"};
       dot=`<span class="evt" style="background:${map[calendarEvents[d]]}"></span>`;
     }
     cells+=`<div class="${cls}">${d}${dot}</div>`;
   }
+  // completa a última semana com o início do mês seguinte
+  const resto=(7-((primeiroDiaSemana+diasNoMes)%7))%7;
+  for(let d=1;d<=resto;d++) cells+=`<div class="cal-day dim">${d}</div>`;
   return `
   <div class="card" style="padding:16px">
     <div class="cal-head">
-      <button class="nav">‹</button>
-      <strong style="font-size:13.5px">Agosto 2026</strong>
-      <button class="nav">›</button>
+      <button class="nav" onclick="calNav(-1)">‹</button>
+      <strong style="font-size:13.5px">${nomesMes[calMes]} ${calAno}</strong>
+      <button class="nav" onclick="calNav(1)">›</button>
     </div>
     <div class="cal-grid">
       ${dow.map(d=>`<div class="dow">${d}</div>`).join("")}
@@ -535,9 +562,9 @@ function renderFinanceiro(){
     <div class="balance-card">
       <p class="lbl">Total em aberto</p>
       <p class="val num">${totalAberto}</p>
-      <button class="pay-all" onclick="alert('Pagamento consolidado (protótipo)')">Pagar tudo · ${boletos.length} boletos</button>
+      <button class="pay-all" onclick="toast('Pagamento consolidado (protótipo)')">Pagar tudo · ${boletos.length} boletos</button>
     </div>
-    <div class="section-title" style="margin-top:6px"><h2>Boletos em aberto</h2><span class="see-all">Ver todos</span></div>
+    <div class="section-title" style="margin-top:6px"><h2>Boletos em aberto</h2><span class="see-all">${boletos.length} em aberto</span></div>
     ${boletos.map(b=>`
       <div class="card bill-card">
         <div class="bill-top">
@@ -546,7 +573,7 @@ function renderFinanceiro(){
         </div>
         <div class="bill-actions">
           <span style="font-size:11px;color:var(--ink-soft)">▤ Boleto</span>
-          <button class="pay-btn" onclick="alert('Pagar boleto (protótipo)')">Pagar</button>
+          <button class="pay-btn" onclick="toast('Pagar boleto (protótipo)')">Pagar</button>
         </div>
       </div>`).join("")}
     <div class="actions-grid">
@@ -561,14 +588,14 @@ function renderFinanceiro(){
     </div>
   </div>`;
 }
-function actionCard(ic,t1,t2){return `<div class="card action-card"><span class="ic">${ic}</span><div><p class="t1">${t1}</p><p class="t2">${t2}</p></div></div>`;}
+function actionCard(ic,t1,t2){return `<button class="card action-card" onclick="toast('${t1} (protótipo)')"><span class="ic">${ic}</span><div><p class="t1">${t1}</p><p class="t2">${t2}</p></div></button>`;}
 
 function renderAvisos(){
   return `
   <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Avisos</h1></div>
   <div class="view">
     <div class="filters" id="avisoFilters">
-      ${["Todos","Comunicados","Manutenções","Urgentes"].map((f,i)=>`<button class="chip ${i===0?'active':''}" onclick="filterList(this,'avisoFilters','avisoList','${f==='Todos'?'':f.toLowerCase().replace('ç','c').slice(0,-1)}')">${f}</button>`).join("")}
+      ${[["Todos",""],["Comunicados","comunicados"],["Manutenções","manutencoes"],["Urgentes","urgentes"]].map(([f,cat],i)=>`<button class="chip ${i===0?'active':''}" onclick="filterList(this,'avisoFilters','avisoList','${cat}')">${f}</button>`).join("")}
     </div>
     <div class="card list-card" id="avisoList">
       ${avisos.map(a=>`
@@ -590,17 +617,17 @@ function renderOcorrencias(){
       <button onclick="switchTab(this,'cond-o')">Condomínio</button>
       <button onclick="switchTab(this,'hist-o')">Histórico</button>
     </div>
-    <div id="minhas-o" class="card list-card">
+    <div id="minhas-o" class="tab-panel card list-card">
       ${ocorrencias.filter(o=>o.cat==='minhas').map(rowOcorrencia).join("")}
     </div>
-    <div id="cond-o" class="card list-card" style="display:none">
+    <div id="cond-o" class="tab-panel card list-card" style="display:none">
       ${ocorrencias.map(rowOcorrencia).join("")}
     </div>
-    <div id="hist-o" class="card list-card" style="display:none">
+    <div id="hist-o" class="tab-panel card list-card" style="display:none">
       ${ocorrencias.filter(o=>o.tag==='Resolvida').map(rowOcorrencia).join("")}
     </div>
   </div>
-  <button class="fab" style="display:flex;align-items:center;justify-content:center" onclick="alert('Abrir nova ocorrência (protótipo)')">+</button>`;
+  <button class="fab" onclick="toast('Abrir nova ocorrência (protótipo)')">+</button>`;
 }
 function rowOcorrencia(o){
   return `<div class="list-row"><div class="list-ic" style="background:${o.cor}">${o.ic}</div><div class="list-body"><p class="t1">${o.titulo}</p><p class="t2">${o.data}</p><p class="t2">${o.local}</p></div><span class="badge ${o.tagClass}">${o.tag}</span></div>`;
@@ -625,14 +652,14 @@ function renderSugestoes(){
       <button class="active" onclick="switchTab(this,'minhas-s')">Minhas</button>
       <button onclick="switchTab(this,'cond-s')">Do condomínio</button>
     </div>
-    <div id="minhas-s" class="card list-card">
+    <div id="minhas-s" class="tab-panel card list-card">
       ${sugestoes.filter(s=>s.cat==='minhas').map(rowSugestao).join("") || `<div class="empty-note">Você ainda não enviou nenhuma sugestão.</div>`}
     </div>
-    <div id="cond-s" class="card list-card" style="display:none">
+    <div id="cond-s" class="tab-panel card list-card" style="display:none">
       ${sugestoes.map(rowSugestao).join("")}
     </div>
   </div>
-  <button class="fab" style="display:flex;align-items:center;justify-content:center" onclick="toggleSugForm(true)">+</button>`;
+  <button class="fab" onclick="toggleSugForm(true)">+</button>`;
 }
 function rowSugestao(s){
   return `<div class="list-row"><div class="list-ic" style="background:${s.cor}">${s.ic}</div><div class="list-body"><p class="t1">${s.titulo}</p><p class="t2">${s.unidade} · ${s.data}</p><p class="t2">${s.corpo}</p></div><span class="badge ${s.tagClass}">${s.tag}</span></div>`;
@@ -644,9 +671,10 @@ function toggleSugForm(show){
 function addSugestao(){
   const titulo=document.getElementById("sfTitulo").value.trim();
   const descricao=document.getElementById("sfDescricao").value.trim();
-  if(!titulo){ return; }
+  if(!titulo){ toast("Informe o título da sugestão"); return; }
   sugestoes.unshift({ic:"💡",cor:"var(--gold-100)",titulo,unidade:morador.unidade.replace("Apto ","").replace(" - Torre A"," - A").replace(" - Torre B"," - B"),data:new Date().toLocaleDateString('pt-BR'),corpo:descricao||"Sem descrição adicional.",tag:"Em análise",tagClass:"b-amber",cat:"minhas"});
   goView("sugestoes");
+  toast("Sugestão enviada");
 }
 
 function renderEncomendas(){
@@ -682,32 +710,33 @@ function renderHub(){
     ["🔧","Manutenções"],["📋","Regimento"],["💬","Fale com o síndico"],["⚙️","Configurações"]
   ];
   return `
-  <div class="topbar"><h1>Mais opções</h1></div>
+  <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Mais opções</h1></div>
   <div class="view">
     <div class="quick-grid" style="grid-template-columns:repeat(4,1fr)">
-      ${items.map(([ic,label])=>`<button class="quick-item" onclick="alert('${label} (protótipo)')"><div class="ic" style="background:#eceae2;color:#5c5f66">${ic}</div><span>${label}</span></button>`).join("")}
+      ${items.map(([ic,label])=>`<button class="quick-item" onclick="toast('${label} (protótipo)')"><div class="ic" style="background:#eceae2;color:#5c5f66">${ic}</div><span>${label}</span></button>`).join("")}
     </div>
   </div>`;
 }
 
 const viewMap={home:renderHome,reservas:renderReservas,financeiro:renderFinanceiro,avisos:renderAvisos,ocorrencias:renderOcorrencias,sugestoes:renderSugestoes,encomendas:renderEncomendas,hub:renderHub};
-const fabViews=["reservas","ocorrencias"];
 
 function goView(v){
+  const render=viewMap[v];
+  if(!render){ console.warn("View desconhecida:",v); return; }
   currentView=v;
-  document.getElementById("residentViews").innerHTML=viewMap[v]();
+  document.getElementById("residentViews").innerHTML=render();
   document.querySelectorAll(".bottomnav button").forEach(b=>b.classList.remove("active"));
   const match=document.querySelector(`.bottomnav button[data-v="${v}"]`);
-  if(match) match.classList.add("active");
-  else if(v==='avisos'||v==='encomendas') document.querySelectorAll('.bottomnav button')[2].classList.add('active');
+  // views sem botão próprio na barra (sugestões, encomendas...) destacam o botão central "Mais"
+  (match || document.querySelector('.bottomnav button.central')).classList.add("active");
   window.scrollTo(0,0);
 }
 function switchTab(btn,targetId){
   const tabs=btn.parentElement;
   tabs.querySelectorAll("button").forEach(b=>b.classList.remove("active"));
   btn.classList.add("active");
-  const siblings=tabs.parentElement.querySelectorAll(":scope > div[id]");
-  siblings.forEach(s=>s.style.display = s.id===targetId ? "block":"none");
+  const panels=tabs.parentElement.querySelectorAll(":scope > .tab-panel");
+  panels.forEach(s=>s.style.display = s.id===targetId ? "block":"none");
 }
 function filterList(btn,filtersId,listId,cat){
   document.querySelectorAll(`#${filtersId} .chip`).forEach(c=>c.classList.remove('active'));
@@ -716,7 +745,6 @@ function filterList(btn,filtersId,listId,cat){
     r.style.display = (cat===''|| r.dataset.cat===cat) ? 'flex':'none';
   });
 }
-function fabAction(){alert("Ação rápida (protótipo)");}
 
 /* ============================================================
    ADMIN APP
@@ -769,7 +797,16 @@ function mobileTabs(){
   ).join("")}</div>`;
 }
 
+function temModulo(v){
+  return staffRoles[currentStaffRole].items.some(i=>i[0]===v);
+}
+
 function goAdmin(v){
+  // impede navegar para um módulo fora do menu do perfil atual
+  if(!temModulo(v)){
+    toast("Este módulo não está disponível para o seu perfil");
+    return;
+  }
   staffViewByRole[currentStaffRole]=v;
   buildSidebar();
   const renderers=rendererMap[currentStaffRole];
@@ -779,7 +816,8 @@ function goAdmin(v){
 }
 
 function adminTopbar(title){
-  return `<div class="admin-topbar"><h1>${title}</h1><div class="datechip">📅 Hoje, 19 de agosto de 2026</div></div>`;
+  const hoje=new Date().toLocaleDateString('pt-BR',{day:'numeric',month:'long',year:'numeric'});
+  return `<div class="admin-topbar"><h1>${title}</h1><div class="datechip">📅 Hoje, ${hoje}</div></div>`;
 }
 
 function renderDashboard(){
@@ -799,34 +837,38 @@ function renderDashboard(){
     </div>
 
     <div class="panel">
-      <div class="panel-head"><h3>Ocorrências</h3><span class="see-all">Ver todas</span></div>
+      <div class="panel-head"><h3>Ocorrências</h3><button class="see-all" onclick="goAdmin('ocorrencias')">Ver todas</button></div>
       ${donut()}
     </div>
     <div class="panel">
-      <div class="panel-head"><h3>Reservas próximas</h3><span class="see-all">Ver todas</span></div>
+      <div class="panel-head"><h3>Reservas próximas</h3><button class="see-all" onclick="goAdmin('reservas')">Ver todas</button></div>
       ${reservas.map(r=>`<div class="mini-row"><div class="list-ic" style="background:${r.cor};width:34px;height:34px;font-size:14px">${r.ic}</div><div><p class="t1">${r.titulo}</p><p class="t2">${r.data}</p></div></div>`).join("")}
     </div>
   </div>
   <div class="bottom-grid">
     <div class="panel">
-      <div class="panel-head"><h3>Avisos recentes</h3><span class="see-all">Ver todos</span></div>
+      <div class="panel-head"><h3>Avisos recentes</h3><span class="see-all">${avisos.length} avisos</span></div>
       ${avisos.map(a=>`<div class="mini-row"><div class="list-ic" style="background:${a.cor};width:34px;height:34px;font-size:14px">${a.ic}</div><div style="flex:1"><p class="t1">${a.titulo}</p><p class="t2">${a.data}</p></div><span class="badge ${a.tagClass}" style="font-size:9px">${a.tag}</span></div>`).join("")}
     </div>
     <div class="panel">
-      <div class="panel-head"><h3>Assembleias</h3><span class="see-all">Ver todas</span></div>
+      <div class="panel-head"><h3>Assembleias</h3>${temModulo('assembleias')?`<button class="see-all" onclick="goAdmin('assembleias')">Ver todas</button>`:''}</div>
       <div class="mini-row" style="border:none;padding-bottom:2px">
         <div class="list-ic" style="background:var(--gold-100);width:34px;height:34px;font-size:14px">🗳️</div>
         <div><p class="t1">Assembleia Geral Ordinária</p><p class="t2">20/08/2026 - 19:00 · Salão de Festas</p></div>
       </div>
       <p style="font-size:11.5px;color:var(--ink-soft);margin:12px 0 4px">Participação · 71% (74 de 104)</p>
       <div class="progress-track"><div class="progress-fill" style="width:71%"></div></div>
-      <button class="vote-btn" onclick="alert('Acessar votação (protótipo)')">Acessar votação</button>
+      <button class="vote-btn" onclick="toast('Acessar votação (protótipo)')">Acessar votação</button>
     </div>
     <div class="panel">
       <div class="panel-head"><h3>Atalhos rápidos</h3></div>
       <div class="shortcut-grid">
-        ${shortcut("📅","Nova reserva")}${shortcut("📣","Novo aviso")}${shortcut("⚠️","Nova ocorrência")}
-        ${shortcut("👤","Novo morador")}${shortcut("💳","Relatório financeiro")}${shortcut("🧾","Prestação de contas")}
+        ${shortcut("📅","Nova reserva","goAdmin('reservas');toggleReservaForm(true)")}
+        ${shortcut("📣","Novo aviso")}
+        ${shortcut("⚠️","Nova ocorrência","goAdmin('ocorrencias');toggleOcorrenciaForm(true)")}
+        ${shortcut("👤","Novo morador","goAdmin('moradores');toggleMoradorForm(true)")}
+        ${shortcut("💳","Relatório financeiro","goAdmin('financeiro')")}
+        ${shortcut("🧾","Prestação de contas")}
       </div>
     </div>
   </div>`;
@@ -834,7 +876,10 @@ function renderDashboard(){
 function kpi(lbl,val,delta,dir,ic,bg){
   return `<div class="kpi-card"><div class="top"><span class="lbl">${lbl}</span><span class="ic" style="background:${bg}">${ic}</span></div><p class="val num">${val}</p><p class="delta ${dir}">${dir==='up'?'▲':'▼'} ${delta}</p></div>`;
 }
-function shortcut(ic,label){return `<button class="shortcut" onclick="alert('${label} (protótipo)')"><div class="ic">${ic}</div><span>${label}</span></button>`;}
+function shortcut(ic,label,acao){
+  const onclick = acao || `toast('${label} (protótipo)')`;
+  return `<button class="shortcut" onclick="${onclick}"><div class="ic">${ic}</div><span>${label}</span></button>`;
+}
 
 function cashChart(){
   const data=[
@@ -846,10 +891,15 @@ function cashChart(){
 }
 
 function donut(){
-  // 24 total: 8 abertas, 10 em execução, 6 resolvidas
-  const abertas=8,execucao=10,resolvidas=6,total=24;
-  const p1=abertas/total*360, p2=execucao/total*360;
-  const grad=`conic-gradient(var(--blue) 0deg ${p1}deg, var(--amber) ${p1}deg ${p1+p2}deg, var(--green) ${p1+p2}deg 360deg)`;
+  // derivado da lista real de ocorrências, para não divergir da tabela ao lado
+  const abertas=ocorrencias.filter(o=>o.tag==="Aberta").length;
+  const execucao=ocorrencias.filter(o=>o.tag==="Em execução").length;
+  const resolvidas=ocorrencias.filter(o=>o.tag==="Resolvida").length;
+  const total=ocorrencias.length;
+  const p1=total?abertas/total*360:0, p2=total?execucao/total*360:0;
+  const grad=total
+    ? `conic-gradient(var(--blue) 0deg ${p1}deg, var(--amber) ${p1}deg ${p1+p2}deg, var(--green) ${p1+p2}deg 360deg)`
+    : "var(--line)";
   return `
   <div class="donut-wrap">
     <div class="donut" style="background:${grad}"><div class="hole"><span class="n">${total}</span><span class="l">Total</span></div></div>
@@ -871,7 +921,7 @@ function renderAdminFinanceiro(){
     ${kpi("Saldo em caixa","R$ 187.920,00","+5% vs mês anterior","up","🏦","var(--blue-bg)")}
   </div>
   <div class="panel">
-    <div class="panel-head"><h3>Boletos do mês</h3><span class="see-all">Exportar</span></div>
+    <div class="panel-head"><h3>Boletos do mês</h3><button class="see-all" onclick="toast('Exportação de boletos (protótipo)')">Exportar</button></div>
     <table class="datatable">
       <tr><th>Unidade</th><th>Morador</th><th>Vencimento</th><th>Valor</th><th>Status</th></tr>
       <tr><td>802-A</td><td>Rodrigo Cahuana</td><td>10/08/2026</td><td class="mono">R$ 412,80</td><td><span class="badge b-green">Pago</span></td></tr>
@@ -900,10 +950,10 @@ function renderAdminMoradores(){
     </div>
   </div>
   <div class="panel">
-    <div class="panel-head"><h3>Todos os moradores</h3><span class="see-all" onclick="toggleMoradorForm(true)" style="cursor:pointer">+ Novo morador</span></div>
+    <div class="panel-head"><h3>Todos os moradores</h3><button class="see-all" onclick="toggleMoradorForm(true)">+ Novo morador</button></div>
     <table class="datatable">
       <tr><th>Nome</th><th>Unidade</th><th>Papel</th><th></th></tr>
-      ${moradoresLista.map(m=>`<tr><td>${m.nome}</td><td class="mono">${m.unidade}</td><td>${m.papel}</td><td><span class="see-all">Ver perfil</span></td></tr>`).join("")}
+      ${moradoresLista.map((m,i)=>`<tr><td>${m.nome}</td><td class="mono">${m.unidade}</td><td>${m.papel}</td><td><button class="see-all" onclick="verPerfilMorador(${i})">Ver perfil</button></td></tr>`).join("")}
     </table>
   </div>`;
 }
@@ -938,10 +988,10 @@ function renderAdminReservas(){
     </div>
   </div>
   <div class="panel">
-    <div class="panel-head"><h3>Reservas da semana</h3><span class="see-all" onclick="toggleReservaForm(true)" style="cursor:pointer">+ Nova reserva</span></div>
+    <div class="panel-head"><h3>Reservas da semana</h3><button class="see-all" onclick="toggleReservaForm(true)">+ Nova reserva</button></div>
     <table class="datatable">
       <tr><th>Área</th><th>Unidade</th><th>Data</th><th>Status</th><th></th></tr>
-      ${reservas.map((r,i)=>`<tr><td>${r.titulo}</td><td class="mono">${r.morador||'802-A'}</td><td>${r.data}</td><td><span class="badge ${r.tagClass}">${r.tag}</span></td><td>${r.tag==='Pendente'?`<span class="see-all" style="cursor:pointer" onclick="confirmReserva(${i})">Confirmar</span>`:''}</td></tr>`).join("")}
+      ${reservas.map((r,i)=>`<tr><td>${r.titulo}</td><td class="mono">${r.morador||'802-A'}</td><td>${r.data}</td><td><span class="badge ${r.tagClass}">${r.tag}</span></td><td>${r.tag==='Pendente'?`<button class="see-all" onclick="confirmReserva(${i})">Confirmar</button>`:''}</td></tr>`).join("")}
     </table>
   </div>`;
 }
@@ -967,23 +1017,59 @@ function addReserva(){
 }
 
 function renderAdminOcorrencias(){
+  const statusOpts=["Aberta","Em execução","Resolvida"];
   return `
   ${adminTopbar("Ocorrências")}
+  <div class="panel" id="ocoFormPanel" style="display:none;margin-bottom:16px">
+    <div class="panel-head"><h3>Registrar ocorrência</h3></div>
+    <div class="form-grid">
+      <div><label>Título</label><input id="ofTitulo" placeholder="Ex: Vazamento na garagem"></div>
+      <div><label>Local</label><input id="ofLocal" placeholder="Ex: Garagem - Subsolo 1"></div>
+    </div>
+    <div class="form-actions">
+      <button class="btn-ghost" onclick="toggleOcorrenciaForm(false)">Cancelar</button>
+      <button class="btn-primary" onclick="addOcorrencia()">Registrar</button>
+    </div>
+  </div>
   <div class="admin-grid" style="grid-template-columns:1fr 2fr">
     <div class="panel">${donut()}</div>
     <div class="panel">
-      <div class="panel-head"><h3>Todas as ocorrências</h3><span class="see-all">+ Registrar</span></div>
+      <div class="panel-head"><h3>Todas as ocorrências</h3><button class="see-all" onclick="toggleOcorrenciaForm(true)">+ Registrar</button></div>
       <table class="datatable">
         <tr><th>Ocorrência</th><th>Local</th><th>Abertura</th><th>Status</th></tr>
-        ${ocorrencias.map(o=>`<tr><td>${o.titulo}</td><td>${o.local}</td><td>${o.data.replace('Abertura: ','')}</td><td><span class="badge ${o.tagClass}">${o.tag}</span></td></tr>`).join("")}
+        ${ocorrencias.map((o,i)=>`<tr><td>${o.titulo}</td><td>${o.local}</td><td>${o.data.replace('Abertura: ','')}</td><td>
+          <select onchange="updateOcorrenciaStatus(${i},this.value)" class="inline-select">
+            ${statusOpts.map(op=>`<option ${op===o.tag?'selected':''}>${op}</option>`).join("")}
+          </select>
+        </td></tr>`).join("")}
       </table>
     </div>
   </div>`;
 }
+function toggleOcorrenciaForm(show){
+  const p=document.getElementById("ocoFormPanel");
+  if(p) p.style.display = show ? "block":"none";
+}
+function addOcorrencia(){
+  const titulo=document.getElementById("ofTitulo").value.trim();
+  const local=document.getElementById("ofLocal").value.trim();
+  if(!titulo||!local){ toast("Preencha título e local"); return; }
+  ocorrencias.unshift({ic:"⚠️",cor:"var(--amber-bg)",titulo,
+    data:"Abertura: "+new Date().toLocaleDateString('pt-BR')+" - "+horaAgora(),
+    local,tag:"Aberta",tagClass:"b-blue",cat:"condominio"});
+  goAdmin("ocorrencias");
+  toast("Ocorrência registrada");
+}
+function updateOcorrenciaStatus(i,novoStatus){
+  const cls={"Aberta":"b-blue","Em execução":"b-amber","Resolvida":"b-green"};
+  ocorrencias[i].tag=novoStatus;
+  ocorrencias[i].tagClass=cls[novoStatus];
+  goAdmin("ocorrencias");
+  toast("Status da ocorrência atualizado");
+}
 
 function renderAdminSugestoes(){
   const statusOpts=["Em análise","Aprovada","Recusada","Implementada"];
-  const statusClass={"Em análise":"b-amber","Aprovada":"b-green","Recusada":"b-red","Implementada":"b-navy"};
   return `
   ${adminTopbar("Sugestões")}
   <div class="panel">
@@ -991,7 +1077,7 @@ function renderAdminSugestoes(){
     <table class="datatable">
       <tr><th>Sugestão</th><th>Unidade</th><th>Data</th><th>Status</th></tr>
       ${sugestoes.map((s,i)=>`<tr><td>${s.titulo}<br><span style="color:var(--ink-soft);font-size:11.5px">${s.corpo}</span></td><td class="mono">${s.unidade}</td><td>${s.data}</td><td>
-        <select onchange="updateSugestaoStatus(${i},this.value)" style="border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 8px;font-family:inherit;background:var(--paper)">
+        <select onchange="updateSugestaoStatus(${i},this.value)" class="inline-select">
           ${statusOpts.map(op=>`<option ${op===s.tag?'selected':''}>${op}</option>`).join("")}
         </select>
       </td></tr>`).join("")}
@@ -1020,10 +1106,10 @@ function renderAdminEncomendas(){
     </div>
   </div>
   <div class="panel">
-    <div class="panel-head"><h3>Encomendas na portaria</h3><span class="see-all" onclick="toggleEncForm(true)" style="cursor:pointer">+ Registrar chegada</span></div>
+    <div class="panel-head"><h3>Encomendas na portaria</h3><button class="see-all" onclick="toggleEncForm(true)">+ Registrar chegada</button></div>
     <table class="datatable">
       <tr><th>Encomenda</th><th>Loja</th><th>Data</th><th>Status</th><th></th></tr>
-      ${encomendas.map((e,i)=>`<tr><td>${e.titulo}</td><td>${e.loja}</td><td>${e.data}</td><td><span class="badge ${e.tagClass}">${e.tag}</span></td><td>${e.tag!=='Entregue'?`<span class="see-all" style="cursor:pointer" onclick="marcarEntregue(${i})">Marcar retirada</span>`:''}</td></tr>`).join("")}
+      ${encomendas.map((e,i)=>`<tr><td>${e.titulo}</td><td>${e.loja}</td><td>${e.data}</td><td><span class="badge ${e.tagClass}">${e.tag}</span></td><td>${e.tag!=='Entregue'?`<button class="see-all" onclick="marcarEntregue(${i})">Marcar retirada</button>`:''}</td></tr>`).join("")}
     </table>
   </div>`;
 }
@@ -1059,10 +1145,10 @@ function renderAdminVisitantes(){
     </div>
   </div>
   <div class="panel">
-    <div class="panel-head"><h3>Visitantes hoje</h3><span class="see-all" onclick="toggleVisForm(true)" style="cursor:pointer">+ Registrar entrada</span></div>
+    <div class="panel-head"><h3>Visitantes hoje</h3><button class="see-all" onclick="toggleVisForm(true)">+ Registrar entrada</button></div>
     <table class="datatable">
       <tr><th>Nome</th><th>Unidade</th><th>Motivo</th><th>Entrada</th><th>Status</th></tr>
-      ${visitantes.map((v,i)=>`<tr><td>${v.nome}</td><td class="mono">${v.unidade}</td><td>${v.motivo}</td><td>${v.entrada}</td><td>${v.saida?`<span class="badge b-green">Saída ${v.saida}</span>`:`<span class="see-all" style="cursor:pointer" onclick="registrarSaida(${i})">Registrar saída</span>`}</td></tr>`).join("")}
+      ${visitantes.map((v,i)=>`<tr><td>${v.nome}</td><td class="mono">${v.unidade}</td><td>${v.motivo}</td><td>${v.entrada}</td><td>${v.saida?`<span class="badge b-green">Saída ${v.saida}</span>`:`<button class="see-all" onclick="registrarSaida(${i})">Registrar saída</button>`}</td></tr>`).join("")}
     </table>
   </div>`;
 }
@@ -1072,12 +1158,12 @@ function addVisitante(){
   const unidade=document.getElementById("vfUnidade").value.trim();
   const motivo=document.getElementById("vfMotivo").value.trim()||"Visita";
   if(!nome||!unidade){ toast("Preencha nome e unidade"); return; }
-  visitantes.unshift({nome,unidade,motivo,entrada:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),saida:null});
+  visitantes.unshift({nome,unidade,motivo,entrada:horaAgora(),saida:null});
   goAdmin("visitantes");
   toast("Entrada registrada");
 }
 function registrarSaida(i){
-  visitantes[i].saida=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  visitantes[i].saida=horaAgora();
   goAdmin("visitantes");
   toast("Saída registrada");
 }
@@ -1085,8 +1171,19 @@ function registrarSaida(i){
 function toast(msg){
   const old=document.querySelector(".toast"); if(old) old.remove();
   const t=document.createElement("div"); t.className="toast"; t.textContent=msg;
+  // no app do morador a barra inferior ocupa o rodapé — sobe o toast para não ficar atrás dela
+  const nav=document.querySelector(".bottomnav");
+  if(nav && document.getElementById("residentApp").style.display!=="none"){
+    t.style.bottom=(nav.offsetHeight+16)+"px";
+  }
   document.body.appendChild(t);
   setTimeout(()=>t.remove(),2200);
+}
+function horaAgora(){return new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
+function verPerfilMorador(i){
+  const m=moradoresLista[i];
+  if(!m) return;
+  toast(`${m.nome} · ${m.unidade} · ${m.papel}`);
 }
 
 function renderAdminUnidades(){
@@ -1141,18 +1238,18 @@ function renderPorteiroDashboard(){
   </div>
   <div class="admin-grid" style="grid-template-columns:1fr 1fr">
     <div class="panel">
-      <div class="panel-head"><h3>Reservas aguardando confirmação</h3><span class="see-all">Ver todas</span></div>
+      <div class="panel-head"><h3>Reservas aguardando confirmação</h3><button class="see-all" onclick="goAdmin('reservas')">Ver todas</button></div>
       ${reservas.filter(r=>r.tag==='Pendente').map(r=>`<div class="mini-row"><div class="list-ic" style="background:${r.cor};width:34px;height:34px;font-size:14px">${r.ic}</div><div style="flex:1"><p class="t1">${r.titulo}</p><p class="t2">${r.data}</p></div></div>`).join("") || `<p style="font-size:12.5px;color:var(--ink-soft)">Nenhuma reserva pendente.</p>`}
     </div>
     <div class="panel">
-      <div class="panel-head"><h3>Encomendas recentes</h3><span class="see-all">Ver todas</span></div>
+      <div class="panel-head"><h3>Encomendas recentes</h3><button class="see-all" onclick="goAdmin('encomendas')">Ver todas</button></div>
       ${encomendas.slice(0,4).map(e=>`<div class="mini-row"><div class="list-ic" style="background:#f3e6d8;width:34px;height:34px;font-size:14px">📦</div><div style="flex:1"><p class="t1">${e.titulo}</p><p class="t2">${e.loja}</p></div><span class="badge ${e.tagClass}" style="font-size:9px">${e.tag}</span></div>`).join("")}
     </div>
   </div>`;
 }
 
 function adminStub(v){
-  const found=staffRoles[currentStaffRole].items.find(i=>i[0]===v);
+  const found=staffRoles[currentStaffRole].items.find(i=>i[0]===v) || [v,"❔",v];
   return `${adminTopbar(found[2])}<div class="panel stub"><div class="ic">${found[1]}</div><h3>${found[2]}</h3><p>Módulo em construção — próxima etapa do protótipo.</p></div>`;
 }
 

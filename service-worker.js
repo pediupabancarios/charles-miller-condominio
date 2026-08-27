@@ -1,5 +1,6 @@
-const CACHE_NAME = "charles-miller-v1";
+const CACHE_NAME = "charles-miller-v2";
 const ASSETS = [
+  "./",
   "./index.html",
   "./manifest.json",
   "./icon-192.png",
@@ -24,18 +25,28 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
-  if (event.request.method !== "GET") return;
+  const req = event.request;
+  if (req.method !== "GET") return;
+  // cache.put() só aceita http/https — ignora chrome-extension:, data:, etc.
+  if (!req.url.startsWith("http")) return;
+
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      const network = fetch(event.request)
+    caches.match(req).then((cached) => {
+      const network = fetch(req)
         .then((response) => {
-          if (response && response.status === 200) {
+          if (response && response.status === 200 && response.type !== "opaque") {
             const clone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+            // waitUntil mantém o SW vivo até a gravação terminar
+            event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(req, clone)));
           }
           return response;
         })
-        .catch(() => cached);
+        .catch(() => {
+          if (cached) return cached;
+          // offline numa rota sem cache próprio: devolve o app
+          if (req.mode === "navigate") return caches.match("./index.html");
+          return Response.error();
+        });
       return cached || network;
     })
   );
