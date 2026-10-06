@@ -5,12 +5,50 @@ PWA de gestão do Condomínio Residencial Charles Miller.
 Quatro perfis de acesso: **Morador**, **Portaria**, **Administrativo** e **Síndico**.
 Estado atual: **protótipo** — dados mockados no próprio `index.html`, sem backend.
 
+## Backend (Supabase)
+- **Projeto:** `ohuaoncwgioawgptyqgz` (prontuario-neonatal-candida-vargas), tabelas com prefixo `cm_`
+- **Schema:** `supabase/schema.sql` — idempotente, replicar aqui qualquer migration aplicada
+- **Chave no app:** publishable (`sb_publishable_…`), embutida no `index.html` — é pública por design
+- **17 tabelas:** cm_config, cm_perfil, cm_moradores, cm_reservas, cm_boletos, cm_boletos_mes,
+  cm_avisos, cm_ocorrencias, cm_encomendas, cm_sugestoes, cm_visitantes, cm_autorizacoes,
+  cm_veiculos, cm_assembleias, cm_documentos, cm_manutencoes, cm_conversas
+
+### Como a persistência funciona
+Os arrays globais continuam sendo a fonte da UI — **os renderers não mudaram**.
+`boot()` carrega tudo do banco antes do primeiro render; cada mutação grava e só
+então re-renderiza. Se o banco não responder, o app entra em **modo demonstração**
+(faixa no rodapé) e segue navegável, sem salvar nada.
+
+- `dbInserir/dbAtualizar/dbRemover(colecao, …)` — `TABELAS{}` liga coleção → tabela
+- `dbSalvarConfig(chave)` / `dbSalvarPerfil()` — upsert em `cm_config` / `cm_perfil`
+- `paraJS()`/`paraDB()` convertem snake_case ↔ camelCase **só no primeiro nível**:
+  o conteúdo de jsonb (`pauta`, `mensagens`, `usos`, `notificacoes`) precisa chegar
+  intacto, senão `meuVoto` viraria `meu_voto`
+- Colunas `numeric` voltam como string do PostgREST — `carregarTudo()` converte
+  `boletos.val`, `boletosDoMes.val` e `manutencoes.custo` para número
+- Toda função que persiste é `async` e dá `await` antes de `goView`/`goAdmin`
+- `id` vem do banco e é o mesmo usado pela lógica (assembleias, conversas, autorizações)
+
+### Limitações conhecidas desta etapa
+- **Sem autenticação.** A chave publishable e a RLS aberta (`using (true)`) deixam
+  qualquer um com o link ler e gravar tudo. Os dados publicados hoje são fictícios.
+  **Não cadastrar morador, boleto ou CPF reais antes de ter login + RLS por unidade.**
+- `vagas` continua gerado proceduralmente (não há tela para remanejar vaga)
+- `eventos`, `calendarEvents`, `serieFinanceira`, `despesasPorCategoria` e
+  `inadimplentes` seguem fixos no código — são read-only, não há UI que os altere
+- Votos de assembleia vivem no `jsonb` da pauta: dois votos simultâneos podem se
+  sobrescrever. O certo é uma tabela `cm_votos (pauta_id, unidade, voto)`, que também
+  resolveria auditoria e bloqueio de unidade inadimplente
+- `ic`/`cor`/`tag_class` estão no banco por pragmatismo (evitou reescrever os
+  renderers). São apresentação e deveriam derivar da categoria, como já acontece
+  em `tiposAviso`
+
 ## Stack
 - **Single file:** `index.html` (HTML + CSS + JS inline, sem build, sem dependências)
 - **PWA:** `manifest.json` + `service-worker.js` (cache offline stale-while-revalidate)
 - **Ícones:** `icon-192.png`, `icon-512.png`, `icon-512-maskable.png`
 - **Fontes:** Google Fonts — Fraunces (títulos), Inter (texto), IBM Plex Mono (números)
-- **Backend:** nenhum ainda. Migração futura provável: Supabase (mesmo padrão do app MedEscala)
+- **Backend:** Supabase (ver seção acima) via `@supabase/supabase-js` por CDN
 
 ## Tema visual
 - **Acento:** dourado `--gold-500 #c79a3d`
@@ -170,8 +208,9 @@ Sidebar do síndico: 17 módulos · administrativo: 14 · portaria: 6.
 Views do morador: 14.
 
 ## Próximos passos
-1. **Autenticação real** — hoje o seletor de perfil no topo troca de papel sem login
-2. **Backend (Supabase)** — todo o estado vive em memória e some ao recarregar
+1. **Autenticação real** — hoje o seletor de perfil no topo troca de papel sem login.
+   É o bloqueio para entrar qualquer dado real: sem ele a RLS não tem em quem se apoiar
+2. **RLS por unidade** — morador só enxerga a própria unidade; hoje a política é aberta
 3. Upload real de documentos (hoje o `<input type=file>` só lê o tamanho)
 4. Envio real das notificações (Web Push) — hoje os toggles só controlam textos
 5. QR code para a autorização (hoje o visitante apresenta o código digitado)

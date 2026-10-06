@@ -12,6 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="Charles Miller">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-192.png">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
@@ -272,6 +273,15 @@ table.datatable td{padding:12px;border-bottom:1px solid var(--line);}
 table.datatable tr:last-child td{border-bottom:none;}
 .inline-select{border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 8px;font-family:inherit;background:var(--paper);}
 
+/* --- faixa de status da conexão com o banco --- */
+#statusDB{position:fixed;left:0;right:0;bottom:0;z-index:1200;padding:11px 16px;
+  font-size:12.5px;font-weight:600;text-align:center;display:flex;align-items:center;
+  justify-content:center;gap:12px;flex-wrap:wrap;}
+#statusDB.carregando{background:var(--navy-950);color:#fff;}
+#statusDB.offline{background:var(--amber-bg);color:#6b4a12;border-top:1px solid var(--amber);}
+#statusDB button{border:1px solid currentColor;background:transparent;color:inherit;
+  border-radius:8px;padding:5px 12px;font-size:11.5px;font-weight:700;}
+
 /* --- conversas / fale com o síndico --- */
 .conv-row{width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--line);}
 .conv-row:last-child{border-bottom:none;}
@@ -469,7 +479,7 @@ const morador = {
 
 /* --- Fale com o síndico: uma thread por assunto --- */
 const categoriasConversa = ["Dúvida","Solicitação","Reclamação","Sugestão","Elogio"];
-const conversas = [
+let conversas = [
   {id:1,unidade:"802-A",morador:"Rodrigo Cahuana",assunto:"Barulho de obra fora do horário",
    categoria:"Reclamação",encerrada:false,
    mensagens:[
@@ -499,7 +509,7 @@ const eventos = [
   {dia:25,mes:"AGO",titulo:"Limpeza da caixa d'água",hora:"25/08/2026 (sábado)",local:"Todo o condomínio",tag:"Informativo",tagClass:"b-amber"},
 ];
 
-const reservas = [
+let reservas = [
   {ic:"🎉",cor:"#f3e6d8",titulo:"Salão de Festas",morador:"802-A",data:"05/09/2026 · 18:00 às 23:00",num:"Reserva #1187",tag:"Confirmada",tagClass:"b-green"},
   {ic:"🍖",cor:"#e6efe0",titulo:"Churrasqueira 1",morador:"1401-B",data:"12/09/2026 · 12:00 às 16:00",num:"Reserva #1192",tag:"Confirmada",tagClass:"b-green"},
   {ic:"🏓",cor:"#e0ebf2",titulo:"Quadra Poliesportiva",morador:"301-A",data:"14/09/2026 · 09:00 às 11:00",num:"Reserva #1201",tag:"Pendente",tagClass:"b-amber"},
@@ -508,7 +518,7 @@ const reservas = [
 const calendarEvents = {5:"reserva",12:"reserva",14:"reserva",20:"assembleia",25:"manutencao",8:"evento"};
 
 /* boletos da unidade do morador logado — dado privado da própria unidade */
-const boletos = [
+let boletos = [
   {titulo:"Condomínio - Agosto/2026",venc:"Vencimento: 10/08/2026",val:412.80},
   {titulo:"Fundo de Obras",venc:"Vencimento: 15/08/2026",val:95.00},
 ];
@@ -520,31 +530,31 @@ const tiposAviso = {
   manutencoes: {plural:"Manutenções",  tag:"Manutenção", ic:"🔧", cor:"var(--amber-bg)", tagClass:"b-amber"}
 };
 
-const avisos = [
+let avisos = [
   {titulo:"Manutenção no reservatório",data:"19/08/2026 - 08:30",corpo:"Amanhã, 20/08, das 09h às 14h, haverá interrupção no abastecimento de água.",cat:"urgentes",fixado:true},
   {titulo:"Convocação de Assembleia",data:"14/08/2026 - 10:15",corpo:"A pauta inclui aprovação do orçamento 2027 e eleição da nova gestão.",cat:"comunicados",fixado:false},
   {titulo:"Manutenção do elevador social",data:"12/08/2026 - 14:45",corpo:"Manutenção preventiva será realizada no elevador social no dia 22/08.",cat:"manutencoes",fixado:false},
 ];
 
-const ocorrencias = [
+let ocorrencias = [
   {ic:"💧",cor:"var(--blue-bg)",titulo:"Vazamento na garagem",data:"Abertura: 18/08/2026 - 09:30",local:"Garagem - Subsolo 1",tag:"Em execução",tagClass:"b-amber",cat:"minhas"},
   {ic:"💡",cor:"var(--amber-bg)",titulo:"Lâmpada queimada",data:"Abertura: 16/08/2026 - 18:20",local:"Corredor - 3º andar",tag:"Aberta",tagClass:"b-blue",cat:"minhas"},
   {ic:"🔊",cor:"var(--red-bg)",titulo:"Barulho excessivo",data:"Abertura: 15/08/2026 - 22:15",local:"Apto 102 - Torre A",tag:"Resolvida",tagClass:"b-green",cat:"condominio"},
 ];
 
-const encomendas = [
+let encomendas = [
   {titulo:"Encomenda #38821",data:"Recebida em 18/08/2026 - 11:20",loja:"Mercado Livre",tag:"Em armazenamento",tagClass:"b-amber"},
   {titulo:"Encomenda #38790",data:"Recebida em 17/08/2026 - 15:45",loja:"Amazon",tag:"Em armazenamento",tagClass:"b-amber"},
   {titulo:"Encomenda #38712",data:"Entregue em 15/08/2026 - 10:30",loja:"Shopee",tag:"Entregue",tagClass:"b-green"},
 ];
 
-const sugestoes = [
+let sugestoes = [
   {ic:"💡",cor:"var(--gold-100)",titulo:"Instalar bicicletário coberto",unidade:"802-A",data:"17/08/2026",corpo:"Sugiro um bicicletário coberto perto da garagem para proteger as bikes da chuva.",tag:"Em análise",tagClass:"b-amber",cat:"minhas"},
   {ic:"🌱",cor:"var(--green-bg)",titulo:"Compostagem no jardim",unidade:"301-A",data:"14/08/2026",corpo:"Criar uma composteira comunitária para reduzir o lixo orgânico do condomínio.",tag:"Aprovada",tagClass:"b-green",cat:"condominio"},
   {ic:"🔐",cor:"var(--blue-bg)",titulo:"Fechadura digital no salão de festas",unidade:"1401-B",data:"10/08/2026",corpo:"Trocar a chave física do salão por fechadura digital com senha por reserva.",tag:"Implementada",tagClass:"b-navy",cat:"condominio"},
 ];
 
-const moradoresLista = [
+let moradoresLista = [
   {nome:"Rodrigo Cahuana",unidade:"802-A",papel:"Proprietário · Síndico"},
   {nome:"João Neto",unidade:"1401-B",papel:"Proprietário · Subsíndico"},
   {nome:"Marina Costa",unidade:"301-A",papel:"Locatária"},
@@ -552,7 +562,7 @@ const moradoresLista = [
   {nome:"Fernanda Alves",unidade:"202-A",papel:"Proprietária"},
 ];
 
-const visitantes = [
+let visitantes = [
   {nome:"Carlos Mendes",unidade:"301-A",motivo:"Visita",entrada:"09:40",saida:"11:15"},
   {nome:"Paula Ribeiro",unidade:"1502-B",motivo:"Entrega",entrada:"10:05",saida:null},
   {nome:"Técnico NET",unidade:"202-A",motivo:"Prestador de serviço",entrada:"08:20",saida:"09:00"},
@@ -602,7 +612,7 @@ const vagas = (function(){
 /* --- Visitantes pré-autorizados pelo morador --- */
 const diasSemana = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
 const motivosVisita = ["Visita","Prestador de serviço","Entrega","Diarista","Cuidador(a)","Transporte por app"];
-const autorizacoes = [
+let autorizacoes = [
   {id:1,unidade:"802-A",nome:"Ana Paula Ferreira",doc:"123.456.789-00",motivo:"Diarista",
    tipo:"recorrente",de:"2026-08-01",ate:"2026-12-31",dias:[2,4],codigo:"CM-7K2P",
    cancelada:false,usos:[{data:"2026-08-25",hora:"08:05"}]},
@@ -615,7 +625,7 @@ const autorizacoes = [
 ];
 
 const tiposVeiculo = {Carro:"🚗",Moto:"🏍️",Bicicleta:"🚲"};
-const veiculos = [
+let veiculos = [
   {placa:"QAB1D23",modelo:"Honda Civic",cor:"Prata",tipo:"Carro",unidade:"802-A",vaga:"A-16"},
   {placa:"PBX7H41",modelo:"Yamaha Fazer 250",cor:"Azul",tipo:"Moto",unidade:"802-A",vaga:"A-16"},
   {placa:"QBC4F09",modelo:"Toyota Corolla",cor:"Preto",tipo:"Carro",unidade:"1401-B",vaga:"B-27"},
@@ -625,7 +635,7 @@ const veiculos = [
 ];
 
 /* --- Assembleias: cada pauta é votada em separado --- */
-const assembleias = [
+let assembleias = [
   {id:1,titulo:"Assembleia Geral Ordinária",data:"2026-09-20",hora:"19:00",local:"Salão de Festas",
    status:"Votação aberta",
    pauta:[
@@ -647,7 +657,7 @@ const assembleias = [
 ];
 
 /* --- Documentos --- */
-const documentos = [
+let documentos = [
   {nome:"Convenção do Condomínio",cat:"Institucional",tipo:"PDF",tam:"1,2 MB",data:"12/03/2024"},
   {nome:"Regimento Interno",cat:"Institucional",tipo:"PDF",tam:"680 KB",data:"12/03/2024"},
   {nome:"Ata da AGO 2025",cat:"Atas",tipo:"PDF",tam:"420 KB",data:"25/09/2025"},
@@ -663,7 +673,7 @@ const documentos = [
 const catsDocumento = ["Institucional","Atas","Financeiro","Contratos","Técnico"];
 
 /* --- Manutenções preventivas --- */
-const manutencoes = [
+let manutencoes = [
   {item:"Elevador social · Torre A",cat:"Elevadores",period:"Mensal",ultima:"2026-08-12",prox:"2026-09-12",resp:"ThyssenKrupp",custo:1850},
   {item:"Elevador social · Torre B",cat:"Elevadores",period:"Mensal",ultima:"2026-08-12",prox:"2026-09-12",resp:"ThyssenKrupp",custo:1850},
   {item:"Limpeza da caixa d'água",cat:"Hidráulica",period:"Semestral",ultima:"2026-02-25",prox:"2026-08-25",resp:"HidroClean",custo:3200},
@@ -998,11 +1008,13 @@ function toggleSugForm(show){
   if(panel) panel.style.display = show ? "block":"none";
   ocultarFab(show);
 }
-function addSugestao(){
+async function addSugestao(){
   const titulo=document.getElementById("sfTitulo").value.trim();
   const descricao=document.getElementById("sfDescricao").value.trim();
   if(!titulo){ toast("Informe o título da sugestão"); return; }
-  sugestoes.unshift({ic:"💡",cor:"var(--gold-100)",titulo,unidade:morador.unidade.replace("Apto ","").replace(" - Torre A"," - A").replace(" - Torre B"," - B"),data:new Date().toLocaleDateString('pt-BR'),corpo:descricao||"Sem descrição adicional.",tag:"Em análise",tagClass:"b-amber",cat:"minhas"});
+  const nova={ic:"💡",cor:"var(--gold-100)",titulo,unidade:morador.cod,data:new Date().toLocaleDateString('pt-BR'),corpo:descricao||"Sem descrição adicional.",tag:"Em análise",tagClass:"b-amber",cat:"minhas"};
+  await dbInserir("sugestoes",nova);
+  sugestoes.unshift(nova);
   goView("sugestoes");
   toast("Sugestão enviada");
 }
@@ -1111,7 +1123,7 @@ function cardAssembleiaMorador(a){
   </div>`;
 }
 
-function votar(idAss,idPauta,voto){
+async function votar(idAss,idPauta,voto){
   const a=assembleias.find(x=>x.id===idAss);
   if(!a || a.status!=="Votação aberta"){ toast("Esta votação não está aberta"); return; }
   const p=a.pauta.find(x=>x.id===idPauta);
@@ -1120,6 +1132,7 @@ function votar(idAss,idPauta,voto){
   if(p.meuVoto) p[p.meuVoto]--;   // troca de voto: retira o anterior
   p[voto]++;
   p.meuVoto=voto;
+  await dbAtualizar("assembleias",a);
   const abaAtiva=[...document.querySelectorAll("#residentViews .tabs button")].findIndex(b=>b.classList.contains("active"));
   goView("assembleias");
   if(abaAtiva>0){
@@ -1384,7 +1397,7 @@ function donut(){
   </div>`;
 }
 
-const boletosDoMes = [
+let boletosDoMes = [
   {unidade:"802-A", morador:"Rodrigo Cahuana", venc:"10/08/2026", val:412.80, status:"Pago"},
   {unidade:"1401-B",morador:"João Neto",       venc:"10/08/2026", val:412.80, status:"Pago"},
   {unidade:"301-A", morador:"Marina Costa",    venc:"10/08/2026", val:398.50, status:"Em atraso"},
@@ -1461,13 +1474,15 @@ function renderAdminMoradores(){
 function toggleMoradorForm(show){
   document.getElementById("moradorFormPanel").style.display = show ? "block":"none";
 }
-function addMorador(){
+async function addMorador(){
   const nome=document.getElementById("mfNome").value.trim();
   const unidade=document.getElementById("mfUnidade").value.trim();
   const papel=document.getElementById("mfPapel").value;
   const tel=document.getElementById("mfTelefone").value.trim();
   if(!nome||!unidade){ toast("Preencha nome e unidade"); return; }
-  moradoresLista.unshift({nome,unidade,papel:papel+(tel?" · "+tel:"")});
+  const novo={nome,unidade,papel:papel+(tel?" · "+tel:"")};
+  await dbInserir("moradoresLista",novo);
+  moradoresLista.unshift(novo);
   goAdmin("moradores");
   toast("Morador cadastrado com sucesso");
 }
@@ -1501,8 +1516,9 @@ function renderAdminReservas(){
 function toggleReservaForm(show){
   document.getElementById("reservaFormPanel").style.display = show ? "block":"none";
 }
-function confirmReserva(i){
+async function confirmReserva(i){
   reservas[i].tag="Confirmada"; reservas[i].tagClass="b-green";
+  await dbAtualizar("reservas",reservas[i]);
   goAdmin("reservas");
   toast("Reserva confirmada");
 }
@@ -1512,7 +1528,7 @@ const iconesArea={"Salão de Festas":["🎉","#f3e6d8"],"Churrasqueira 1":["🍖
   "Espaço Gourmet":["🍽️","#f3e6d8"]};
 function iconeArea(nome){return iconesArea[nome]||["🏛️","#eceae2"];}
 
-function addReserva(){
+async function addReserva(){
   const area=document.getElementById("rfArea").value;
   const unidade=document.getElementById("rfMorador").value.trim().toUpperCase();
   const data=document.getElementById("rfData").value;
@@ -1529,9 +1545,11 @@ function addReserva(){
     toast(`${area} já está reservada em ${fmtData(data)}`); return;
   }
   const [ic,cor]=iconeArea(area);
-  reservas.unshift({ic,cor,titulo:area,morador:unidade,
+  const nova={ic,cor,titulo:area,morador:unidade,
     data:`${fmtData(data)} · ${hora||'a definir'}`,
-    num:"Reserva #"+(1200+reservas.length+1),tag:"Confirmada",tagClass:"b-green"});
+    num:"Reserva #"+(1200+reservas.length+1),tag:"Confirmada",tagClass:"b-green"};
+  await dbInserir("reservas",nova);
+  reservas.unshift(nova);
   goAdmin("reservas");
   toast("Reserva criada");
 }
@@ -1580,10 +1598,11 @@ function addOcorrencia(){
   goAdmin("ocorrencias");
   toast("Ocorrência registrada");
 }
-function updateOcorrenciaStatus(i,novoStatus){
+async function updateOcorrenciaStatus(i,novoStatus){
   const cls={"Aberta":"b-blue","Em execução":"b-amber","Resolvida":"b-green"};
   ocorrencias[i].tag=novoStatus;
   ocorrencias[i].tagClass=cls[novoStatus];
+  await dbAtualizar("ocorrencias",ocorrencias[i]);
   goAdmin("ocorrencias");
   toast("Status da ocorrência atualizado");
 }
@@ -1604,10 +1623,11 @@ function renderAdminSugestoes(){
     </table>
   </div>`;
 }
-function updateSugestaoStatus(i,novoStatus){
+async function updateSugestaoStatus(i,novoStatus){
   const statusClass={"Em análise":"b-amber","Aprovada":"b-green","Recusada":"b-red","Implementada":"b-navy"};
   sugestoes[i].tag=novoStatus;
   sugestoes[i].tagClass=statusClass[novoStatus];
+  await dbAtualizar("sugestoes",sugestoes[i]);
   toast("Status da sugestão atualizado");
 }
 
@@ -1634,16 +1654,19 @@ function renderAdminEncomendas(){
   </div>`;
 }
 function toggleEncForm(show){document.getElementById("encFormPanel").style.display = show ? "block":"none";}
-function addEncomenda(){
+async function addEncomenda(){
   const loja=document.getElementById("efLoja").value.trim();
   const unidade=document.getElementById("efUnidade").value.trim();
   if(!loja||!unidade){ toast("Preencha loja e unidade"); return; }
-  encomendas.unshift({titulo:"Encomenda #"+(38800+encomendas.length+1),data:"Recebida em "+new Date().toLocaleDateString('pt-BR')+" · "+unidade,loja,tag:"Em armazenamento",tagClass:"b-amber"});
+  const nova={titulo:"Encomenda #"+(38800+encomendas.length+1),data:"Recebida em "+new Date().toLocaleDateString('pt-BR')+" · "+unidade,loja,tag:"Em armazenamento",tagClass:"b-amber"};
+  await dbInserir("encomendas",nova);
+  encomendas.unshift(nova);
   goAdmin("encomendas");
   toast("Chegada registrada");
 }
-function marcarEntregue(i){
+async function marcarEntregue(i){
   encomendas[i].tag="Entregue"; encomendas[i].tagClass="b-green";
+  await dbAtualizar("encomendas",encomendas[i]);
   goAdmin("encomendas");
   toast("Encomenda marcada como retirada");
 }
@@ -1690,17 +1713,20 @@ function renderAdminVisitantes(){
   </div>`;
 }
 function toggleVisForm(show){document.getElementById("visFormPanel").style.display = show ? "block":"none";}
-function addVisitante(){
+async function addVisitante(){
   const nome=document.getElementById("vfNome").value.trim();
   const unidade=document.getElementById("vfUnidade").value.trim();
   const motivo=document.getElementById("vfMotivo").value.trim()||"Visita";
   if(!nome||!unidade){ toast("Preencha nome e unidade"); return; }
-  visitantes.unshift({nome,unidade,motivo,entrada:horaAgora(),saida:null});
+  const novo={nome,unidade,motivo,entrada:horaAgora(),saida:null,autorizado:false};
+  await dbInserir("visitantes",novo);
+  visitantes.unshift(novo);
   goAdmin("visitantes");
   toast("Entrada registrada");
 }
-function registrarSaida(i){
+async function registrarSaida(i){
   visitantes[i].saida=horaAgora();
+  await dbAtualizar("visitantes",visitantes[i]);
   goAdmin("visitantes");
   toast("Saída registrada");
 }
@@ -1837,7 +1863,9 @@ function totalNaoLidasMorador(){
 }
 function marcarLidas(c,paraQuem){
   const outro = paraQuem==="morador" ? "sindico" : "morador";
+  const tinhaNaoLida = c.mensagens.some(m=>m.de===outro && !m.lida);
   c.mensagens.forEach(m=>{ if(m.de===outro) m.lida=true; });
+  if(tinhaNaoLida) dbAtualizar("conversas",c);   // em segundo plano: não bloqueia o render
 }
 /* ordena: aguardando resposta primeiro, depois pela mensagem mais recente */
 function conversasOrdenadas(lista){
@@ -1948,19 +1976,20 @@ function toggleConvForm(show){
   ocultarFab(show);
   if(show) document.getElementById("cvAssunto").focus();
 }
-function addConversa(){
+async function addConversa(){
   const assunto=document.getElementById("cvAssunto").value.trim();
   const categoria=document.getElementById("cvCategoria").value;
   const texto=document.getElementById("cvTexto").value.trim();
   if(!assunto){ toast("Informe o assunto"); return; }
   if(!texto){ toast("Escreva a mensagem"); return; }
-  conversas.unshift({id:Math.max(0,...conversas.map(c=>c.id))+1,
-    unidade:morador.cod,morador:morador.nomeCompleto,assunto,categoria,encerrada:false,
-    mensagens:[{de:"morador",texto,data:hojeISO(),hora:horaAgora(),lida:false}]});
+  const nova={unidade:morador.cod,morador:morador.nomeCompleto,assunto,categoria,encerrada:false,
+    mensagens:[{de:"morador",texto,data:hojeISO(),hora:horaAgora(),lida:false}]};
+  await dbInserir("conversas",nova);
+  conversas.unshift(nova);
   goView("fale");
   toast("Mensagem enviada ao síndico");
 }
-function responderConversa(id,de){
+async function responderConversa(id,de){
   const campo=de==="morador"?"cvResposta":"cvRespostaAdmin";
   const c=conversas.find(x=>x.id===id);
   if(!c) return;
@@ -1968,21 +1997,24 @@ function responderConversa(id,de){
   const texto=document.getElementById(campo).value.trim();
   if(!texto){ toast("Escreva a resposta"); return; }
   c.mensagens.push({de,texto,data:hojeISO(),hora:horaAgora(),lida:false});
+  await dbAtualizar("conversas",c);
   if(de==="morador"){ goView("fale"); } else { goAdmin("mensagens"); }
   toast("Resposta enviada");
 }
-function encerrarConversa(id){
+async function encerrarConversa(id){
   const c=conversas.find(x=>x.id===id);
   if(!c) return;
   if(!confirm(`Encerrar a conversa "${c.assunto}"? O morador não poderá mais responder nela.`)) return;
   c.encerrada=true;
+  await dbAtualizar("conversas",c);
   goAdmin("mensagens");
   toast("Conversa encerrada");
 }
-function reabrirConversa(id){
+async function reabrirConversa(id){
   const c=conversas.find(x=>x.id===id);
   if(!c) return;
   c.encerrada=false;
+  await dbAtualizar("conversas",c);
   goAdmin("mensagens");
   toast("Conversa reaberta");
 }
@@ -2139,7 +2171,7 @@ function renderConfigMorador(){
 function ocultoNaLista(unidade){
   return unidade===morador.cod && !morador.mostrarNaLista;
 }
-function salvarPerfil(){
+async function salvarPerfil(){
   const nome=document.getElementById("pfNome").value.trim();
   const email=document.getElementById("pfEmail").value.trim();
   const tel=document.getElementById("pfTelefone").value.trim();
@@ -2153,16 +2185,22 @@ function salvarPerfil(){
   const naLista=moradoresLista.find(m=>m.unidade===morador.cod);
   if(naLista) naLista.nome=nome;
   conversas.forEach(c=>{ if(c.unidade===morador.cod) c.morador=nome; });
+  await dbSalvarPerfil();
+  const meu=moradoresLista.find(m=>m.unidade===morador.cod);
+  if(meu) await dbAtualizar("moradoresLista",meu);
+  await Promise.all(conversas.filter(c=>c.unidade===morador.cod).map(c=>dbAtualizar("conversas",c)));
   goView("config");
   toast("Dados atualizados");
 }
-function alternarNotifMorador(chave){
+async function alternarNotifMorador(chave){
   morador.notificacoes[chave]=!morador.notificacoes[chave];
+  await dbSalvarPerfil();
   goView("config");
   toast(`Notificação ${morador.notificacoes[chave]?'ativada':'desativada'}`);
 }
-function alternarMostrarNaLista(){
+async function alternarMostrarNaLista(){
   morador.mostrarNaLista=!morador.mostrarNaLista;
+  await dbSalvarPerfil();
   goView("config");
   toast(morador.mostrarNaLista?"Seu nome aparece na lista":"Seu nome ficará oculto");
 }
@@ -2309,7 +2347,7 @@ function atualizarCamposAut(){
   document.getElementById("atCampoAte").style.display  = tipo==="unica" ? "none":"block";
   document.getElementById("atCampoDias").style.display = tipo==="recorrente" ? "block":"none";
 }
-function addAutorizacao(){
+async function addAutorizacao(){
   const nome=document.getElementById("atNome").value.trim();
   const doc=document.getElementById("atDoc").value.trim()||"—";
   const motivo=document.getElementById("atMotivo").value;
@@ -2337,6 +2375,7 @@ function addAutorizacao(){
       nova.dias=dias;
     }
   }
+  await dbInserir("autorizacoes",nova);
   autorizacoes.unshift(nova);
   goView("autorizacoes");
   toast(`Autorização criada · código ${nova.codigo}`);
@@ -2349,11 +2388,12 @@ function compartilharCodigo(id){
   if(navigator.clipboard){ navigator.clipboard.writeText(msg).then(()=>toast("Mensagem copiada")).catch(()=>toast(a.codigo)); return; }
   toast(`Código ${a.codigo}`);
 }
-function cancelarAutorizacao(id){
+async function cancelarAutorizacao(id){
   const a=autorizacoes.find(x=>x.id===id);
   if(!a) return;
   if(!confirm(`Cancelar a autorização de ${a.nome}? O código ${a.codigo} deixará de valer.`)) return;
   a.cancelada=true;
+  await dbAtualizar("autorizacoes",a);
   if(CTX_AUTORIZACAO==="admin"){ goAdmin("visitantes"); } else { goView("autorizacoes"); }
   toast("Autorização cancelada");
 }
@@ -2405,14 +2445,17 @@ function buscarAutorizacao(v){
   const inp=document.getElementById("buscaAut");
   if(inp){ inp.focus(); inp.setSelectionRange(inp.value.length,inp.value.length); }
 }
-function liberarEntrada(id){
+async function liberarEntrada(id){
   const a=autorizacoes.find(x=>x.id===id);
   if(!a){ toast("Autorização não encontrada"); return; }
   const st=statusAutorizacao(a);
   if(!st.ativa){ toast(`Autorização ${st.txt.toLowerCase()} — entrada não liberada`); return; }
   const hora=horaAgora();
   a.usos.push({data:hojeISO(),hora});
-  visitantes.unshift({nome:a.nome,unidade:a.unidade,motivo:a.motivo,entrada:hora,saida:null,autorizado:true});
+  await dbAtualizar("autorizacoes",a);
+  const entrada={nome:a.nome,unidade:a.unidade,motivo:a.motivo,entrada:hora,saida:null,autorizado:true};
+  await dbInserir("visitantes",entrada);
+  visitantes.unshift(entrada);
   goAdmin("visitantes");
   toast(`Entrada liberada · ${a.nome} (${a.unidade})`);
 }
@@ -2513,7 +2556,7 @@ function toggleVeicForm(show){
   const p=document.getElementById("veicFormPanel");
   if(p) p.style.display = show ? "block":"none";
 }
-function addVeiculoAdmin(){
+async function addVeiculoAdmin(){
   const placa=document.getElementById("vcPlaca").value.trim();
   const unidade=document.getElementById("vcUnidade").value.trim().toUpperCase();
   const modelo=document.getElementById("vcModelo").value.trim();
@@ -2524,14 +2567,17 @@ function addVeiculoAdmin(){
   if(veiculos.some(v=>normalizaPlaca(v.placa)===normalizaPlaca(placa))){ toast("Esta placa já está cadastrada"); return; }
   const vaga=vagaDaUnidade(unidade);
   if(!vaga){ toast("Unidade sem vaga atribuída ou inexistente"); return; }
-  veiculos.push({placa:normalizaPlaca(placa),modelo,cor,tipo,unidade,vaga:vaga.num});
+  const novo={placa:normalizaPlaca(placa),modelo,cor,tipo,unidade,vaga:vaga.num};
+  await dbInserir("veiculos",novo);
+  veiculos.push(novo);
   goAdmin("veiculos");
   toast("Veículo cadastrado");
 }
-function removerVeiculo(i,origem){
+async function removerVeiculo(i,origem){
   const v=veiculos[i];
   if(!v) return;
   if(!confirm(`Remover o veículo ${formataPlaca(v.placa)} (${v.modelo})?`)) return;
+  await dbRemover("veiculos",v.id);
   veiculos.splice(i,1);
   if(origem==="admin"){ goAdmin("veiculos"); } else { goView("veiculos"); }
   toast("Veículo removido");
@@ -2597,7 +2643,7 @@ function toggleVeicFormMorador(show){
   ocultarFab(show);
   if(show) document.getElementById("vmPlaca").focus();
 }
-function addVeiculoMorador(){
+async function addVeiculoMorador(){
   const placa=document.getElementById("vmPlaca").value.trim();
   const modelo=document.getElementById("vmModelo").value.trim();
   const cor=document.getElementById("vmCor").value.trim()||"—";
@@ -2609,7 +2655,9 @@ function addVeiculoMorador(){
     toast(`Limite de ${MAX_VEICULOS_UNIDADE} veículos por unidade`); return;
   }
   const vaga=vagaDaUnidade(morador.cod);
-  veiculos.push({placa:normalizaPlaca(placa),modelo,cor,tipo,unidade:morador.cod,vaga:vaga?vaga.num:null});
+  const novo={placa:normalizaPlaca(placa),modelo,cor,tipo,unidade:morador.cod,vaga:vaga?vaga.num:null};
+  await dbInserir("veiculos",novo);
+  veiculos.push(novo);
   goView("veiculos");
   toast("Veículo cadastrado");
 }
@@ -2725,7 +2773,7 @@ function cancelarAviso(){
   avisoEditando=null;
   goAdmin("avisos");
 }
-function salvarAviso(){
+async function salvarAviso(){
   const titulo=document.getElementById("avTitulo").value.trim();
   const corpo=document.getElementById("avCorpo").value.trim();
   const cat=document.getElementById("avCat").value;
@@ -2736,13 +2784,16 @@ function salvarAviso(){
   const notif=config.notificacoes.find(n=>n.chave==="avisos");
   if(avisoEditando!==null){
     Object.assign(avisos[avisoEditando],{titulo,corpo,cat,fixado});
+    await dbAtualizar("avisos",avisos[avisoEditando]);
     avisoEditando=null;
     goAdmin("avisos");
     toast("Aviso atualizado");
   } else {
     const agora=new Date();
-    avisos.unshift({titulo,corpo,cat,fixado,
-      data:`${agora.toLocaleDateString('pt-BR')} - ${horaAgora()}`});
+    const novo={titulo,corpo,cat,fixado,
+      data:`${agora.toLocaleDateString('pt-BR')} - ${horaAgora()}`};
+    await dbInserir("avisos",novo);
+    avisos.unshift(novo);
     filtroAviso="Todos";
     goAdmin("avisos");
     toast(notif.ativo
@@ -2750,17 +2801,19 @@ function salvarAviso(){
       : "Aviso publicado (notificações desativadas)");
   }
 }
-function alternarFixado(i){
+async function alternarFixado(i){
   const a=avisos[i];
   if(!a) return;
   a.fixado=!a.fixado;
+  await dbAtualizar("avisos",a);
   goAdmin("avisos");
   toast(a.fixado?"Aviso fixado no topo":"Aviso desafixado");
 }
-function removerAviso(i){
+async function removerAviso(i){
   const a=avisos[i];
   if(!a) return;
   if(!confirm(`Remover o aviso "${a.titulo}"? Ele deixará de aparecer para os moradores.`)) return;
+  await dbRemover("avisos",a.id);
   avisos.splice(i,1);
   avisoEditando=null;   // os índices mudaram: cancela qualquer edição em curso
   goAdmin("avisos");
@@ -2871,24 +2924,29 @@ function toggleAssForm(show){
   const p=document.getElementById("assFormPanel");
   if(p) p.style.display = show ? "block":"none";
 }
-function addAssembleia(){
+async function addAssembleia(){
   const titulo=document.getElementById("afTitulo").value.trim();
   const local=document.getElementById("afLocal").value.trim()||"Salão de Festas";
   const data=document.getElementById("afData").value;
   const hora=document.getElementById("afHora").value||"19:00";
   const pauta=document.getElementById("afPauta").value.trim();
   if(!titulo||!data){ toast("Preencha título e data"); return; }
-  const id=Math.max(0,...assembleias.map(a=>a.id))+1;
-  assembleias.unshift({id,titulo,data,hora,local,status:"Agendada",
-    pauta: pauta?[{id:id*10+1,titulo:pauta,desc:"Item incluído na convocação.",sim:0,nao:0,abst:0,meuVoto:null}]:[]});
-  assembleiaAberta=id;
+  const nova={titulo,data,hora,local,status:"Agendada",pauta:[]};
+  await dbInserir("assembleias",nova);
+  if(pauta){
+    nova.pauta=[{id:nova.id*10+1,titulo:pauta,desc:"Item incluído na convocação.",sim:0,nao:0,abst:0,meuVoto:null}];
+    await dbAtualizar("assembleias",nova);
+  }
+  assembleias.unshift(nova);
+  assembleiaAberta=nova.id;
   goAdmin("assembleias");
   toast("Assembleia convocada");
 }
-function mudarStatusAssembleia(id,novo){
+async function mudarStatusAssembleia(id,novo){
   const a=assembleias.find(x=>x.id===id);
   if(!a) return;
   a.status=novo;
+  await dbAtualizar("assembleias",a);
   goAdmin("assembleias");
   toast(novo==="Votação aberta"?"Votação aberta aos moradores":"Votação encerrada");
 }
@@ -2945,14 +3003,16 @@ function toggleDocForm(show){
   const p=document.getElementById("docFormPanel");
   if(p) p.style.display = show ? "block":"none";
 }
-function addDocumento(){
+async function addDocumento(){
   const nome=document.getElementById("dfNome").value.trim();
   const cat=document.getElementById("dfCat").value;
   const tipo=document.getElementById("dfTipo").value;
   const arq=document.getElementById("dfArquivo").files[0];
   if(!nome){ toast("Informe o nome do documento"); return; }
   const tam=arq?(arq.size>1048576?(arq.size/1048576).toFixed(1).replace('.',',')+" MB":Math.round(arq.size/1024)+" KB"):"—";
-  documentos.unshift({nome,cat,tipo,tam,data:new Date().toLocaleDateString('pt-BR')});
+  const novo={nome,cat,tipo,tam,data:new Date().toLocaleDateString('pt-BR')};
+  await dbInserir("documentos",novo);
+  documentos.unshift(novo);
   filtroDocumento="Todos";
   goAdmin("documentos");
   toast("Documento publicado");
@@ -2961,10 +3021,11 @@ function baixarDocumento(i){
   const d=documentos[i];
   if(d) toast(`Baixando "${d.nome}" (protótipo)`);
 }
-function removerDocumento(i){
+async function removerDocumento(i){
   const d=documentos[i];
   if(!d) return;
   if(!confirm(`Remover "${d.nome}" da biblioteca?`)) return;
+  await dbRemover("documentos",d.id);
   documentos.splice(i,1);
   goAdmin("documentos");
   toast("Documento removido");
@@ -3031,7 +3092,7 @@ function toggleManForm(show){
   const p=document.getElementById("manFormPanel");
   if(p) p.style.display = show ? "block":"none";
 }
-function addManutencao(){
+async function addManutencao(){
   const item=document.getElementById("mnItem").value.trim();
   const cat=document.getElementById("mnCat").value.trim()||"Geral";
   const period=document.getElementById("mnPeriod").value;
@@ -3039,15 +3100,18 @@ function addManutencao(){
   const resp=document.getElementById("mnResp").value.trim()||"Equipe interna";
   const custo=parseFloat(document.getElementById("mnCusto").value)||0;
   if(!item){ toast("Informe o item de manutenção"); return; }
-  manutencoes.push({item,cat,period,ultima,prox:somaISO(ultima,periodicidades[period]),resp,custo});
+  const novo={item,cat,period,ultima,prox:somaISO(ultima,periodicidades[period]),resp,custo};
+  await dbInserir("manutencoes",novo);
+  manutencoes.push(novo);
   goAdmin("manutencoes");
   toast("Item adicionado ao plano");
 }
-function concluirManutencao(i){
+async function concluirManutencao(i){
   const m=manutencoes[i];
   if(!m) return;
   m.ultima=hojeISO();
   m.prox=somaISO(m.ultima,periodicidades[m.period]);
+  await dbAtualizar("manutencoes",m);
   goAdmin("manutencoes");
   toast(`Execução registrada · próxima em ${fmtData(m.prox)}`);
 }
@@ -3229,31 +3293,36 @@ function renderAdminConfiguracoes(){
 function sw(id,ativo,acao){
   return `<button class="switch ${ativo?'on':''}" id="${id}" role="switch" aria-checked="${ativo}" onclick="${acao}"><span></span></button>`;
 }
-function salvarCondominio(){
+async function salvarCondominio(){
   config.condominio.nome=document.getElementById("cfNome").value.trim()||config.condominio.nome;
   config.condominio.cnpj=document.getElementById("cfCnpj").value.trim();
   config.condominio.endereco=document.getElementById("cfEndereco").value.trim();
+  await dbSalvarConfig("condominio");
   toast("Dados do condomínio salvos");
 }
 function salvarTaxa(i,valor){
   const v=parseFloat(valor);
   if(isNaN(v)||v<0){ toast("Valor inválido"); goAdmin("configuracoes"); return; }
   config.taxas[i].valor=v;
+  dbSalvarConfig("taxas");
   toast(`${config.taxas[i].nome} · ${fmtBRL(v)}`);
 }
 function salvarArea(i,campo,valor){
   const v=parseInt(valor,10);
   if(isNaN(v)||v<0){ toast("Valor inválido"); goAdmin("configuracoes"); return; }
   config.areas[i][campo]=v;
+  dbSalvarConfig("areas");
   toast(`${config.areas[i].nome} atualizada`);
 }
-function alternarArea(i){
+async function alternarArea(i){
   config.areas[i].ativa=!config.areas[i].ativa;
+  await dbSalvarConfig("areas");
   goAdmin("configuracoes");
   toast(`${config.areas[i].nome} · ${config.areas[i].ativa?'liberada para reserva':'indisponível'}`);
 }
-function alternarNotificacao(i){
+async function alternarNotificacao(i){
   config.notificacoes[i].ativo=!config.notificacoes[i].ativo;
+  await dbSalvarConfig("notificacoes");
   goAdmin("configuracoes");
   toast(`${config.notificacoes[i].label} · ${config.notificacoes[i].ativo?'ativada':'desativada'}`);
 }
@@ -3302,8 +3371,168 @@ function setRole(role){
   }
 }
 
+/* ============================================================
+   PERSISTÊNCIA — Supabase
+   Os arrays globais continuam sendo a fonte da UI; o banco é
+   carregado no boot e atualizado a cada mutação. Se o banco
+   estiver fora do ar, o app segue funcionando em memória
+   (modo demonstração) e avisa na tela.
+   ============================================================ */
+const SUPA_URL = "https://ohuaoncwgioawgptyqgz.supabase.co";
+const SUPA_KEY = "sb_publishable_zyC-vusc-CgM4pzf_Q3gYA_N7i2GT4P";
+
+let sb = null;
+let ONLINE = false;
+
+/* coleção em memória → tabela no banco */
+const TABELAS = {
+  moradoresLista:"cm_moradores", reservas:"cm_reservas", boletos:"cm_boletos",
+  boletosDoMes:"cm_boletos_mes", avisos:"cm_avisos", ocorrencias:"cm_ocorrencias",
+  encomendas:"cm_encomendas", sugestoes:"cm_sugestoes", visitantes:"cm_visitantes",
+  autorizacoes:"cm_autorizacoes", veiculos:"cm_veiculos", assembleias:"cm_assembleias",
+  documentos:"cm_documentos", manutencoes:"cm_manutencoes", conversas:"cm_conversas"
+};
+/* colunas que o banco tem mas a UI não usa — não devolver no update */
+const COLS_INTERNAS = ["id","criado_em","atualizado_em","dia"];
+
+const paraSnake = k => k.replace(/[A-Z]/g, c => "_"+c.toLowerCase());
+const paraCamel = k => k.replace(/_([a-z])/g, (_,c) => c.toUpperCase());
+
+/* converte só o primeiro nível: o conteúdo de jsonb (pauta, mensagens,
+   usos, notificacoes) precisa chegar ao banco exatamente como está */
+function paraJS(row){
+  const o={};
+  for(const k in row) o[paraCamel(k)] = row[k];
+  return o;
+}
+function paraDB(obj){
+  const o={};
+  for(const k in obj){
+    if(k.startsWith("_")) continue;
+    o[paraSnake(k)] = obj[k];
+  }
+  return o;
+}
+
+function avisarFalhaDB(acao, erro){
+  console.error("[db] "+acao, erro);
+  toast("Não foi possível salvar no servidor — alteração só nesta sessão");
+}
+
+async function dbInserir(colecao, obj){
+  if(!ONLINE) return obj;
+  const payload = paraDB(obj);
+  delete payload.id;                       // o banco gera
+  const { data, error } = await sb.from(TABELAS[colecao]).insert(payload).select().single();
+  if(error){ avisarFalhaDB("inserir "+colecao, error); return obj; }
+  Object.assign(obj, paraJS(data));        // traz o id gerado
+  return obj;
+}
+
+async function dbAtualizar(colecao, obj){
+  if(!ONLINE || !obj || obj.id==null) return;
+  const payload = paraDB(obj);
+  COLS_INTERNAS.forEach(c => delete payload[c]);
+  const { error } = await sb.from(TABELAS[colecao]).update(payload).eq("id", obj.id);
+  if(error) avisarFalhaDB("atualizar "+colecao, error);
+}
+
+async function dbRemover(colecao, id){
+  if(!ONLINE || id==null) return;
+  const { error } = await sb.from(TABELAS[colecao]).delete().eq("id", id);
+  if(error) avisarFalhaDB("remover "+colecao, error);
+}
+
+async function dbSalvarConfig(chave){
+  if(!ONLINE) return;
+  const { error } = await sb.from("cm_config")
+    .upsert({ chave, valor: config[chave], atualizado_em: new Date().toISOString() },
+            { onConflict: "chave" });
+  if(error) avisarFalhaDB("salvar config."+chave, error);
+}
+
+async function dbSalvarPerfil(){
+  if(!ONLINE) return;
+  const { error } = await sb.from("cm_perfil").upsert({
+    cod: morador.cod, nome: morador.nome, nome_completo: morador.nomeCompleto,
+    unidade: morador.unidade, papel: morador.papel, email: morador.email,
+    telefone: morador.telefone, notificacoes: morador.notificacoes,
+    mostrar_na_lista: morador.mostrarNaLista
+  }, { onConflict: "cod" });
+  if(error) avisarFalhaDB("salvar perfil", error);
+}
+
+/* ---------- carga inicial ---------- */
+async function carregarTudo(){
+  const nomes = Object.keys(TABELAS);
+  const respostas = await Promise.all(
+    nomes.map(n => sb.from(TABELAS[n]).select("*").order("id", { ascending:true }))
+  );
+  const destino = {
+    moradoresLista:v=>moradoresLista=v, reservas:v=>reservas=v, boletos:v=>boletos=v,
+    boletosDoMes:v=>boletosDoMes=v, avisos:v=>avisos=v, ocorrencias:v=>ocorrencias=v,
+    encomendas:v=>encomendas=v, sugestoes:v=>sugestoes=v, visitantes:v=>visitantes=v,
+    autorizacoes:v=>autorizacoes=v, veiculos:v=>veiculos=v, assembleias:v=>assembleias=v,
+    documentos:v=>documentos=v, manutencoes:v=>manutencoes=v, conversas:v=>conversas=v
+  };
+  respostas.forEach((r,i)=>{
+    const nome=nomes[i];
+    if(r.error) throw new Error(nome+": "+r.error.message);
+    destino[nome]((r.data||[]).map(paraJS));
+  });
+
+  /* numéricos chegam como string em colunas numeric */
+  boletos.forEach(b => b.val = Number(b.val));
+  boletosDoMes.forEach(b => b.val = Number(b.val));
+  manutencoes.forEach(m => m.custo = Number(m.custo));
+
+  const cfg = await sb.from("cm_config").select("*");
+  if(cfg.error) throw new Error("config: "+cfg.error.message);
+  (cfg.data||[]).forEach(r => { config[r.chave] = r.valor; });
+
+  const perf = await sb.from("cm_perfil").select("*").eq("cod", morador.cod).maybeSingle();
+  if(perf.error) throw new Error("perfil: "+perf.error.message);
+  if(perf.data){
+    const p = perf.data;
+    Object.assign(morador, {
+      nome:p.nome, nomeCompleto:p.nome_completo, unidade:p.unidade, papel:p.papel,
+      email:p.email, telefone:p.telefone, notificacoes:p.notificacoes,
+      mostrarNaLista:p.mostrar_na_lista
+    });
+  }
+}
+
+function faixaStatus(texto, cor){
+  let el = document.getElementById("statusDB");
+  if(!el){
+    el = document.createElement("div");
+    el.id = "statusDB";
+    document.body.appendChild(el);
+  }
+  el.className = cor;
+  el.innerHTML = texto;
+}
+
+async function boot(){
+  faixaStatus("Carregando dados…","carregando");
+  try{
+    if(!window.supabase) throw new Error("SDK do Supabase não carregou");
+    sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+    await carregarTudo();
+    ONLINE = true;
+    const el=document.getElementById("statusDB");
+    if(el) el.remove();
+  }catch(e){
+    console.error("[boot]", e);
+    ONLINE = false;
+    faixaStatus("⚠ Sem conexão com o banco — modo demonstração, nada será salvo "+
+                "<button onclick=\"location.reload()\">Tentar de novo</button>","offline");
+  }
+  goView("home");
+}
+
 /* init */
-goView("home");
+boot();
 
 /* ============================================================
    PWA — instalação e service worker
@@ -3325,7 +3554,7 @@ window.addEventListener("appinstalled", () => {
   hideInstallBanner();
 });
 
-function showInstallBanner(){
+async function showInstallBanner(){
   if (document.getElementById("installBanner")) return;
   if (window.matchMedia("(display-mode: standalone)").matches) return;
   const banner = document.createElement("div");

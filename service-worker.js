@@ -1,4 +1,4 @@
-const CACHE_NAME = "charles-miller-v7";
+const CACHE_NAME = "charles-miller-v8";
 const ASSETS = [
   "./",
   "./index.html",
@@ -29,6 +29,9 @@ self.addEventListener("fetch", (event) => {
   if (req.method !== "GET") return;
   // cache.put() só aceita http/https — ignora chrome-extension:, data:, etc.
   if (!req.url.startsWith("http")) return;
+  // Só gerencia os arquivos do próprio app. Chamadas ao Supabase (e a qualquer
+  // outra origem) passam direto: cacheá-las devolveria dados desatualizados.
+  if (new URL(req.url).origin !== self.location.origin) return;
 
   event.respondWith(
     caches.match(req).then((cached) => {
