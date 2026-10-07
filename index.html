@@ -1427,8 +1427,13 @@ async function confirmReserva(i){
   toast("Reserva confirmada");
 }
 /* ícone/cor por área; áreas novas caem no padrão em vez de quebrar */
-const iconesArea={"Salão de Festas":["🎉","#f3e6d8"],"Churrasqueira 1":["🍖","#e6efe0"],
-  "Churrasqueira 2":["🍖","#e6efe0"],"Quadra Poliesportiva":["🏓","#e0ebf2"],
+const iconesArea={
+  "Salão de Festas":["🎉","#f3e6d8"], "Salão Gourmet":["🍽️","#f3e6d8"],
+  "Churrasqueira 1":["🍖","#e6efe0"], "Garagem Band":["🎸","#e6e0f2"],
+  "Home Cinema":["🎬","#e0ebf2"],
+  /* áreas desativadas: mantidas só para as reservas já existentes não
+     perderem o ícone no histórico */
+  "Churrasqueira 2":["🍖","#e6efe0"], "Quadra Poliesportiva":["🏓","#e0ebf2"],
   "Espaço Gourmet":["🍽️","#f3e6d8"]};
 function iconeArea(nome){return iconesArea[nome]||["🏛️","#eceae2"];}
 
