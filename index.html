@@ -608,29 +608,12 @@ const catsDocumento = ["Institucional","Atas","Financeiro","Contratos","Técnico
 let manutencoes = [];
 const periodicidades = {"Mensal":1,"Bimestral":2,"Trimestral":3,"Semestral":6,"Anual":12};
 
-/* --- Séries para os relatórios --- */
-const serieFinanceira = [
-  {mes:"Mar",receita:129400,despesa:98200,inad:9.4},
-  {mes:"Abr",receita:131800,despesa:91500,inad:10.1},
-  {mes:"Mai",receita:127900,despesa:104300,inad:11.8},
-  {mes:"Jun",receita:134600,despesa:88900,inad:11.2},
-  {mes:"Jul",receita:126800,despesa:97400,inad:13.5},
-  {mes:"Ago",receita:138240,despesa:94610,inad:12.8}
-];
-const despesasPorCategoria = [
-  {cat:"Pessoal e encargos",valor:41200,cor:"var(--navy-700)"},
-  {cat:"Manutenção",valor:18400,cor:"var(--blue)"},
-  {cat:"Água e energia",valor:16800,cor:"var(--amber)"},
-  {cat:"Limpeza e insumos",valor:9300,cor:"var(--green)"},
-  {cat:"Administração",valor:8910,cor:"var(--gold-500)"}
-];
-const inadimplentes = [
-  {unidade:"301-A",morador:"Marina Costa",meses:3,valor:1195.50},
-  {unidade:"1102-B",morador:"Ricardo Sanches",meses:2,valor:825.60},
-  {unidade:"0704-A",morador:"Helena Braga",meses:2,valor:797.00},
-  {unidade:"1802-B",morador:"Tiago Moreira",meses:1,valor:445.10},
-  {unidade:"0503-A",morador:"Bruno Tavares",meses:1,valor:412.80}
-];
+/* Séries dos relatórios — preenchidas por carregarRelatorios() a partir
+   de cm_financeiro_mensal, cm_despesas_categoria e cm_boletos_mes.
+   Antes eram arrays fixos aqui: o síndico via sempre os mesmos números. */
+let serieFinanceira = [];
+let despesasPorCategoria = [];
+let inadimplentes = [];
 
 /* --- Configurações --- */
 const config = { condominio:{}, taxas:[], areas:[], notificacoes:[] };
@@ -1378,12 +1361,15 @@ function shortcut(ic,label,acao){
 }
 
 function cashChart(){
-  const data=[
-    [40,22],[55,30],[35,45],[60,25],[48,38],[70,20]
-  ];
-  const labels=["01/08","06/08","11/08","16/08","21/08","31/08"];
-  const bars=data.map(([r,d])=>`<div class="bar-pair"><div class="bar rec" style="height:${r}%"></div><div class="bar desp" style="height:${d}%"></div></div>`).join("");
-  return `<div class="chart-wrap">${bars}</div><div class="chart-labels">${labels.map(l=>`<span>${l}</span>`).join("")}</div>`;
+  if(!serieFinanceira.length)
+    return `<div class="empty-note">Sem dados financeiros registrados.</div>`;
+  const maxV = Math.max(...serieFinanceira.map(m=>Math.max(m.receita,m.despesa))) || 1;
+  const bars = serieFinanceira.map(m=>
+    `<div class="bar-pair" title="${m.mes}: ${fmtBRL(m.receita)} / ${fmtBRL(m.despesa)}">
+       <div class="bar rec"  style="height:${m.receita/maxV*100}%"></div>
+       <div class="bar desp" style="height:${m.despesa/maxV*100}%"></div></div>`).join("");
+  return `<div class="chart-wrap">${bars}</div>
+    <div class="chart-labels">${serieFinanceira.map(m=>`<span>${m.mes}</span>`).join("")}</div>`;
 }
 
 function donut(){
@@ -3261,13 +3247,17 @@ let periodoRelatorio="6m";
 
 function renderAdminRelatorios(){
   const meses = periodoRelatorio==="3m" ? serieFinanceira.slice(-3) : serieFinanceira;
+  if(!meses.length) return `${adminTopbar("Relatórios")}
+    <div class="panel"><div class="empty-note">
+      Ainda não há dados financeiros registrados para montar os relatórios.
+    </div></div>`;
   const totRec=meses.reduce((s,m)=>s+m.receita,0);
   const totDesp=meses.reduce((s,m)=>s+m.despesa,0);
   const inadMedia=(meses.reduce((s,m)=>s+m.inad,0)/meses.length).toFixed(1).replace('.',',');
   const totalInad=inadimplentes.reduce((s,d)=>s+d.valor,0);
   const verInad=podeVerInadimplencia();
-  const totDespCat=despesasPorCategoria.reduce((s,d)=>s+d.valor,0);
-  const maxV=Math.max(...meses.map(m=>Math.max(m.receita,m.despesa)));
+  const totDespCat=despesasPorCategoria.reduce((s,d)=>s+d.valor,0) || 1;
+  const maxV=Math.max(...meses.map(m=>Math.max(m.receita,m.despesa))) || 1;
   return `
   ${adminTopbar("Relatórios")}
   <div class="admin-topbar" style="margin-top:-10px">
@@ -3613,6 +3603,36 @@ async function dbSalvarPerfil(){
   if(error) avisarFalhaDB("salvar perfil", error);
 }
 
+/* relatórios são dado de gestão: a RLS recusa para morador e portaria */
+function cm_podeVerRelatorios(){
+  return ["sindico","administrativo"].includes(papelAtual());
+}
+
+const MES_PT = ["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"];
+
+async function carregarRelatorios(){
+  const [fin, desp, atraso] = await Promise.all([
+    sb.from("cm_financeiro_mensal").select("*").order("competencia"),
+    sb.from("cm_despesas_categoria").select("*").order("valor",{ascending:false}),
+    sb.from("cm_boletos_mes").select("*").eq("status","Em atraso").order("val",{ascending:false})
+  ]);
+  if(fin.error||desp.error||atraso.error){
+    avisarFalhaDB("carregar relatórios", fin.error||desp.error||atraso.error);
+    return;
+  }
+  serieFinanceira = (fin.data||[]).map(r=>({
+    mes: MES_PT[Number(r.competencia.slice(5,7))-1],
+    receita: Number(r.receita), despesa: Number(r.despesa), inad: Number(r.inadimplencia)
+  }));
+  despesasPorCategoria = (desp.data||[]).map(d=>({
+    cat: d.categoria, valor: Number(d.valor), cor: d.cor || "var(--navy-700)"
+  }));
+  inadimplentes = (atraso.data||[]).map(b=>({
+    unidade: b.unidade, morador: b.morador,
+    meses: Number(b.meses_atraso)||1, valor: Number(b.val)
+  }));
+}
+
 /* ---------- carga inicial ---------- */
 async function carregarTudo(){
   // a unidade deixa de ser fixa no código: vem da conta autenticada
@@ -3651,6 +3671,8 @@ async function carregarTudo(){
   if(vts.error) throw new Error("votos: "+vts.error.message);
   votos = (vts.data||[]).map(paraJS);
   aplicarVotos();
+
+  if(cm_podeVerRelatorios()) await carregarRelatorios();
 
   const cfg = await sb.from("cm_config").select("*");
   if(cfg.error) throw new Error("config: "+cfg.error.message);
@@ -3731,6 +3753,7 @@ function formEntrar(erro){
            onkeydown="if(event.key==='Enter')entrar()">
     <button class="auth-btn" onclick="entrar()">Entrar</button>
     <button class="auth-link" onclick="formCriar()">Criar conta</button>
+    <button class="auth-link" style="color:var(--ink-soft)" onclick="formEsqueci()">Esqueci minha senha</button>
   `);
   const e=document.getElementById("auEmail"); if(e) e.focus();
 }
@@ -3752,6 +3775,65 @@ function formCriar(erro){
     <p class="auth-nota">A conta precisa ser liberada pelo síndico antes do primeiro acesso.</p>
   `);
   const e=document.getElementById("auNome"); if(e) e.focus();
+}
+
+function formEsqueci(erro){
+  telaAuth(`
+    ${erro?`<div class="auth-erro">${erro}</div>`:''}
+    <p class="auth-nota" style="margin:0 0 4px">Enviamos um link para você definir uma senha nova.</p>
+    <label>E-mail da conta</label>
+    <input id="auEmail" type="email" autocomplete="username" placeholder="seu@email.com"
+           onkeydown="if(event.key==='Enter')enviarRecuperacao()">
+    <button class="auth-btn" onclick="enviarRecuperacao()">Enviar link</button>
+    <button class="auth-link" onclick="formEntrar()">Voltar</button>
+  `);
+  const e=document.getElementById("auEmail"); if(e) e.focus();
+}
+
+async function enviarRecuperacao(){
+  const email=(document.getElementById("auEmail").value||"").trim();
+  if(!email){ formEsqueci("Informe o e-mail da conta."); return; }
+  // volta para esta mesma página; o link traz um token de recuperação
+  const destino = location.origin + location.pathname;
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: destino });
+  if(error){ formEsqueci(traduzErroAuth(error.message)); return; }
+  telaAuth(`
+    <div class="auth-aguardando">
+      <div class="ic">📧</div>
+      <h2>Link enviado</h2>
+      <p>Se existir uma conta com <strong>${email}</strong>, o link para criar
+      uma senha nova chegou na caixa de entrada.</p>
+      <p class="auth-nota">O link vale por uma hora. Confira também o spam.</p>
+    </div>
+    <button class="auth-btn" onclick="formEntrar()">Voltar para o acesso</button>`);
+}
+
+/* chamada quando o usuário volta pelo link de recuperação */
+function formNovaSenha(erro){
+  telaAuth(`
+    ${erro?`<div class="auth-erro">${erro}</div>`:''}
+    <p class="auth-nota" style="margin:0 0 4px">Escolha a senha que vai usar a partir de agora.</p>
+    <label>Nova senha</label>
+    <input id="auSenha" type="password" autocomplete="new-password" placeholder="mínimo 8 caracteres">
+    <label>Repita a senha</label>
+    <input id="auSenha2" type="password" autocomplete="new-password" placeholder="digite de novo"
+           onkeydown="if(event.key==='Enter')salvarNovaSenha()">
+    <button class="auth-btn" onclick="salvarNovaSenha()">Salvar senha</button>
+  `);
+  const e=document.getElementById("auSenha"); if(e) e.focus();
+}
+
+async function salvarNovaSenha(){
+  const s1=document.getElementById("auSenha").value||"";
+  const s2=document.getElementById("auSenha2").value||"";
+  if(s1.length<8){ formNovaSenha("A senha precisa ter ao menos 8 caracteres."); return; }
+  if(s1!==s2){ formNovaSenha("As duas senhas não são iguais."); return; }
+  const { error } = await sb.auth.updateUser({ password: s1 });
+  if(error){ formNovaSenha(traduzErroAuth(error.message)); return; }
+  RECUPERANDO_SENHA = false;
+  history.replaceState(null,"",location.origin+location.pathname);
+  toast("Senha atualizada");
+  await aposLogin();
 }
 
 function telaPendente(){
@@ -3827,6 +3909,10 @@ function traduzErroAuth(msg){
   if(m.includes("invalid login")) return "E-mail ou senha incorretos.";
   if(m.includes("already registered")) return "Esse e-mail já tem conta. Use “Já tenho conta”.";
   if(m.includes("email not confirmed")) return "Confirme o e-mail antes de entrar.";
+  if(m.includes("password should be")) return "Senha muito curta — use ao menos 8 caracteres.";
+  if(m.includes("same as the old")) return "Escolha uma senha diferente da anterior.";
+  if(m.includes("expired") || m.includes("invalid token")) return "O link expirou. Peça outro em “Esqueci minha senha”.";
+  if(m.includes("rate limit") || m.includes("too many")) return "Muitas tentativas. Aguarde alguns minutos.";
   if(m.includes("password")) return "Senha muito curta — use ao menos 8 caracteres.";
   return msg;
 }
@@ -3872,12 +3958,27 @@ async function iniciarApp(){
   setRole(papelAtual()==="morador" ? "resident" : papelAtual());
 }
 
+let RECUPERANDO_SENHA = false;
+
 async function boot(){
   if(!window.supabase){
     faixaStatus("⚠ Não foi possível carregar o app. Verifique sua conexão.","offline");
     return;
   }
   sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+  // o link do e-mail abre o app com um token de recuperação na URL;
+  // nesse caso a sessão existe, mas o destino é trocar a senha, não entrar
+  const veioDoLinkDeSenha = /type=recovery/.test(location.hash) || /type=recovery/.test(location.search);
+  sb.auth.onAuthStateChange((evento)=>{
+    if(evento === "PASSWORD_RECOVERY"){ RECUPERANDO_SENHA = true; formNovaSenha(); }
+  });
+  if(veioDoLinkDeSenha){
+    RECUPERANDO_SENHA = true;
+    formNovaSenha();
+    return;
+  }
+
   const { data:{ session } } = await sb.auth.getSession();
   if(session) await aposLogin(); else formEntrar();
 }

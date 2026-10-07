@@ -46,6 +46,24 @@ então re-renderiza. Se o banco não responder, o app entra em **modo demonstra�
 - Dados fictícios **não estão mais no JavaScript** — se o banco falhar, o app
   aparece vazio em vez de mostrar dados falsos como se fossem reais.
 
+### Recuperação de senha
+`formEsqueci()` → `sb.auth.resetPasswordForEmail(email, {redirectTo})` aponta de volta
+para a própria página. Ao voltar pelo link, `boot()` detecta `type=recovery` na URL
+(e escuta o evento `PASSWORD_RECOVERY`) e abre `formNovaSenha()` **antes** de entrar
+no app — a sessão existe, mas o destino é trocar a senha.
+⚠️ A URL do app precisa estar em **Authentication → URL Configuration** no Supabase,
+senão o link do e-mail não volta para cá.
+
+### Relatórios
+`serieFinanceira`, `despesasPorCategoria` e `inadimplentes` **não são mais arrays
+fixos no código** — `carregarRelatorios()` os traz de `cm_financeiro_mensal`,
+`cm_despesas_categoria` e `cm_boletos_mes` (status "Em atraso", com `meses_atraso`).
+Só é chamada para síndico e administrativo; a RLS recusa para os demais.
+`cashChart()` do dashboard usa a mesma série — antes tinha números próprios
+inventados, diferentes dos da tela de Relatórios.
+Sem dados, as telas mostram aviso em vez de quebrar (`Math.max` de array vazio
+devolve `-Infinity`).
+
 ### Limitações conhecidas desta etapa
 - O mascaramento da inadimplência para o administrativo é de interface: a RLS deixa
   ele ler `cm_boletos_mes` inteiro. Para valer no servidor, seria uma view sem os nomes.
