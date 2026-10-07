@@ -3194,7 +3194,8 @@ function renderAdminDocumentos(){
       <div><label>Nome do documento</label><input id="dfNome" placeholder="Ex: Ata da AGE 09/2026"></div>
       <div><label>Categoria</label><select id="dfCat">${catsDocumento.map(c=>`<option>${c}</option>`).join("")}</select></div>
       <div><label>Formato</label><select id="dfTipo"><option>PDF</option><option>XLSX</option></select></div>
-      <div><label>Arquivo</label><input id="dfArquivo" type="file"></div>
+      <div><label>Arquivo (PDF ou planilha, até ${LIMITE_ARQUIVO_MB} MB)</label>
+        <input id="dfArquivo" type="file" accept=".pdf,.xlsx,.xls,.jpg,.jpeg,.png"></div>
     </div>
     <div class="form-actions">
       <button class="btn-ghost" onclick="toggleDocForm(false)">Cancelar</button>
@@ -3228,28 +3229,74 @@ function toggleDocForm(show){
   const p=document.getElementById("docFormPanel");
   if(p) p.style.display = show ? "block":"none";
 }
+const LIMITE_ARQUIVO_MB = 50;
+
+function tamanhoLegivel(bytes){
+  return bytes > 1048576
+    ? (bytes/1048576).toFixed(1).replace('.',',')+" MB"
+    : Math.round(bytes/1024)+" KB";
+}
+/* nome de arquivo seguro: o Storage recusa acento e espaço no caminho */
+function caminhoDoArquivo(nome, arq){
+  const base = nome.normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[^a-zA-Z0-9]+/g,"-").replace(/^-|-$/g,"").toLowerCase().slice(0,60);
+  const ext = (arq.name.split(".").pop()||"pdf").toLowerCase();
+  return `${Date.now()}-${base||"documento"}.${ext}`;
+}
+
 async function addDocumento(){
   const nome=document.getElementById("dfNome").value.trim();
   const cat=document.getElementById("dfCat").value;
   const tipo=document.getElementById("dfTipo").value;
   const arq=document.getElementById("dfArquivo").files[0];
   if(!nome){ toast("Informe o nome do documento"); return; }
-  const tam=arq?(arq.size>1048576?(arq.size/1048576).toFixed(1).replace('.',',')+" MB":Math.round(arq.size/1024)+" KB"):"—";
-  const novo={nome,cat,tipo,tam,data:new Date().toLocaleDateString('pt-BR')};
+  if(!arq){ toast("Escolha o arquivo"); return; }
+  if(arq.size > LIMITE_ARQUIVO_MB*1048576){
+    toast(`Arquivo muito grande (${tamanhoLegivel(arq.size)}). O limite é ${LIMITE_ARQUIVO_MB} MB.`);
+    return;
+  }
+  if(!ONLINE){ toast("Sem conexão — não é possível enviar arquivos"); return; }
+
+  const botao=document.querySelector("#docFormPanel .btn-primary");
+  if(botao){ botao.disabled=true; botao.textContent="Enviando…"; }
+
+  const caminho = caminhoDoArquivo(nome, arq);
+  const { error: erroUpload } = await sb.storage.from("cm-documentos")
+    .upload(caminho, arq, { contentType: arq.type || "application/pdf", upsert:false });
+  if(erroUpload){
+    if(botao){ botao.disabled=false; botao.textContent="Publicar"; }
+    avisarFalhaDB("enviar arquivo", erroUpload);
+    return;
+  }
+
+  const novo={nome,cat,tipo,tam:tamanhoLegivel(arq.size),
+    data:new Date().toLocaleDateString('pt-BR'), arquivo:caminho};
   await dbInserir("documentos",novo);
   documentos.unshift(novo);
   filtroDocumento="Todos";
   goAdmin("documentos");
   toast("Documento publicado");
 }
-function baixarDocumento(i){
+async function baixarDocumento(i){
   const d=documentos[i];
-  if(d) toast(`Baixando "${d.nome}" (protótipo)`);
+  if(!d) return;
+  if(!d.arquivo){ toast("Este registro não tem arquivo anexado"); return; }
+  if(!ONLINE){ toast("Sem conexão — não é possível baixar agora"); return; }
+  toast(`Abrindo "${d.nome}"…`);
+  // link temporário: o bucket é privado, ninguém acessa sem estar logado
+  const { data, error } = await sb.storage.from("cm-documentos")
+    .createSignedUrl(d.arquivo, 120, { download: d.nome + "." + (d.arquivo.split(".").pop()||"pdf") });
+  if(error || !data){ avisarFalhaDB("gerar link do arquivo", error); return; }
+  window.open(data.signedUrl, "_blank");
 }
 async function removerDocumento(i){
   const d=documentos[i];
   if(!d) return;
   if(!confirm(`Remover "${d.nome}" da biblioteca?`)) return;
+  if(d.arquivo && ONLINE){
+    const { error } = await sb.storage.from("cm-documentos").remove([d.arquivo]);
+    if(error) console.warn("[storage] arquivo não removido:", error);
+  }
   await dbRemover("documentos",d.id);
   documentos.splice(i,1);
   goAdmin("documentos");
