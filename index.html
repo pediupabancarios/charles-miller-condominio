@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Charles Miller · App do Condomínio</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0e1b33">
+<meta name="theme-color" content="#1f2933">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -17,18 +17,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy-950:#0e1b33;
-  --navy-900:#152544;
-  --navy-800:#1c3159;
-  --navy-700:#28417a;
-  --gold-500:#c79a3d;
-  --gold-400:#d9b25f;
-  --gold-100:#f6ecd6;
-  --paper:#f4f2ec;
+  --navy-950:#1f2933;
+  --navy-900:#27333f;
+  --navy-800:#32414f;
+  --navy-700:#1c6b61;
+  --gold-500:#2a9d8f;
+  --gold-400:#4bbdaf;
+  --gold-100:#d9f0ec;
+  --paper:#f4f6f7;
   --card:#ffffff;
   --ink:#1c1c1c;
   --ink-soft:#5c5f66;
-  --line:#e6e2d6;
+  --line:#e2e6e9;
   --green:#2f8f5b;
   --green-bg:#e7f4ec;
   --red:#c14a3f;
@@ -40,7 +40,7 @@
   --radius-lg:20px;
   --radius-md:14px;
   --radius-sm:9px;
-  --shadow:0 1px 2px rgba(14,27,51,.04), 0 8px 24px -12px rgba(14,27,51,.18);
+  --shadow:0 1px 2px rgba(31,41,51,.04), 0 8px 24px -12px rgba(31,41,51,.18);
 }
 *{box-sizing:border-box;}
 html,body{margin:0;padding:0;}
@@ -162,7 +162,7 @@ button.see-all,.see-all[onclick]{cursor:pointer;}
 .action-card .t1{font-size:12.5px;font-weight:700;margin:0;}
 .action-card .t2{font-size:10.5px;color:var(--ink-soft);margin:0;}
 .tip-card{background:var(--gold-100);border:1px solid var(--gold-400);border-radius:var(--radius-md);padding:15px;margin-top:18px;}
-.tip-card p{margin:0;font-size:12.5px;color:#5c4a1c;}
+.tip-card p{margin:0;font-size:12.5px;color:#15514a;}
 .tip-card .t1{font-weight:700;margin-bottom:4px;}
 
 /* --- calendar --- */
@@ -663,7 +663,7 @@ function renderHome(){
       ${quick("📅","Reservas","#e9f1fa","#3a6ea8","reservas")}
       ${quick("📣","Avisos","#f8ecd8","#b9822c","avisos")}
       ${quick("⚠️","Ocorrências","#fbeae7","#c14a3f","ocorrencias")}
-      ${quick("💡","Sugestões","#f6ecd6","#b9822c","sugestoes")}
+      ${quick("💡","Sugestões","#d9f0ec","#b9822c","sugestoes")}
       ${quick("📦","Encomendas","#f3e6d8","#a3652f","encomendas")}
       ${quick("👥","Visitantes","#e6e0f2","#6d4fa8","autorizacoes")}
       ${quick("🚗","Veículos","#e0ebf2","#3a6ea8","veiculos")}
@@ -752,7 +752,7 @@ function calendar(){
     let cls="cal-day"+(ehHoje?" today":"");
     let dot="";
     if(mostraEventos && calendarEvents[d]){
-      const map={reserva:"#3a6ea8",evento:"#6d4fa8",manutencao:"#b9822c",assembleia:"#152544"};
+      const map={reserva:"#3a6ea8",evento:"#6d4fa8",manutencao:"#b9822c",assembleia:"#27333f"};
       dot=`<span class="evt" style="background:${map[calendarEvents[d]]}"></span>`;
     }
     cells+=`<div class="${cls}">${d}${dot}</div>`;
@@ -775,7 +775,7 @@ function calendar(){
       <span><i style="background:#3a6ea8"></i>Reservas</span>
       <span><i style="background:#6d4fa8"></i>Eventos</span>
       <span><i style="background:#b9822c"></i>Manutenções</span>
-      <span><i style="background:#152544"></i>Assembleias</span>
+      <span><i style="background:#27333f"></i>Assembleias</span>
     </div>
   </div>`;
 }

@@ -67,12 +67,21 @@ então re-renderiza. Se o banco não responder, o app entra em **modo demonstra�
 - **Backend:** Supabase (ver seção acima) via `@supabase/supabase-js` por CDN
 
 ## Tema visual
-- **Acento:** dourado `--gold-500 #c79a3d`
-- **Escuro/marinho:** `--navy-950 #0e1b33` → `--navy-700 #28417a`
-- **Fundo:** `--paper #f4f2ec` | Cards: `--card #ffffff`
+Paleta **Ardósia e verde-água** (as variáveis mantiveram os nomes `--navy-*` e
+`--gold-*` de quando o tema era marinho e dourado; o nome é histórico, a cor não).
+- **Escuros:** `--navy-950 #1f2933` → `--navy-800 #32414f`
+- **Acento:** `--gold-500 #2a9d8f` (verde-água) · `--gold-400 #4bbdaf` · `--gold-100 #d9f0ec`
+- **Links e gradientes:** `--navy-700 #1c6b61`
+- **Fundo:** `--paper #f4f6f7` | Cards: `--card #ffffff` | Linhas: `--line #e2e6e9`
 - **Texto:** `--ink #1c1c1c` | `--ink-soft #5c5f66`
-- **Status:** verde `--green`, vermelho `--red`, âmbar `--amber`, azul `--blue` (cada um com `-bg`)
+- **Status (independem da paleta):** verde `--green`, vermelho `--red`,
+  âmbar `--amber`, azul `--blue`, cada um com `-bg`
 - **Badges:** `.b-green` `.b-blue` `.b-red` `.b-amber` `.b-navy`
+
+Trocar de paleta é trocar os hex no `:root` — mas confira se o novo acento não
+fica perto demais do `--green` de status, que aparece lado a lado nos badges.
+O `theme-color` do HTML e o `manifest.json` carregam a cor escura: mudam junto.
+
 
 ## Arquitetura JS (tudo em `index.html`, tag `<script>` única)
 - **Dados mock** no topo: `morador`, `eventos`, `reservas`, `boletos`, `avisos`,
