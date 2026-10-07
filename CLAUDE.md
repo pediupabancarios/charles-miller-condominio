@@ -120,6 +120,17 @@ O `theme-color` do HTML e o `manifest.json` carregam a cor escura: mudam junto.
   `donut()`, `toast(msg)`, `sw()` (switch), `fmtBRL()`, `fmtData()`, `diasAte()`, `somaISO()`
 - **PWA:** registro do SW + `beforeinstallprompt` → `showInstallBanner()` / `hideInstallBanner()`
 
+## Privacidade — encomendas e ocorrências
+Ambas ganharam coluna `unidade`, que é o que a RLS usa:
+- **Encomenda** é da unidade: o morador vê só as dele. Antes a unidade vivia
+  embutida no texto da data (`"Recebida em … · 1201-A"`), a RLS não tinha em que
+  se apoiar e **todo morador lia as encomendas de todos**.
+- **Ocorrência** com `unidade = null` é área comum e todos leem; com unidade
+  preenchida fica restrita a ela e à gestão. O formulário do morador pergunta
+  "na minha unidade" ou "em área comum".
+- A aba **Minhas** de ocorrências filtra por `o.unidade === morador.cod`, não
+  mais por um campo `cat` fixo que não tinha relação com quem abriu.
+
 ## Privacidade — inadimplência
 Quem deve em qual unidade é dado pessoal. A regra está em `podeVerInadimplencia()`
 (hoje: apenas `sindico`) e é aplicada em **três** telas — mexeu numa, confira as outras:
@@ -232,8 +243,10 @@ Depois abrir http://localhost:8000
 Todos os módulos do menu de cada perfil estão implementados — `adminStub()` continua
 no código apenas como rede de segurança para views não registradas.
 
-O hub do morador não tem mais placeholders. Ainda mostram só um toast: no
-financeiro — Pix, 2ª via, histórico e os botões de pagamento.
+O hub do morador não tem mais placeholders. O morador **solicita reserva**
+(`addReservaMorador`, nasce Pendente para a portaria confirmar) e **abre
+ocorrência** (`addOcorrenciaMorador`). Ainda mostram só um toast: no financeiro —
+Pix, 2ª via, histórico e os botões de pagamento.
 
 Sidebar do síndico: 17 módulos · administrativo: 14 · portaria: 6.
 Views do morador: 14.

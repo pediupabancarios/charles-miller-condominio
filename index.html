@@ -692,10 +692,28 @@ function renderReservas(){
       <button class="active" onclick="switchTab(this,'minhas-r')">Minhas reservas</button>
       <button onclick="switchTab(this,'cal-r')">Calendário geral</button>
     </div>
+    <div class="card" id="reservaMoradorPanel" style="display:none;padding:16px;margin-bottom:16px">
+      <p style="font-weight:700;font-size:13.5px;margin:0 0 12px">Reservar área comum</p>
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <div><label>Área</label>
+          <select id="rmArea">${
+            config.areas.filter(a=>a.ativa).map(a=>
+              `<option value="${a.nome}">${a.nome}${a.taxa?` · ${fmtBRL(a.taxa)}`:" · sem taxa"}</option>`).join("")
+          }</select>
+        </div>
+        <div><label>Data</label><input id="rmData" type="date" min="${hojeISO()}"></div>
+        <div><label>Horário</label><input id="rmHora" placeholder="Ex: 18:00 às 23:00"></div>
+      </div>
+      <p class="t2" id="rmRegra" style="font-size:11px;color:var(--ink-soft);margin:0 0 12px"></p>
+      <div class="form-actions">
+        <button class="btn-ghost" onclick="toggleReservaMorador(false)">Cancelar</button>
+        <button class="btn-primary" onclick="addReservaMorador()">Solicitar reserva</button>
+      </div>
+    </div>
     <div id="minhas-r" class="tab-panel">
       <div class="section-title" style="margin-top:0"><h2>Minhas reservas</h2></div>
       <div class="card list-card">
-        ${reservas.map(r=>`
+        ${(reservas.filter(r=>r.morador===morador.cod).length?reservas.filter(r=>r.morador===morador.cod):[]).map(r=>`
           <div class="list-row">
             <div class="list-ic" style="background:${r.cor}">${r.ic}</div>
             <div class="list-body"><p class="t1">${r.titulo}</p><p class="t2">${r.data}</p><p class="t2">${r.num}</p></div>
@@ -713,7 +731,7 @@ function renderReservas(){
       </div>
     </div>
   </div>
-  <button class="fab" onclick="toast('Nova solicitação de reserva (protótipo)')">+</button>`;
+  <button class="fab" onclick="toggleReservaMorador(true)">+</button>`;
 }
 
 /* mês exibido no calendário — os eventos mock pertencem a agosto/2026 */
@@ -853,8 +871,26 @@ function renderOcorrencias(){
       <button onclick="switchTab(this,'cond-o')">Condomínio</button>
       <button onclick="switchTab(this,'hist-o')">Histórico</button>
     </div>
+    <div class="card" id="ocorrenciaMoradorPanel" style="display:none;padding:16px;margin-bottom:16px">
+      <p style="font-weight:700;font-size:13.5px;margin:0 0 12px">Abrir ocorrência</p>
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <div><label>O que aconteceu</label><input id="omTitulo" placeholder="Ex: Vazamento no teto da garagem"></div>
+        <div><label>Local</label><input id="omLocal" placeholder="Ex: Garagem - Subsolo 1"></div>
+        <div><label>Onde foi</label>
+          <select id="omEscopo">
+            <option value="unidade">Na minha unidade (${morador.cod})</option>
+            <option value="comum">Em área comum do condomínio</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn-ghost" onclick="toggleOcorrenciaMorador(false)">Cancelar</button>
+        <button class="btn-primary" onclick="addOcorrenciaMorador()">Abrir ocorrência</button>
+      </div>
+    </div>
     <div id="minhas-o" class="tab-panel card list-card">
-      ${ocorrencias.filter(o=>o.cat==='minhas').map(rowOcorrencia).join("")}
+      ${(()=>{const m=ocorrencias.filter(o=>o.unidade===morador.cod);
+          return m.length?m.map(rowOcorrencia).join(""):`<div class="empty-note">Você ainda não abriu nenhuma ocorrência.</div>`;})()}
     </div>
     <div id="cond-o" class="tab-panel card list-card" style="display:none">
       ${ocorrencias.map(rowOcorrencia).join("")}
@@ -863,8 +899,72 @@ function renderOcorrencias(){
       ${ocorrencias.filter(o=>o.tag==='Resolvida').map(rowOcorrencia).join("")}
     </div>
   </div>
-  <button class="fab" onclick="toast('Abrir nova ocorrência (protótipo)')">+</button>`;
+  <button class="fab" onclick="toggleOcorrenciaMorador(true)">+</button>`;
 }
+/* --- reserva solicitada pelo próprio morador --- */
+function toggleReservaMorador(mostrar){
+  const p=document.getElementById("reservaMoradorPanel");
+  if(!p) return;
+  p.style.display = mostrar ? "block":"none";
+  ocultarFab(mostrar);
+  if(mostrar){ mostrarRegraArea(); document.getElementById("rmArea").onchange = mostrarRegraArea; }
+}
+function mostrarRegraArea(){
+  const sel=document.getElementById("rmArea"), txt=document.getElementById("rmRegra");
+  if(!sel||!txt) return;
+  const a=config.areas.find(x=>x.nome===sel.value);
+  txt.textContent = a
+    ? `Até ${a.cap} pessoas · reserve com ${a.antec} dias de antecedência${a.taxa?` · taxa de ${fmtBRL(a.taxa)}`:" · sem taxa"}`
+    : "";
+}
+async function addReservaMorador(){
+  const area=document.getElementById("rmArea").value;
+  const data=document.getElementById("rmData").value;
+  const hora=document.getElementById("rmHora").value.trim();
+  if(!area){ toast("Nenhuma área está liberada para reserva"); return; }
+  if(!data){ toast("Escolha a data"); return; }
+  const cfg=config.areas.find(a=>a.nome===area);
+  const dias=diasAte(data);
+  if(dias<0){ toast("A data não pode estar no passado"); return; }
+  if(cfg && dias<cfg.antec){ toast(`${area} exige ${cfg.antec} dias de antecedência`); return; }
+  if(reservas.some(r=>r.titulo===area && r.data.startsWith(fmtData(data)) && r.tag!=="Cancelada")){
+    toast(`${area} já está reservada em ${fmtData(data)}`); return;
+  }
+  const [ic,cor]=iconeArea(area);
+  // nasce Pendente: quem confirma é a portaria ou o síndico
+  const nova={ic,cor,titulo:area,morador:morador.cod,
+    data:`${fmtData(data)} · ${hora||'a definir'}`,
+    num:"Reserva #"+(1200+reservas.length+1),tag:"Pendente",tagClass:"b-amber"};
+  await dbInserir("reservas",nova);
+  reservas.unshift(nova);
+  goView("reservas");
+  toast("Reserva solicitada — aguarde a confirmação");
+}
+
+/* --- ocorrência aberta pelo próprio morador --- */
+function toggleOcorrenciaMorador(mostrar){
+  const p=document.getElementById("ocorrenciaMoradorPanel");
+  if(!p) return;
+  p.style.display = mostrar ? "block":"none";
+  ocultarFab(mostrar);
+  if(mostrar) document.getElementById("omTitulo").focus();
+}
+async function addOcorrenciaMorador(){
+  const titulo=document.getElementById("omTitulo").value.trim();
+  const local=document.getElementById("omLocal").value.trim();
+  const escopo=document.getElementById("omEscopo").value;
+  if(!titulo){ toast("Descreva o que aconteceu"); return; }
+  if(!local){ toast("Informe o local"); return; }
+  const nova={ic:"⚠️",cor:"var(--amber-bg)",titulo,
+    data:"Abertura: "+new Date().toLocaleDateString('pt-BR')+" - "+horaAgora(),
+    local, unidade: escopo==="unidade" ? morador.cod : null,
+    tag:"Aberta",tagClass:"b-blue", cat: escopo==="unidade" ? "minhas":"condominio"};
+  await dbInserir("ocorrencias",nova);
+  ocorrencias.unshift(nova);
+  goView("ocorrencias");
+  toast("Ocorrência aberta");
+}
+
 function rowOcorrencia(o){
   return `<div class="list-row"><div class="list-ic" style="background:${o.cor}">${o.ic}</div><div class="list-body"><p class="t1">${o.titulo}</p><p class="t2">${o.data}</p><p class="t2">${o.local}</p></div><span class="badge ${o.tagClass}">${o.tag}</span></div>`;
 }
@@ -927,7 +1027,7 @@ function renderEncomendas(){
       ${encomendas.map(e=>`
         <div class="list-row" data-tag="${e.tag}">
           <div class="list-ic" style="background:#f3e6d8">📦</div>
-          <div class="list-body"><p class="t1">${e.titulo}</p><p class="t2">${e.data}</p><p class="t2">${e.loja}</p></div>
+          <div class="list-body"><p class="t1">${e.titulo}</p><p class="t2">${e.data}</p><p class="t2">${e.loja}${e.unidade?" · "+e.unidade:""}</p></div>
           <span class="badge ${e.tagClass}">${e.tag}</span>
         </div>`).join("")}
     </div>
@@ -1473,6 +1573,7 @@ function renderAdminOcorrencias(){
     <div class="form-grid">
       <div><label>Título</label><input id="ofTitulo" placeholder="Ex: Vazamento na garagem"></div>
       <div><label>Local</label><input id="ofLocal" placeholder="Ex: Garagem - Subsolo 1"></div>
+      <div><label>Unidade (vazio = área comum)</label><input id="ofUnidade" placeholder="Ex: 802-A" style="text-transform:uppercase"></div>
     </div>
     <div class="form-actions">
       <button class="btn-ghost" onclick="toggleOcorrenciaForm(false)">Cancelar</button>
@@ -1484,8 +1585,8 @@ function renderAdminOcorrencias(){
     <div class="panel">
       <div class="panel-head"><h3>Todas as ocorrências</h3><button class="see-all" onclick="toggleOcorrenciaForm(true)">+ Registrar</button></div>
       <table class="datatable">
-        <tr><th>Ocorrência</th><th>Local</th><th>Abertura</th><th>Status</th></tr>
-        ${ocorrencias.map((o,i)=>`<tr><td>${o.titulo}</td><td>${o.local}</td><td>${o.data.replace('Abertura: ','')}</td><td>
+        <tr><th>Ocorrência</th><th>Local</th><th>Unidade</th><th>Abertura</th><th>Status</th></tr>
+        ${ocorrencias.map((o,i)=>`<tr><td>${o.titulo}</td><td>${o.local}</td><td class="mono">${o.unidade||'<span style="color:var(--ink-soft)">área comum</span>'}</td><td>${o.data.replace('Abertura: ','')}</td><td>
           <select onchange="updateOcorrenciaStatus(${i},this.value)" class="inline-select">
             ${statusOpts.map(op=>`<option ${op===o.tag?'selected':''}>${op}</option>`).join("")}
           </select>
@@ -1498,13 +1599,22 @@ function toggleOcorrenciaForm(show){
   const p=document.getElementById("ocoFormPanel");
   if(p) p.style.display = show ? "block":"none";
 }
-function addOcorrencia(){
+async function addOcorrencia(){
   const titulo=document.getElementById("ofTitulo").value.trim();
   const local=document.getElementById("ofLocal").value.trim();
   if(!titulo||!local){ toast("Preencha título e local"); return; }
-  ocorrencias.unshift({ic:"⚠️",cor:"var(--amber-bg)",titulo,
+  const campoU=document.getElementById("ofUnidade");
+  // sem unidade = área comum, visível a todo o condomínio
+  const unidade=(campoU ? campoU.value.trim().toUpperCase() : "") || null;
+  if(unidade && !todasUnidades().includes(unidade)){
+    toast("Unidade inexistente — deixe em branco se for área comum"); return;
+  }
+  const nova={ic:"⚠️",cor:"var(--amber-bg)",titulo,
     data:"Abertura: "+new Date().toLocaleDateString('pt-BR')+" - "+horaAgora(),
-    local,tag:"Aberta",tagClass:"b-blue",cat:"condominio"});
+    local,unidade,tag:"Aberta",tagClass:"b-blue",
+    cat:unidade?"minhas":"condominio"};
+  await dbInserir("ocorrencias",nova);
+  ocorrencias.unshift(nova);
   goAdmin("ocorrencias");
   toast("Ocorrência registrada");
 }
@@ -1558,8 +1668,8 @@ function renderAdminEncomendas(){
   <div class="panel">
     <div class="panel-head"><h3>Encomendas na portaria</h3><button class="see-all" onclick="toggleEncForm(true)">+ Registrar chegada</button></div>
     <table class="datatable">
-      <tr><th>Encomenda</th><th>Loja</th><th>Data</th><th>Status</th><th></th></tr>
-      ${encomendas.map((e,i)=>`<tr><td>${e.titulo}</td><td>${e.loja}</td><td>${e.data}</td><td><span class="badge ${e.tagClass}">${e.tag}</span></td><td>${e.tag!=='Entregue'?`<button class="see-all" onclick="marcarEntregue(${i})">Marcar retirada</button>`:''}</td></tr>`).join("")}
+      <tr><th>Encomenda</th><th>Unidade</th><th>Loja</th><th>Data</th><th>Status</th><th></th></tr>
+      ${encomendas.map((e,i)=>`<tr><td>${e.titulo}</td><td class="mono">${e.unidade||'—'}</td><td>${e.loja}</td><td>${e.data}</td><td><span class="badge ${e.tagClass}">${e.tag}</span></td><td>${e.tag!=='Entregue'?`<button class="see-all" onclick="marcarEntregue(${i})">Marcar retirada</button>`:''}</td></tr>`).join("")}
     </table>
   </div>`;
 }
@@ -1568,7 +1678,11 @@ async function addEncomenda(){
   const loja=document.getElementById("efLoja").value.trim();
   const unidade=document.getElementById("efUnidade").value.trim();
   if(!loja||!unidade){ toast("Preencha loja e unidade"); return; }
-  const nova={titulo:"Encomenda #"+(38800+encomendas.length+1),data:"Recebida em "+new Date().toLocaleDateString('pt-BR')+" · "+unidade,loja,tag:"Em armazenamento",tagClass:"b-amber"};
+  const u=unidade.toUpperCase();
+  if(!todasUnidades().includes(u)){ toast("Unidade inexistente — use o formato 802-A"); return; }
+  const nova={titulo:"Encomenda #"+(38800+encomendas.length+1),
+    data:"Recebida em "+new Date().toLocaleDateString('pt-BR'),
+    loja,unidade:u,tag:"Em armazenamento",tagClass:"b-amber"};
   await dbInserir("encomendas",nova);
   encomendas.unshift(nova);
   goAdmin("encomendas");
