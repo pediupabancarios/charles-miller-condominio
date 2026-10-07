@@ -547,6 +547,12 @@ const TOTAL_UNIDADES = 104;
 const TORRES = ["A","B"], ANDARES = 26, APTOS_POR_ANDAR = 2;
 
 /* código da unidade: andar + apto (2 díg) + torre → 802-A, 1401-B */
+/* 301-A -> "Apto 301 - Torre A" */
+function descreveUnidade(cod){
+  if(!cod) return "—";
+  const [num,torre] = String(cod).split("-");
+  return torre ? `Apto ${num} - Torre ${torre}` : `Apto ${num}`;
+}
 function codUnidade(andar,apto,torre){
   return `${andar}${String(apto).padStart(2,"0")}-${torre}`;
 }
@@ -3494,6 +3500,9 @@ async function carregarTudo(){
     morador.cod = USUARIO.unidade;
     morador.nomeCompleto = USUARIO.nome;
     morador.nome = USUARIO.nome.split(" ")[0];
+    // descrição e vínculo derivam da conta; antes ficavam fixos no código
+    morador.unidade = descreveUnidade(USUARIO.unidade);
+    morador.papel = "Morador";
   }
   const nomes = Object.keys(TABELAS);
   const respostas = await Promise.all(
@@ -3526,6 +3535,12 @@ async function carregarTudo(){
   const cfg = await sb.from("cm_config").select("*");
   if(cfg.error) throw new Error("config: "+cfg.error.message);
   (cfg.data||[]).forEach(r => { config[r.chave] = r.valor; });
+
+  // o vínculo (Proprietário / Locatária …) está no cadastro de moradores
+  if(USUARIO && USUARIO.unidade){
+    const reg = moradoresLista.find(m=>m.unidade===USUARIO.unidade);
+    if(reg && reg.papel) morador.papel = reg.papel.split(" · ")[0];
+  }
 
   if(papelAtual()==="sindico") await carregarContas();
 
