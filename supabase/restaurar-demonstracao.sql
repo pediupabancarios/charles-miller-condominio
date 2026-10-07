@@ -1,0 +1,23 @@
+-- ============================================================
+-- Restaura os dados de demonstração a partir de
+-- supabase/backup-demonstracao.json
+--
+-- Use se precisar apresentar o app cheio (reunião, condomínio).
+-- Cole o conteúdo do JSON no lugar de :dados e rode no SQL Editor.
+-- Limpa o que existir antes, então NÃO rode com dados reais no ar.
+-- ============================================================
+-- exemplo para uma tabela:
+--
+--   truncate cm_avisos restart identity cascade;
+--   insert into cm_avisos
+--   select * from jsonb_populate_recordset(null::cm_avisos, '<cole aqui o array cm_avisos>');
+--
+-- Repita para: cm_moradores, cm_perfil, cm_reservas, cm_boletos,
+-- cm_boletos_mes, cm_avisos, cm_ocorrencias, cm_encomendas, cm_sugestoes,
+-- cm_visitantes, cm_autorizacoes, cm_veiculos, cm_assembleias, cm_votos,
+-- cm_documentos, cm_manutencoes, cm_conversas, cm_financeiro_mensal,
+-- cm_despesas_categoria.
+--
+-- cm_config é upsert por chave, não truncate:
+--   insert into cm_config select * from jsonb_populate_recordset(null::cm_config, '<array>')
+--   on conflict (chave) do update set valor = excluded.valor;

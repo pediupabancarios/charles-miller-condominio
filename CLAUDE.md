@@ -138,6 +138,22 @@ O `theme-color` do HTML e o `manifest.json` carregam a cor escura: mudam junto.
   `donut()`, `toast(msg)`, `sw()` (switch), `fmtBRL()`, `fmtData()`, `diasAte()`, `somaISO()`
 - **PWA:** registro do SW + `beforeinstallprompt` → `showInstallBanner()` / `hideInstallBanner()`
 
+## Estado dos dados
+O banco foi **zerado dos dados de demonstração** em 07/10/2026. Continuam lá:
+- a conta de síndico do Rodrigo
+- as 7 áreas comuns reais (Salão de Festas, Salão Gourmet, Churrasqueira 1,
+  Garagem Band, Home Cinema, Sauna, Spa) e as preferências de notificação
+- a estrutura do prédio, **confirmada pelo condomínio**: 2 torres (A e B),
+  26 andares, 2 apartamentos por andar = 104 unidades, numeradas
+  `101-A`, `102-A` … `2602-B`
+
+Zerados: moradores, boletos, avisos, ocorrências, encomendas, visitantes,
+veículos, assembleias, votos, documentos, manutenções, conversas e relatórios.
+Também o CNPJ, o endereço e as taxas, que eram inventados.
+
+Cópia dos dados antigos em `supabase/backup-demonstracao.json` (ver
+`restaurar-demonstracao.sql`), caso seja preciso apresentar o app cheio.
+
 ## Privacidade — encomendas e ocorrências
 Ambas ganharam coluna `unidade`, que é o que a RLS usa:
 - **Encomenda** é da unidade: o morador vê só as dele. Antes a unidade vivia

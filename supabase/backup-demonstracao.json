@@ -1,0 +1,3967 @@
+{
+ "cm_votos": [
+  {
+   "id": 1,
+   "voto": "sim",
+   "unidade": "1001-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 2,
+   "voto": "sim",
+   "unidade": "1001-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 3,
+   "voto": "sim",
+   "unidade": "1002-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 4,
+   "voto": "sim",
+   "unidade": "1002-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 5,
+   "voto": "sim",
+   "unidade": "101-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 6,
+   "voto": "sim",
+   "unidade": "101-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 7,
+   "voto": "sim",
+   "unidade": "102-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 8,
+   "voto": "sim",
+   "unidade": "102-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 9,
+   "voto": "sim",
+   "unidade": "1101-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 10,
+   "voto": "sim",
+   "unidade": "1101-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 11,
+   "voto": "sim",
+   "unidade": "1102-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 12,
+   "voto": "sim",
+   "unidade": "1102-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 13,
+   "voto": "sim",
+   "unidade": "1201-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 14,
+   "voto": "sim",
+   "unidade": "1201-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 15,
+   "voto": "sim",
+   "unidade": "1202-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 16,
+   "voto": "sim",
+   "unidade": "1202-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 17,
+   "voto": "sim",
+   "unidade": "1301-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 18,
+   "voto": "sim",
+   "unidade": "1301-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 19,
+   "voto": "sim",
+   "unidade": "1302-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 20,
+   "voto": "sim",
+   "unidade": "1302-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 21,
+   "voto": "sim",
+   "unidade": "1401-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 22,
+   "voto": "sim",
+   "unidade": "1401-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 23,
+   "voto": "sim",
+   "unidade": "1402-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 24,
+   "voto": "sim",
+   "unidade": "1402-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 25,
+   "voto": "sim",
+   "unidade": "1501-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 26,
+   "voto": "sim",
+   "unidade": "1501-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 27,
+   "voto": "sim",
+   "unidade": "1502-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 28,
+   "voto": "sim",
+   "unidade": "1502-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 29,
+   "voto": "sim",
+   "unidade": "1601-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 30,
+   "voto": "sim",
+   "unidade": "1601-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 31,
+   "voto": "sim",
+   "unidade": "1602-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 32,
+   "voto": "sim",
+   "unidade": "1602-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 33,
+   "voto": "sim",
+   "unidade": "1701-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 34,
+   "voto": "sim",
+   "unidade": "1701-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 35,
+   "voto": "sim",
+   "unidade": "1702-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 36,
+   "voto": "sim",
+   "unidade": "1702-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 37,
+   "voto": "sim",
+   "unidade": "1801-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 38,
+   "voto": "sim",
+   "unidade": "1801-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 39,
+   "voto": "sim",
+   "unidade": "1802-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 40,
+   "voto": "sim",
+   "unidade": "1802-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 41,
+   "voto": "sim",
+   "unidade": "1901-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 42,
+   "voto": "sim",
+   "unidade": "1901-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 43,
+   "voto": "sim",
+   "unidade": "1902-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 44,
+   "voto": "sim",
+   "unidade": "1902-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 45,
+   "voto": "sim",
+   "unidade": "2001-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 46,
+   "voto": "sim",
+   "unidade": "2001-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 47,
+   "voto": "sim",
+   "unidade": "2002-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 48,
+   "voto": "sim",
+   "unidade": "2002-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 49,
+   "voto": "sim",
+   "unidade": "201-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 50,
+   "voto": "sim",
+   "unidade": "201-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 51,
+   "voto": "sim",
+   "unidade": "202-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 52,
+   "voto": "sim",
+   "unidade": "202-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 53,
+   "voto": "sim",
+   "unidade": "2101-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 54,
+   "voto": "sim",
+   "unidade": "2101-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 55,
+   "voto": "sim",
+   "unidade": "2102-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 56,
+   "voto": "sim",
+   "unidade": "2102-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 57,
+   "voto": "sim",
+   "unidade": "2201-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 58,
+   "voto": "sim",
+   "unidade": "2201-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 59,
+   "voto": "sim",
+   "unidade": "2202-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 60,
+   "voto": "sim",
+   "unidade": "2202-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 61,
+   "voto": "sim",
+   "unidade": "2301-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 62,
+   "voto": "sim",
+   "unidade": "2301-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 63,
+   "voto": "sim",
+   "unidade": "2302-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 64,
+   "voto": "nao",
+   "unidade": "2302-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 65,
+   "voto": "nao",
+   "unidade": "2401-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 66,
+   "voto": "nao",
+   "unidade": "2401-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 67,
+   "voto": "nao",
+   "unidade": "2402-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 68,
+   "voto": "nao",
+   "unidade": "2402-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 69,
+   "voto": "nao",
+   "unidade": "2501-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 70,
+   "voto": "nao",
+   "unidade": "2501-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 71,
+   "voto": "nao",
+   "unidade": "2502-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 72,
+   "voto": "abst",
+   "unidade": "2502-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 73,
+   "voto": "abst",
+   "unidade": "2601-A",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 74,
+   "voto": "abst",
+   "unidade": "2601-B",
+   "pauta_id": 31,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 75,
+   "voto": "sim",
+   "unidade": "1001-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 76,
+   "voto": "sim",
+   "unidade": "1001-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 77,
+   "voto": "sim",
+   "unidade": "1002-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 78,
+   "voto": "sim",
+   "unidade": "1002-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 79,
+   "voto": "sim",
+   "unidade": "101-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 80,
+   "voto": "sim",
+   "unidade": "101-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 81,
+   "voto": "sim",
+   "unidade": "102-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 82,
+   "voto": "sim",
+   "unidade": "102-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 83,
+   "voto": "sim",
+   "unidade": "1101-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 84,
+   "voto": "sim",
+   "unidade": "1101-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 85,
+   "voto": "sim",
+   "unidade": "1102-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 86,
+   "voto": "sim",
+   "unidade": "1102-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 87,
+   "voto": "sim",
+   "unidade": "1201-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 88,
+   "voto": "sim",
+   "unidade": "1201-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 89,
+   "voto": "sim",
+   "unidade": "1202-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 90,
+   "voto": "sim",
+   "unidade": "1202-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 91,
+   "voto": "sim",
+   "unidade": "1301-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 92,
+   "voto": "sim",
+   "unidade": "1301-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 93,
+   "voto": "sim",
+   "unidade": "1302-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 94,
+   "voto": "sim",
+   "unidade": "1302-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 95,
+   "voto": "sim",
+   "unidade": "1401-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 96,
+   "voto": "sim",
+   "unidade": "1401-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 97,
+   "voto": "sim",
+   "unidade": "1402-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 98,
+   "voto": "sim",
+   "unidade": "1402-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 99,
+   "voto": "sim",
+   "unidade": "1501-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 100,
+   "voto": "sim",
+   "unidade": "1501-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 101,
+   "voto": "sim",
+   "unidade": "1502-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 102,
+   "voto": "sim",
+   "unidade": "1502-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 103,
+   "voto": "sim",
+   "unidade": "1601-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 104,
+   "voto": "sim",
+   "unidade": "1601-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 105,
+   "voto": "sim",
+   "unidade": "1602-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 106,
+   "voto": "sim",
+   "unidade": "1602-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 107,
+   "voto": "sim",
+   "unidade": "1701-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 108,
+   "voto": "sim",
+   "unidade": "1701-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 109,
+   "voto": "sim",
+   "unidade": "1702-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 110,
+   "voto": "sim",
+   "unidade": "1702-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 111,
+   "voto": "sim",
+   "unidade": "1801-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 112,
+   "voto": "sim",
+   "unidade": "1801-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 113,
+   "voto": "sim",
+   "unidade": "1802-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 114,
+   "voto": "sim",
+   "unidade": "1802-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 115,
+   "voto": "sim",
+   "unidade": "1901-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 116,
+   "voto": "sim",
+   "unidade": "1901-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 117,
+   "voto": "sim",
+   "unidade": "1902-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 118,
+   "voto": "sim",
+   "unidade": "1902-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 119,
+   "voto": "sim",
+   "unidade": "2001-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 120,
+   "voto": "sim",
+   "unidade": "2001-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 121,
+   "voto": "sim",
+   "unidade": "2002-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 122,
+   "voto": "sim",
+   "unidade": "2002-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 123,
+   "voto": "sim",
+   "unidade": "201-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 124,
+   "voto": "sim",
+   "unidade": "201-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 125,
+   "voto": "sim",
+   "unidade": "202-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 126,
+   "voto": "sim",
+   "unidade": "202-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 127,
+   "voto": "sim",
+   "unidade": "2101-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 128,
+   "voto": "sim",
+   "unidade": "2101-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 129,
+   "voto": "sim",
+   "unidade": "2102-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 130,
+   "voto": "sim",
+   "unidade": "2102-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 131,
+   "voto": "sim",
+   "unidade": "2201-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 132,
+   "voto": "sim",
+   "unidade": "2201-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 133,
+   "voto": "nao",
+   "unidade": "2202-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 134,
+   "voto": "nao",
+   "unidade": "2202-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 135,
+   "voto": "nao",
+   "unidade": "2301-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 136,
+   "voto": "nao",
+   "unidade": "2301-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 137,
+   "voto": "nao",
+   "unidade": "2302-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 138,
+   "voto": "nao",
+   "unidade": "2302-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 139,
+   "voto": "nao",
+   "unidade": "2401-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 140,
+   "voto": "nao",
+   "unidade": "2401-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 141,
+   "voto": "nao",
+   "unidade": "2402-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 142,
+   "voto": "nao",
+   "unidade": "2402-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 143,
+   "voto": "nao",
+   "unidade": "2501-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 144,
+   "voto": "abst",
+   "unidade": "2501-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 145,
+   "voto": "abst",
+   "unidade": "2502-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 146,
+   "voto": "abst",
+   "unidade": "2502-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 147,
+   "voto": "abst",
+   "unidade": "2601-A",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 148,
+   "voto": "abst",
+   "unidade": "2601-B",
+   "pauta_id": 32,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 3,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 149,
+   "voto": "sim",
+   "unidade": "1001-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 150,
+   "voto": "sim",
+   "unidade": "1001-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 151,
+   "voto": "sim",
+   "unidade": "1002-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 152,
+   "voto": "sim",
+   "unidade": "1002-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 153,
+   "voto": "sim",
+   "unidade": "101-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 154,
+   "voto": "sim",
+   "unidade": "101-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 155,
+   "voto": "sim",
+   "unidade": "102-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 156,
+   "voto": "sim",
+   "unidade": "102-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 157,
+   "voto": "sim",
+   "unidade": "1101-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 158,
+   "voto": "sim",
+   "unidade": "1101-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 159,
+   "voto": "sim",
+   "unidade": "1102-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 160,
+   "voto": "sim",
+   "unidade": "1102-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 161,
+   "voto": "sim",
+   "unidade": "1201-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 162,
+   "voto": "sim",
+   "unidade": "1201-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 163,
+   "voto": "sim",
+   "unidade": "1202-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 164,
+   "voto": "sim",
+   "unidade": "1202-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 165,
+   "voto": "sim",
+   "unidade": "1301-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 166,
+   "voto": "sim",
+   "unidade": "1301-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 167,
+   "voto": "sim",
+   "unidade": "1302-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 168,
+   "voto": "sim",
+   "unidade": "1302-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 169,
+   "voto": "sim",
+   "unidade": "1401-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 170,
+   "voto": "sim",
+   "unidade": "1401-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 171,
+   "voto": "sim",
+   "unidade": "1402-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 172,
+   "voto": "sim",
+   "unidade": "1402-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 173,
+   "voto": "sim",
+   "unidade": "1501-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 174,
+   "voto": "sim",
+   "unidade": "1501-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 175,
+   "voto": "sim",
+   "unidade": "1502-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 176,
+   "voto": "sim",
+   "unidade": "1502-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 177,
+   "voto": "sim",
+   "unidade": "1601-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 178,
+   "voto": "sim",
+   "unidade": "1601-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 179,
+   "voto": "sim",
+   "unidade": "1602-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 180,
+   "voto": "sim",
+   "unidade": "1602-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 181,
+   "voto": "sim",
+   "unidade": "1701-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 182,
+   "voto": "sim",
+   "unidade": "1701-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 183,
+   "voto": "sim",
+   "unidade": "1702-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 184,
+   "voto": "sim",
+   "unidade": "1702-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 185,
+   "voto": "sim",
+   "unidade": "1801-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 186,
+   "voto": "sim",
+   "unidade": "1801-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 187,
+   "voto": "sim",
+   "unidade": "1802-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 188,
+   "voto": "sim",
+   "unidade": "1802-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 189,
+   "voto": "sim",
+   "unidade": "1901-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 190,
+   "voto": "nao",
+   "unidade": "1901-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 191,
+   "voto": "nao",
+   "unidade": "1902-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 192,
+   "voto": "nao",
+   "unidade": "1902-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 193,
+   "voto": "nao",
+   "unidade": "2001-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 194,
+   "voto": "nao",
+   "unidade": "2001-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 195,
+   "voto": "nao",
+   "unidade": "2002-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 196,
+   "voto": "nao",
+   "unidade": "2002-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 197,
+   "voto": "nao",
+   "unidade": "201-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 198,
+   "voto": "nao",
+   "unidade": "201-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 199,
+   "voto": "nao",
+   "unidade": "202-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 200,
+   "voto": "nao",
+   "unidade": "202-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 201,
+   "voto": "nao",
+   "unidade": "2101-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 202,
+   "voto": "abst",
+   "unidade": "2101-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 203,
+   "voto": "abst",
+   "unidade": "2102-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 204,
+   "voto": "abst",
+   "unidade": "2102-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 205,
+   "voto": "abst",
+   "unidade": "2201-A",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 206,
+   "voto": "abst",
+   "unidade": "2201-B",
+   "pauta_id": 11,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 207,
+   "voto": "sim",
+   "unidade": "1001-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 208,
+   "voto": "sim",
+   "unidade": "1001-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 209,
+   "voto": "sim",
+   "unidade": "1002-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 210,
+   "voto": "sim",
+   "unidade": "1002-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 211,
+   "voto": "sim",
+   "unidade": "101-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 212,
+   "voto": "sim",
+   "unidade": "101-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 213,
+   "voto": "sim",
+   "unidade": "102-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 214,
+   "voto": "sim",
+   "unidade": "102-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 215,
+   "voto": "sim",
+   "unidade": "1101-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 216,
+   "voto": "sim",
+   "unidade": "1101-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 217,
+   "voto": "sim",
+   "unidade": "1102-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 218,
+   "voto": "sim",
+   "unidade": "1102-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 219,
+   "voto": "sim",
+   "unidade": "1201-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 220,
+   "voto": "sim",
+   "unidade": "1201-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 221,
+   "voto": "sim",
+   "unidade": "1202-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 222,
+   "voto": "sim",
+   "unidade": "1202-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 223,
+   "voto": "sim",
+   "unidade": "1301-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 224,
+   "voto": "sim",
+   "unidade": "1301-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 225,
+   "voto": "sim",
+   "unidade": "1302-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 226,
+   "voto": "sim",
+   "unidade": "1302-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 227,
+   "voto": "sim",
+   "unidade": "1401-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 228,
+   "voto": "sim",
+   "unidade": "1401-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 229,
+   "voto": "sim",
+   "unidade": "1402-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 230,
+   "voto": "sim",
+   "unidade": "1402-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 231,
+   "voto": "sim",
+   "unidade": "1501-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 232,
+   "voto": "sim",
+   "unidade": "1501-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 233,
+   "voto": "sim",
+   "unidade": "1502-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 234,
+   "voto": "sim",
+   "unidade": "1502-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 235,
+   "voto": "sim",
+   "unidade": "1601-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 236,
+   "voto": "sim",
+   "unidade": "1601-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 237,
+   "voto": "sim",
+   "unidade": "1602-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 238,
+   "voto": "sim",
+   "unidade": "1602-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 239,
+   "voto": "sim",
+   "unidade": "1701-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 240,
+   "voto": "sim",
+   "unidade": "1701-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 241,
+   "voto": "sim",
+   "unidade": "1702-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 242,
+   "voto": "sim",
+   "unidade": "1702-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 243,
+   "voto": "sim",
+   "unidade": "1801-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 244,
+   "voto": "sim",
+   "unidade": "1801-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 245,
+   "voto": "sim",
+   "unidade": "1802-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 246,
+   "voto": "sim",
+   "unidade": "1802-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 247,
+   "voto": "sim",
+   "unidade": "1901-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 248,
+   "voto": "sim",
+   "unidade": "1901-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 249,
+   "voto": "sim",
+   "unidade": "1902-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 250,
+   "voto": "sim",
+   "unidade": "1902-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 251,
+   "voto": "sim",
+   "unidade": "2001-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 252,
+   "voto": "sim",
+   "unidade": "2001-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 253,
+   "voto": "sim",
+   "unidade": "2002-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 254,
+   "voto": "sim",
+   "unidade": "2002-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 255,
+   "voto": "nao",
+   "unidade": "201-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 256,
+   "voto": "nao",
+   "unidade": "201-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 257,
+   "voto": "nao",
+   "unidade": "202-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 258,
+   "voto": "nao",
+   "unidade": "202-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 259,
+   "voto": "abst",
+   "unidade": "2101-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 260,
+   "voto": "abst",
+   "unidade": "2101-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 261,
+   "voto": "abst",
+   "unidade": "2102-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 262,
+   "voto": "abst",
+   "unidade": "2102-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 263,
+   "voto": "abst",
+   "unidade": "2201-A",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 264,
+   "voto": "abst",
+   "unidade": "2201-B",
+   "pauta_id": 12,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 265,
+   "voto": "sim",
+   "unidade": "1001-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 266,
+   "voto": "sim",
+   "unidade": "1001-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 267,
+   "voto": "sim",
+   "unidade": "1002-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 268,
+   "voto": "sim",
+   "unidade": "1002-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 269,
+   "voto": "sim",
+   "unidade": "101-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 270,
+   "voto": "sim",
+   "unidade": "101-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 271,
+   "voto": "sim",
+   "unidade": "102-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 272,
+   "voto": "sim",
+   "unidade": "102-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 273,
+   "voto": "sim",
+   "unidade": "1101-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 274,
+   "voto": "sim",
+   "unidade": "1101-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 275,
+   "voto": "sim",
+   "unidade": "1102-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 276,
+   "voto": "sim",
+   "unidade": "1102-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 277,
+   "voto": "sim",
+   "unidade": "1201-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 278,
+   "voto": "sim",
+   "unidade": "1201-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 279,
+   "voto": "sim",
+   "unidade": "1202-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 280,
+   "voto": "sim",
+   "unidade": "1202-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 281,
+   "voto": "sim",
+   "unidade": "1301-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 282,
+   "voto": "sim",
+   "unidade": "1301-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 283,
+   "voto": "sim",
+   "unidade": "1302-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 284,
+   "voto": "sim",
+   "unidade": "1302-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 285,
+   "voto": "sim",
+   "unidade": "1401-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 286,
+   "voto": "sim",
+   "unidade": "1401-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 287,
+   "voto": "sim",
+   "unidade": "1402-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 288,
+   "voto": "sim",
+   "unidade": "1402-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 289,
+   "voto": "sim",
+   "unidade": "1501-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 290,
+   "voto": "sim",
+   "unidade": "1501-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 291,
+   "voto": "sim",
+   "unidade": "1502-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 292,
+   "voto": "sim",
+   "unidade": "1502-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 293,
+   "voto": "sim",
+   "unidade": "1601-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 294,
+   "voto": "nao",
+   "unidade": "1601-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 295,
+   "voto": "nao",
+   "unidade": "1602-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 296,
+   "voto": "nao",
+   "unidade": "1602-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 297,
+   "voto": "nao",
+   "unidade": "1701-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 298,
+   "voto": "nao",
+   "unidade": "1701-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 299,
+   "voto": "nao",
+   "unidade": "1702-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 300,
+   "voto": "nao",
+   "unidade": "1702-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 301,
+   "voto": "nao",
+   "unidade": "1801-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 302,
+   "voto": "nao",
+   "unidade": "1801-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 303,
+   "voto": "nao",
+   "unidade": "1802-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 304,
+   "voto": "nao",
+   "unidade": "1802-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 305,
+   "voto": "nao",
+   "unidade": "1901-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 306,
+   "voto": "nao",
+   "unidade": "1901-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 307,
+   "voto": "nao",
+   "unidade": "1902-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 308,
+   "voto": "nao",
+   "unidade": "1902-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 309,
+   "voto": "nao",
+   "unidade": "2001-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 310,
+   "voto": "nao",
+   "unidade": "2001-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 311,
+   "voto": "nao",
+   "unidade": "2002-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 312,
+   "voto": "nao",
+   "unidade": "2002-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 313,
+   "voto": "nao",
+   "unidade": "201-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 314,
+   "voto": "nao",
+   "unidade": "201-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 315,
+   "voto": "nao",
+   "unidade": "202-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 316,
+   "voto": "abst",
+   "unidade": "202-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 317,
+   "voto": "abst",
+   "unidade": "2101-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 318,
+   "voto": "abst",
+   "unidade": "2101-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 319,
+   "voto": "abst",
+   "unidade": "2102-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 320,
+   "voto": "abst",
+   "unidade": "2102-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 321,
+   "voto": "abst",
+   "unidade": "2201-A",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  },
+  {
+   "id": 322,
+   "voto": "abst",
+   "unidade": "2201-B",
+   "pauta_id": 13,
+   "criado_em": "2026-10-07T01:01:30.528908+00:00",
+   "assembleia_id": 1,
+   "atualizado_em": "2026-10-07T01:01:30.528908+00:00"
+  }
+ ],
+ "cm_avisos": [
+  {
+   "id": 1,
+   "cat": "urgentes",
+   "data": "19/08/2026 - 08:30",
+   "corpo": "Amanhã, 20/08, das 09h às 14h, haverá interrupção no abastecimento de água.",
+   "fixado": true,
+   "titulo": "Manutenção no reservatório",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 2,
+   "cat": "comunicados",
+   "data": "14/08/2026 - 10:15",
+   "corpo": "A pauta inclui aprovação do orçamento 2027 e eleição da nova gestão.",
+   "fixado": false,
+   "titulo": "Convocação de Assembleia",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 3,
+   "cat": "manutencoes",
+   "data": "12/08/2026 - 14:45",
+   "corpo": "Manutenção preventiva será realizada no elevador social no dia 22/08.",
+   "fixado": false,
+   "titulo": "Manutenção do elevador social",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  }
+ ],
+ "cm_config": [
+  {
+   "chave": "condominio",
+   "valor": {
+    "cnpj": "12.345.678/0001-90",
+    "nome": "Residencial Charles Miller",
+    "torres": 2,
+    "andares": 26,
+    "endereco": "Av. Charles Miller, 1200 — João Pessoa/PB",
+    "unidades": 104
+   },
+   "atualizado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "chave": "notificacoes",
+   "valor": [
+    {
+     "desc": "Notificar moradores a cada novo aviso publicado",
+     "ativo": true,
+     "chave": "avisos",
+     "label": "Avisos e comunicados"
+    },
+    {
+     "desc": "Lembrete 3 dias antes do vencimento",
+     "ativo": true,
+     "chave": "boletos",
+     "label": "Vencimento de boletos"
+    },
+    {
+     "desc": "Avisar o morador quando a portaria registrar",
+     "ativo": true,
+     "chave": "encomendas",
+     "label": "Chegada de encomendas"
+    },
+    {
+     "desc": "Notificar aprovação ou recusa da reserva",
+     "ativo": true,
+     "chave": "reservas",
+     "label": "Confirmação de reservas"
+    },
+    {
+     "desc": "Notificar abertura de pauta e votação",
+     "ativo": true,
+     "chave": "assembleias",
+     "label": "Convocação de assembleias"
+    },
+    {
+     "desc": "Avisar o morador a cada entrada autorizada",
+     "ativo": false,
+     "chave": "visitantes",
+     "label": "Entrada de visitantes"
+    }
+   ],
+   "atualizado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "chave": "taxas",
+   "valor": [
+    {
+     "nome": "Taxa condominial · 2 quartos",
+     "valor": 398.5
+    },
+    {
+     "nome": "Taxa condominial · 3 quartos",
+     "valor": 412.8
+    },
+    {
+     "nome": "Taxa condominial · cobertura",
+     "valor": 445.1
+    },
+    {
+     "nome": "Fundo de reserva (10%)",
+     "valor": 41.28
+    },
+    {
+     "nome": "Fundo de obras",
+     "valor": 95
+    }
+   ],
+   "atualizado_em": "2026-10-06T23:03:17.038+00:00"
+  },
+  {
+   "chave": "areas",
+   "valor": [
+    {
+     "cap": 80,
+     "nome": "Salão de Festas",
+     "taxa": 250,
+     "antec": 30,
+     "ativa": true
+    },
+    {
+     "cap": 30,
+     "nome": "Salão Gourmet",
+     "taxa": 150,
+     "antec": 15,
+     "ativa": true
+    },
+    {
+     "cap": 20,
+     "nome": "Churrasqueira 1",
+     "taxa": 80,
+     "antec": 15,
+     "ativa": true
+    },
+    {
+     "cap": 15,
+     "nome": "Garagem Band",
+     "taxa": 100,
+     "antec": 7,
+     "ativa": true
+    },
+    {
+     "cap": 20,
+     "nome": "Home Cinema",
+     "taxa": 80,
+     "antec": 7,
+     "ativa": true
+    },
+    {
+     "cap": 10,
+     "nome": "Sauna",
+     "taxa": 50,
+     "antec": 3,
+     "ativa": true
+    },
+    {
+     "cap": 6,
+     "nome": "Spa",
+     "taxa": 80,
+     "antec": 3,
+     "ativa": true
+    }
+   ],
+   "atualizado_em": "2026-10-07T12:11:27.967324+00:00"
+  }
+ ],
+ "cm_perfil": [
+  {
+   "cod": "802-A",
+   "nome": "Rodrigo",
+   "email": "rodrigo.cahuana@email.com",
+   "papel": "Proprietário",
+   "unidade": "Apto 802 - Torre A",
+   "telefone": "(83) 9 9812-3456",
+   "notificacoes": {
+    "avisos": true,
+    "boletos": true,
+    "reservas": true,
+    "encomendas": true,
+    "visitantes": false,
+    "assembleias": true
+   },
+   "nome_completo": "Rodrigo Cahuana",
+   "mostrar_na_lista": true
+  }
+ ],
+ "gerado_em": "2026-10-07 12:58:01.273327+00",
+ "cm_boletos": [
+  {
+   "id": 1,
+   "val": 412.8,
+   "venc": "Vencimento: 10/08/2026",
+   "titulo": "Condomínio - Agosto/2026",
+   "unidade": "802-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 2,
+   "val": 95.0,
+   "venc": "Vencimento: 15/08/2026",
+   "titulo": "Fundo de Obras",
+   "unidade": "802-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  }
+ ],
+ "cm_reservas": [
+  {
+   "ic": "🎉",
+   "id": 1,
+   "cor": "#f3e6d8",
+   "num": "Reserva #1187",
+   "tag": "Confirmada",
+   "data": "05/09/2026 · 18:00 às 23:00",
+   "titulo": "Salão de Festas",
+   "morador": "802-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-green"
+  },
+  {
+   "ic": "🍖",
+   "id": 2,
+   "cor": "#e6efe0",
+   "num": "Reserva #1192",
+   "tag": "Confirmada",
+   "data": "12/09/2026 · 12:00 às 16:00",
+   "titulo": "Churrasqueira 1",
+   "morador": "1401-B",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-green"
+  },
+  {
+   "ic": "🏓",
+   "id": 3,
+   "cor": "#e0ebf2",
+   "num": "Reserva #1201",
+   "tag": "Pendente",
+   "data": "14/09/2026 · 09:00 às 11:00",
+   "titulo": "Quadra Poliesportiva",
+   "morador": "301-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-amber"
+  }
+ ],
+ "cm_veiculos": [
+  {
+   "id": 1,
+   "cor": "Prata",
+   "tipo": "Carro",
+   "vaga": "A-16",
+   "placa": "QAB1D23",
+   "modelo": "Honda Civic",
+   "unidade": "802-A"
+  },
+  {
+   "id": 2,
+   "cor": "Azul",
+   "tipo": "Moto",
+   "vaga": "A-16",
+   "placa": "PBX7H41",
+   "modelo": "Yamaha Fazer 250",
+   "unidade": "802-A"
+  },
+  {
+   "id": 3,
+   "cor": "Preto",
+   "tipo": "Carro",
+   "vaga": "B-27",
+   "placa": "QBC4F09",
+   "modelo": "Toyota Corolla",
+   "unidade": "1401-B"
+  },
+  {
+   "id": 4,
+   "cor": "Branco",
+   "tipo": "Carro",
+   "vaga": "A-05",
+   "placa": "OGH2A88",
+   "modelo": "Fiat Argo",
+   "unidade": "301-A"
+  },
+  {
+   "id": 5,
+   "cor": "Cinza",
+   "tipo": "Carro",
+   "vaga": "A-04",
+   "placa": "QDE9J55",
+   "modelo": "Jeep Renegade",
+   "unidade": "202-A"
+  },
+  {
+   "id": 6,
+   "cor": "Vermelho",
+   "tipo": "Carro",
+   "vaga": "B-22",
+   "placa": "PZK3C17",
+   "modelo": "Hyundai HB20",
+   "unidade": "1102-B"
+  }
+ ],
+ "cm_conversas": [
+  {
+   "id": 3,
+   "assunto": "Infiltração na parede da garagem",
+   "morador": "João Neto",
+   "unidade": "1401-B",
+   "categoria": "Reclamação",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "encerrada": false,
+   "mensagens": [
+    {
+     "de": "morador",
+     "data": "2026-08-26",
+     "hora": "08:30",
+     "lida": false,
+     "texto": "A parede ao lado da vaga B-27 está com infiltração há duas semanas."
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "assunto": "Horário da academia aos domingos",
+   "morador": "Marina Costa",
+   "unidade": "301-A",
+   "categoria": "Dúvida",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "encerrada": false,
+   "mensagens": [
+    {
+     "de": "morador",
+     "data": "2026-08-27",
+     "hora": "07:12",
+     "lida": false,
+     "texto": "A academia abre aos domingos? O quadro na portaria não deixa claro."
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "assunto": "Segunda via do boleto de julho",
+   "morador": "Rodrigo Cahuana",
+   "unidade": "802-A",
+   "categoria": "Solicitação",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "encerrada": true,
+   "mensagens": [
+    {
+     "de": "morador",
+     "data": "2026-08-10",
+     "hora": "11:40",
+     "lida": true,
+     "texto": "Preciso da segunda via do boleto de julho para o imposto de renda."
+    },
+    {
+     "de": "sindico",
+     "data": "2026-08-10",
+     "hora": "15:20",
+     "lida": true,
+     "texto": "Enviei ao seu e-mail cadastrado. Qualquer coisa, o histórico também fica na aba Financeiro."
+    }
+   ]
+  },
+  {
+   "id": 1,
+   "assunto": "Barulho de obra fora do horário",
+   "morador": "Rodrigo Cahuana",
+   "unidade": "802-A",
+   "categoria": "Reclamação",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "encerrada": false,
+   "mensagens": [
+    {
+     "de": "morador",
+     "data": "2026-08-24",
+     "hora": "20:15",
+     "lida": true,
+     "texto": "Boa noite. A obra do 902 seguiu batendo laje até às 22h ontem. O regimento permite até que horas?"
+    },
+    {
+     "de": "sindico",
+     "data": "2026-08-25",
+     "hora": "09:02",
+     "lida": true,
+     "texto": "Boa noite, Rodrigo. O regimento permite obras de segunda a sexta, das 8h às 18h. Já notifiquei a unidade por escrito e a portaria foi orientada a barrar entrada de material fora desse horário."
+    }
+   ]
+  }
+ ],
+ "cm_moradores": [
+  {
+   "id": 2,
+   "nome": "João Neto",
+   "papel": "Proprietário · Subsíndico",
+   "unidade": "1401-B",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 3,
+   "nome": "Marina Costa",
+   "papel": "Locatária",
+   "unidade": "301-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 4,
+   "nome": "Eduardo Lima",
+   "papel": "Proprietário",
+   "unidade": "1502-B",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 5,
+   "nome": "Fernanda Alves",
+   "papel": "Proprietária",
+   "unidade": "202-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 1,
+   "nome": "Rodrigo Cahuana",
+   "papel": "Proprietário · Síndico",
+   "unidade": "802-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  }
+ ],
+ "cm_sugestoes": [
+  {
+   "ic": "💡",
+   "id": 1,
+   "cat": "minhas",
+   "cor": "var(--gold-100)",
+   "tag": "Em análise",
+   "data": "17/08/2026",
+   "corpo": "Sugiro um bicicletário coberto perto da garagem para proteger as bikes da chuva.",
+   "titulo": "Instalar bicicletário coberto",
+   "unidade": "802-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-amber"
+  },
+  {
+   "ic": "🌱",
+   "id": 2,
+   "cat": "condominio",
+   "cor": "var(--green-bg)",
+   "tag": "Aprovada",
+   "data": "14/08/2026",
+   "corpo": "Criar uma composteira comunitária para reduzir o lixo orgânico do condomínio.",
+   "titulo": "Compostagem no jardim",
+   "unidade": "301-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-green"
+  },
+  {
+   "ic": "🔐",
+   "id": 3,
+   "cat": "condominio",
+   "cor": "var(--blue-bg)",
+   "tag": "Implementada",
+   "data": "10/08/2026",
+   "corpo": "Trocar a chave física do salão por fechadura digital com senha por reserva.",
+   "titulo": "Fechadura digital no salão de festas",
+   "unidade": "1401-B",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-navy"
+  }
+ ],
+ "cm_documentos": [
+  {
+   "id": 1,
+   "cat": "Institucional",
+   "tam": "1,2 MB",
+   "data": "12/03/2024",
+   "nome": "Convenção do Condomínio",
+   "tipo": "PDF",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 2,
+   "cat": "Institucional",
+   "tam": "680 KB",
+   "data": "12/03/2024",
+   "nome": "Regimento Interno",
+   "tipo": "PDF",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 3,
+   "cat": "Atas",
+   "tam": "420 KB",
+   "data": "25/09/2025",
+   "nome": "Ata da AGO 2025",
+   "tipo": "PDF",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 4,
+   "cat": "Atas",
+   "tam": "310 KB",
+   "data": "14/03/2026",
+   "nome": "Ata da AGE 03/2026",
+   "tipo": "PDF",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 5,
+   "cat": "Financeiro",
+   "tam": "890 KB",
+   "data": "05/08/2026",
+   "nome": "Prestação de contas · Julho/2026",
+   "tipo": "PDF",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 6,
+   "cat": "Financeiro",
+   "tam": "156 KB",
+   "data": "10/07/2026",
+   "nome": "Balancete · 1º semestre 2026",
+   "tipo": "XLSX",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 7,
+   "cat": "Contratos",
+   "tam": "1,8 MB",
+   "data": "01/02/2026",
+   "nome": "Contrato · Portaria 24h",
+   "tipo": "PDF",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 8,
+   "cat": "Contratos",
+   "tam": "940 KB",
+   "data": "15/01/2026",
+   "nome": "Contrato · Manutenção de elevadores",
+   "tipo": "PDF",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 9,
+   "cat": "Contratos",
+   "tam": "2,1 MB",
+   "data": "20/04/2026",
+   "nome": "Apólice de seguro predial",
+   "tipo": "PDF",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 10,
+   "cat": "Técnico",
+   "tam": "3,4 MB",
+   "data": "08/11/2023",
+   "nome": "Planta baixa · Pavimento tipo",
+   "tipo": "PDF",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 12,
+   "cat": "Técnico",
+   "tam": "520 KB",
+   "data": "30/05/2026",
+   "nome": "AVCB · Corpo de Bombeiros",
+   "tipo": "PDF",
+   "criado_em": "2026-10-06T23:03:41.690977+00:00"
+  }
+ ],
+ "cm_encomendas": [
+  {
+   "id": 1,
+   "tag": "Em armazenamento",
+   "data": "Recebida em 18/08/2026 - 11:20",
+   "loja": "Mercado Livre",
+   "titulo": "Encomenda #38821",
+   "unidade": "802-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-amber"
+  },
+  {
+   "id": 2,
+   "tag": "Em armazenamento",
+   "data": "Recebida em 17/08/2026 - 15:45",
+   "loja": "Amazon",
+   "titulo": "Encomenda #38790",
+   "unidade": "301-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-amber"
+  },
+  {
+   "id": 3,
+   "tag": "Entregue",
+   "data": "Entregue em 15/08/2026 - 10:30",
+   "loja": "Shopee",
+   "titulo": "Encomenda #38712",
+   "unidade": "1401-B",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-green"
+  }
+ ],
+ "cm_visitantes": [
+  {
+   "id": 1,
+   "dia": "2026-10-06",
+   "nome": "Carlos Mendes",
+   "saida": "11:15",
+   "motivo": "Visita",
+   "entrada": "09:40",
+   "unidade": "301-A",
+   "autorizado": false
+  },
+  {
+   "id": 2,
+   "dia": "2026-10-06",
+   "nome": "Paula Ribeiro",
+   "saida": null,
+   "motivo": "Entrega",
+   "entrada": "10:05",
+   "unidade": "1502-B",
+   "autorizado": false
+  },
+  {
+   "id": 3,
+   "dia": "2026-10-06",
+   "nome": "Técnico NET",
+   "saida": "09:00",
+   "motivo": "Prestador de serviço",
+   "entrada": "08:20",
+   "unidade": "202-A",
+   "autorizado": false
+  }
+ ],
+ "cm_assembleias": [
+  {
+   "id": 2,
+   "data": "2026-11-08",
+   "hora": "10:00",
+   "local": "Salão de Festas",
+   "pauta": [
+    {
+     "id": 21,
+     "desc": "Proposta de 12 câmeras com gravação em nuvem por 30 dias.",
+     "titulo": "Instalação de câmeras na garagem"
+    }
+   ],
+   "status": "Agendada",
+   "titulo": "Assembleia Geral Extraordinária",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 3,
+   "data": "2025-09-18",
+   "hora": "19:00",
+   "local": "Salão de Festas",
+   "pauta": [
+    {
+     "id": 31,
+     "desc": "Prestação de contas do exercício encerrado.",
+     "titulo": "Aprovação das contas de 2025"
+    },
+    {
+     "id": 32,
+     "desc": "Substituição dos brinquedos e do piso emborrachado.",
+     "titulo": "Reforma do playground"
+    }
+   ],
+   "status": "Encerrada",
+   "titulo": "Assembleia Geral Ordinária 2025",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "id": 1,
+   "data": "2026-09-20",
+   "hora": "19:00",
+   "local": "Salão de Festas",
+   "pauta": [
+    {
+     "id": 11,
+     "desc": "Previsão de receitas e despesas para o exercício de 2027, com reajuste de 6,2% na taxa condominial.",
+     "titulo": "Aprovação do orçamento 2027"
+    },
+    {
+     "id": 12,
+     "desc": "Chapa única: Rodrigo Cahuana (síndico) e João Neto (subsíndico), mandato de 2 anos.",
+     "titulo": "Eleição da nova gestão"
+    },
+    {
+     "id": 13,
+     "desc": "Orçamento de R$ 186.000,00, custeado pelo Fundo de Obras em 12 parcelas.",
+     "titulo": "Obra de impermeabilização da laje"
+    }
+   ],
+   "status": "Votação aberta",
+   "titulo": "Assembleia Geral Ordinária",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  }
+ ],
+ "cm_boletos_mes": [
+  {
+   "id": 1,
+   "val": 412.8,
+   "venc": "10/08/2026",
+   "status": "Pago",
+   "morador": "Rodrigo Cahuana",
+   "unidade": "802-A",
+   "meses_atraso": 0
+  },
+  {
+   "id": 2,
+   "val": 412.8,
+   "venc": "10/08/2026",
+   "status": "Pago",
+   "morador": "João Neto",
+   "unidade": "1401-B",
+   "meses_atraso": 0
+  },
+  {
+   "id": 4,
+   "val": 445.1,
+   "venc": "10/08/2026",
+   "status": "Pendente",
+   "morador": "Eduardo Lima",
+   "unidade": "1502-B",
+   "meses_atraso": 0
+  },
+  {
+   "id": 5,
+   "val": 398.5,
+   "venc": "10/08/2026",
+   "status": "Pago",
+   "morador": "Fernanda Alves",
+   "unidade": "202-A",
+   "meses_atraso": 0
+  },
+  {
+   "id": 3,
+   "val": 1195.5,
+   "venc": "10/08/2026",
+   "status": "Em atraso",
+   "morador": "Marina Costa",
+   "unidade": "301-A",
+   "meses_atraso": 3
+  },
+  {
+   "id": 6,
+   "val": 825.6,
+   "venc": "10/08/2026",
+   "status": "Em atraso",
+   "morador": "Ricardo Sanches",
+   "unidade": "1102-B",
+   "meses_atraso": 2
+  },
+  {
+   "id": 7,
+   "val": 797.0,
+   "venc": "10/08/2026",
+   "status": "Em atraso",
+   "morador": "Helena Braga",
+   "unidade": "0704-A",
+   "meses_atraso": 2
+  },
+  {
+   "id": 8,
+   "val": 445.1,
+   "venc": "10/08/2026",
+   "status": "Em atraso",
+   "morador": "Tiago Moreira",
+   "unidade": "1802-B",
+   "meses_atraso": 1
+  },
+  {
+   "id": 9,
+   "val": 412.8,
+   "venc": "10/08/2026",
+   "status": "Em atraso",
+   "morador": "Bruno Tavares",
+   "unidade": "0503-A",
+   "meses_atraso": 1
+  }
+ ],
+ "cm_manutencoes": [
+  {
+   "id": 1,
+   "cat": "Elevadores",
+   "item": "Elevador social · Torre A",
+   "prox": "2026-09-12",
+   "resp": "ThyssenKrupp",
+   "custo": 1850.0,
+   "period": "Mensal",
+   "ultima": "2026-08-12"
+  },
+  {
+   "id": 2,
+   "cat": "Elevadores",
+   "item": "Elevador social · Torre B",
+   "prox": "2026-09-12",
+   "resp": "ThyssenKrupp",
+   "custo": 1850.0,
+   "period": "Mensal",
+   "ultima": "2026-08-12"
+  },
+  {
+   "id": 3,
+   "cat": "Hidráulica",
+   "item": "Limpeza da caixa d'água",
+   "prox": "2026-08-25",
+   "resp": "HidroClean",
+   "custo": 3200.0,
+   "period": "Semestral",
+   "ultima": "2026-02-25"
+  },
+  {
+   "id": 4,
+   "cat": "Incêndio",
+   "item": "Recarga de extintores",
+   "prox": "2026-11-10",
+   "resp": "Extinpar",
+   "custo": 4700.0,
+   "period": "Anual",
+   "ultima": "2025-11-10"
+  },
+  {
+   "id": 5,
+   "cat": "Incêndio",
+   "item": "Teste da bomba de incêndio",
+   "prox": "2026-09-05",
+   "resp": "Extinpar",
+   "custo": 600.0,
+   "period": "Mensal",
+   "ultima": "2026-08-05"
+  },
+  {
+   "id": 6,
+   "cat": "Higiene",
+   "item": "Dedetização das áreas comuns",
+   "prox": "2026-09-18",
+   "resp": "Sanivet",
+   "custo": 1400.0,
+   "period": "Trimestral",
+   "ultima": "2026-06-18"
+  },
+  {
+   "id": 7,
+   "cat": "Hidráulica",
+   "item": "Limpeza de calhas e ralos",
+   "prox": "2026-08-02",
+   "resp": "Equipe interna",
+   "custo": 0.0,
+   "period": "Trimestral",
+   "ultima": "2026-05-02"
+  },
+  {
+   "id": 8,
+   "cat": "Acessos",
+   "item": "Manutenção do portão da garagem",
+   "prox": "2026-10-14",
+   "resp": "PortAuto",
+   "custo": 980.0,
+   "period": "Trimestral",
+   "ultima": "2026-07-14"
+  },
+  {
+   "id": 9,
+   "cat": "Elétrica",
+   "item": "Inspeção do gerador",
+   "prox": "2026-10-20",
+   "resp": "GenPower",
+   "custo": 2600.0,
+   "period": "Semestral",
+   "ultima": "2026-04-20"
+  }
+ ],
+ "cm_ocorrencias": [
+  {
+   "ic": "💧",
+   "id": 1,
+   "cat": "minhas",
+   "cor": "var(--blue-bg)",
+   "tag": "Em execução",
+   "data": "Abertura: 18/08/2026 - 09:30",
+   "local": "Garagem - Subsolo 1",
+   "titulo": "Vazamento na garagem",
+   "unidade": null,
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-amber"
+  },
+  {
+   "ic": "💡",
+   "id": 2,
+   "cat": "minhas",
+   "cor": "var(--amber-bg)",
+   "tag": "Aberta",
+   "data": "Abertura: 16/08/2026 - 18:20",
+   "local": "Corredor - 3º andar",
+   "titulo": "Lâmpada queimada",
+   "unidade": null,
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-blue"
+  },
+  {
+   "ic": "🔊",
+   "id": 3,
+   "cat": "condominio",
+   "cor": "var(--red-bg)",
+   "tag": "Resolvida",
+   "data": "Abertura: 15/08/2026 - 22:15",
+   "local": "Apto 102 - Torre A",
+   "titulo": "Barulho excessivo",
+   "unidade": "102-A",
+   "criado_em": "2026-10-06T22:58:15.37263+00:00",
+   "tag_class": "b-green"
+  }
+ ],
+ "cm_autorizacoes": [
+  {
+   "de": "2026-08-01",
+   "id": 1,
+   "ate": "2026-12-31",
+   "doc": "123.456.789-00",
+   "data": null,
+   "dias": [
+    2,
+    4
+   ],
+   "nome": "Ana Paula Ferreira",
+   "tipo": "recorrente",
+   "usos": [
+    {
+     "data": "2026-08-25",
+     "hora": "08:05"
+    }
+   ],
+   "codigo": "CM-7K2P",
+   "motivo": "Diarista",
+   "unidade": "802-A",
+   "cancelada": false,
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "de": null,
+   "id": 2,
+   "ate": null,
+   "doc": "987.654.321-00",
+   "data": "2026-08-27",
+   "dias": null,
+   "nome": "Marcos Vinícius Alves",
+   "tipo": "unica",
+   "usos": [],
+   "codigo": "CM-3B9X",
+   "motivo": "Visita",
+   "unidade": "802-A",
+   "cancelada": false,
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "de": "2026-08-26",
+   "id": 3,
+   "ate": "2026-08-29",
+   "doc": "CNPJ 09.876.543/0001-21",
+   "data": null,
+   "dias": null,
+   "nome": "Equipe Climatiza Ar",
+   "tipo": "periodo",
+   "usos": [],
+   "codigo": "CM-5T4Q",
+   "motivo": "Prestador de serviço",
+   "unidade": "1401-B",
+   "cancelada": false,
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  },
+  {
+   "de": null,
+   "id": 4,
+   "ate": null,
+   "doc": "111.222.333-44",
+   "data": "2026-08-20",
+   "dias": null,
+   "nome": "Juliana Reis",
+   "tipo": "unica",
+   "usos": [
+    {
+     "data": "2026-08-20",
+     "hora": "19:30"
+    }
+   ],
+   "codigo": "CM-9W4M",
+   "motivo": "Visita",
+   "unidade": "301-A",
+   "cancelada": false,
+   "criado_em": "2026-10-06T22:58:15.37263+00:00"
+  }
+ ],
+ "cm_financeiro_mensal": [
+  {
+   "despesa": 98200.0,
+   "receita": 129400.0,
+   "competencia": "2026-03-01",
+   "inadimplencia": 9.4
+  },
+  {
+   "despesa": 91500.0,
+   "receita": 131800.0,
+   "competencia": "2026-04-01",
+   "inadimplencia": 10.1
+  },
+  {
+   "despesa": 104300.0,
+   "receita": 127900.0,
+   "competencia": "2026-05-01",
+   "inadimplencia": 11.8
+  },
+  {
+   "despesa": 88900.0,
+   "receita": 134600.0,
+   "competencia": "2026-06-01",
+   "inadimplencia": 11.2
+  },
+  {
+   "despesa": 97400.0,
+   "receita": 126800.0,
+   "competencia": "2026-07-01",
+   "inadimplencia": 13.5
+  },
+  {
+   "despesa": 94610.0,
+   "receita": 138240.0,
+   "competencia": "2026-08-01",
+   "inadimplencia": 12.8
+  }
+ ],
+ "cm_despesas_categoria": [
+  {
+   "id": 1,
+   "cor": "var(--navy-700)",
+   "valor": 41200.0,
+   "categoria": "Pessoal e encargos",
+   "competencia": "2026-08-01"
+  },
+  {
+   "id": 2,
+   "cor": "var(--blue)",
+   "valor": 18400.0,
+   "categoria": "Manutenção",
+   "competencia": "2026-08-01"
+  },
+  {
+   "id": 3,
+   "cor": "var(--amber)",
+   "valor": 16800.0,
+   "categoria": "Água e energia",
+   "competencia": "2026-08-01"
+  },
+  {
+   "id": 4,
+   "cor": "var(--green)",
+   "valor": 9300.0,
+   "categoria": "Limpeza e insumos",
+   "competencia": "2026-08-01"
+  },
+  {
+   "id": 5,
+   "cor": "var(--gold-500)",
+   "valor": 8910.0,
+   "categoria": "Administração",
+   "competencia": "2026-08-01"
+  }
+ ]
+}
