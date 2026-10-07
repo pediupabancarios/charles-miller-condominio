@@ -43,9 +43,6 @@ então re-renderiza. Se o banco não responder, o app entra em **modo demonstra�
   aparece vazio em vez de mostrar dados falsos como se fossem reais.
 
 ### Limitações conhecidas desta etapa
-- A tabela `cm_votos` já existe (voto por unidade, com `unique(pauta_id, unidade)`),
-  mas a tela de assembleias **ainda usa os contadores no jsonb da pauta**. Migrar a UI
-  para `cm_votos` resolve concorrência e dá auditoria de quem votou.
 - O mascaramento da inadimplência para o administrativo é de interface: a RLS deixa
   ele ler `cm_boletos_mes` inteiro. Para valer no servidor, seria uma view sem os nomes.
 - `vagas` continua gerado proceduralmente (não há tela para remanejar vaga)
@@ -188,6 +185,12 @@ Uma thread por assunto, compartilhada entre o morador e o síndico.
 - **Assembleias:** status Agendada → Votação aberta → Encerrada. Voto por **pauta**,
   1 voto por unidade (`TOTAL_UNIDADES = 104`), quórum = maioria simples das unidades.
   O morador pode trocar o voto enquanto a votação estiver aberta.
+  - O voto vive em **`cm_votos`** (uma linha por unidade, `unique(pauta_id, unidade)`),
+    não mais em contadores no jsonb. `votar()` faz upsert — trocar o voto substitui a
+    linha em vez de somar outra — e a RLS impede votar em nome de outra unidade.
+  - `aplicarVotos()` projeta `cm_votos` nos campos `sim/nao/abst/meuVoto` que as telas
+    já liam, então os renderizadores não mudaram. **O jsonb da pauta guarda só
+    `id`, `titulo` e `desc`** — se voltar a gravar contagem ali, haverá duas fontes.
 - **Avisos:** categoria (`urgentes` / `comunicados` / `manutencoes`) define ícone, cor e
   badge via `tiposAviso` — **não** duplique esses campos no registro. Aviso `fixado`
   sobe ao topo em todas as listas (`avisosOrdenados()`). Publicação respeita o toggle
@@ -224,7 +227,7 @@ Views do morador: 14.
 
 ## Próximos passos
 1. ~~Autenticação real~~ e ~~RLS por unidade~~ — **feitos**
-2. Migrar a votação de assembleia para `cm_votos` (ver limitações)
+2. Trocar os dados de demonstração por dados reais do condomínio
 3. Upload real de documentos (hoje o `<input type=file>` só lê o tamanho)
 4. Envio real das notificações (Web Push) — hoje os toggles só controlam textos
 5. QR code para a autorização (hoje o visitante apresenta o código digitado)

@@ -1019,11 +1019,24 @@ async function votar(idAss,idPauta,voto){
   if(!a || a.status!=="Votação aberta"){ toast("Esta votação não está aberta"); return; }
   const p=a.pauta.find(x=>x.id===idPauta);
   if(!p) return;
+  if(!morador.cod){ toast("Sua conta não está vinculada a uma unidade"); return; }
   if(p.meuVoto===voto){ toast("Você já votou assim nesta pauta"); return; }
-  if(p.meuVoto) p[p.meuVoto]--;   // troca de voto: retira o anterior
-  p[voto]++;
-  p.meuVoto=voto;
-  await dbAtualizar("assembleias",a);
+
+  // um voto por unidade: o upsert troca o voto anterior em vez de somar outro
+  if(ONLINE){
+    const { error } = await sb.from("cm_votos")
+      .upsert({ assembleia_id:idAss, pauta_id:idPauta, unidade:morador.cod, voto,
+                atualizado_em:new Date().toISOString() },
+              { onConflict:"pauta_id,unidade" });
+    if(error){ avisarFalhaDB("registrar voto", error); return; }
+    const r = await sb.from("cm_votos").select("*");
+    if(!r.error) votos = (r.data||[]).map(paraJS);
+  } else {
+    const j = votos.findIndex(v=>v.pautaId===idPauta && v.unidade===morador.cod);
+    if(j>=0) votos[j].voto=voto;
+    else votos.push({assembleiaId:idAss,pautaId:idPauta,unidade:morador.cod,voto});
+  }
+  aplicarVotos();
   const abaAtiva=[...document.querySelectorAll("#residentViews .tabs button")].findIndex(b=>b.classList.contains("active"));
   goView("assembleias");
   if(abaAtiva>0){
@@ -2809,6 +2822,24 @@ let assembleiaAberta = null;   // id da assembleia expandida
 function statusAssembleia(a){
   return {"Votação aberta":"b-green","Agendada":"b-blue","Encerrada":"b-navy"}[a.status]||"b-amber";
 }
+let votos = [];   // cm_votos: {id,assembleiaId,pautaId,unidade,voto}
+
+/* Projeta cm_votos nos campos que as telas já leem. Mantém os
+   renderizadores intactos e deixa o banco como fonte única —
+   antes os contadores viviam no jsonb e dois votos simultâneos
+   se sobrescreviam. */
+function aplicarVotos(){
+  const porPauta = {};
+  votos.forEach(v=>{
+    const p = porPauta[v.pautaId] || (porPauta[v.pautaId] = {sim:0,nao:0,abst:0,meuVoto:null});
+    if(p[v.voto]!==undefined) p[v.voto]++;
+    if(v.unidade === morador.cod) p.meuVoto = v.voto;
+  });
+  assembleias.forEach(a=>(a.pauta||[]).forEach(item=>{
+    const c = porPauta[item.id] || {sim:0,nao:0,abst:0,meuVoto:null};
+    item.sim=c.sim; item.nao=c.nao; item.abst=c.abst; item.meuVoto=c.meuVoto;
+  }));
+}
 function totalVotos(item){return item.sim+item.nao+item.abst;}
 function votosAssembleia(a){
   // participação = maior nº de votos entre as pautas
@@ -2915,7 +2946,7 @@ async function addAssembleia(){
   const nova={titulo,data,hora,local,status:"Agendada",pauta:[]};
   await dbInserir("assembleias",nova);
   if(pauta){
-    nova.pauta=[{id:nova.id*10+1,titulo:pauta,desc:"Item incluído na convocação.",sim:0,nao:0,abst:0,meuVoto:null}];
+    nova.pauta=[{id:nova.id*10+1,titulo:pauta,desc:"Item incluído na convocação."}];
     await dbAtualizar("assembleias",nova);
   }
   assembleias.unshift(nova);
@@ -3485,6 +3516,12 @@ async function carregarTudo(){
   boletos.forEach(b => b.val = Number(b.val));
   boletosDoMes.forEach(b => b.val = Number(b.val));
   manutencoes.forEach(m => m.custo = Number(m.custo));
+
+  // votos: uma linha por unidade, agregados na memória para a UI
+  const vts = await sb.from("cm_votos").select("*");
+  if(vts.error) throw new Error("votos: "+vts.error.message);
+  votos = (vts.data||[]).map(paraJS);
+  aplicarVotos();
 
   const cfg = await sb.from("cm_config").select("*");
   if(cfg.error) throw new Error("config: "+cfg.error.message);
