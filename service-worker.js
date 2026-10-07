@@ -1,4 +1,4 @@
-const CACHE_NAME = "charles-miller-v19";
+const CACHE_NAME = "charles-miller-v20";
 const ASSETS = [
   "./",
   "./index.html",
@@ -33,6 +33,30 @@ self.addEventListener("fetch", (event) => {
   // outra origem) passam direto: cacheá-las devolveria dados desatualizados.
   if (new URL(req.url).origin !== self.location.origin) return;
 
+  // O app é um arquivo só: servir index.html do cache significa servir a
+  // versão anterior inteira. Para a navegação vale a rede primeiro — o
+  // cache fica como rede de segurança para quando não houver conexão.
+  const ehONucleoDoApp =
+    req.mode === "navigate" ||
+    new URL(req.url).pathname.replace(/\/$/, "").endsWith("/index.html") ||
+    new URL(req.url).pathname.endsWith("/");
+
+  if (ehONucleoDoApp) {
+    event.respondWith(
+      fetch(req)
+        .then((resposta) => {
+          if (resposta && resposta.status === 200) {
+            const copia = resposta.clone();
+            event.waitUntil(caches.open(CACHE_NAME).then((c) => c.put("./index.html", copia)));
+          }
+          return resposta;
+        })
+        .catch(() => caches.match("./index.html"))
+    );
+    return;
+  }
+
+  // Ícones, manifesto e afins continuam saindo do cache: mudam pouco.
   event.respondWith(
     caches.match(req).then((cached) => {
       const network = fetch(req)

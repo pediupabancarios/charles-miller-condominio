@@ -267,6 +267,19 @@ Uma thread por assunto, compartilhada entre o morador e o síndico.
 - **Manutenções:** status derivado da data (`Atrasada` < hoje, `Vence em Nd` ≤ 15 dias,
   senão `Em dia`). Registrar execução recalcula a próxima pela periodicidade.
 
+## Service worker
+`CACHE_NAME` é a versão — **subir a cada alteração no app**, senão o navegador
+continua servindo a anterior.
+
+Duas estratégias, de propósito:
+- **index.html e navegação: rede primeiro**, caindo no cache só sem conexão.
+  O app é um arquivo único, então servir o HTML do cache servia a versão
+  inteira anterior — chegou a aparecer uma tela com o gráfico novo e os KPIs
+  antigos ao mesmo tempo.
+- **Ícones e manifesto: cache primeiro** com revalidação. Mudam pouco.
+- **Outras origens passam direto**: cachear as respostas do Supabase devolveria
+  dados desatualizados.
+
 ## Como editar
 Toda a UI é gerada por funções JS que montam HTML como template string e
 injetam em `innerHTML` (`#residentViews` ou `#adminMain`). Para adicionar uma
