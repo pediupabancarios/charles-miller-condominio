@@ -3651,13 +3651,27 @@ async function criarConta(){
   if(!email||!senha){ formCriar("Informe e-mail e senha."); return; }
   if(senha.length<8){ formCriar("A senha precisa ter ao menos 8 caracteres."); return; }
 
-  const { error } = await sb.auth.signUp({ email, password: senha });
+  const { error } = await sb.auth.signUp({
+    email, password: senha,
+    options: { data: { nome, unidade: unidade || null } }   // sobrevive à confirmação por e-mail
+  });
   if(error){ formCriar(traduzErroAuth(error.message)); return; }
 
-  // signUp pode não deixar sessão aberta se a confirmação por e-mail estiver ligada
+  // com "Confirm email" ligado o signUp não abre sessão; o registro
+  // acontece no primeiro login, lendo nome e unidade do metadata
   const { data:{ session } } = await sb.auth.getSession();
   if(!session){
-    formEntrar("Conta criada. Confirme o e-mail que enviamos e depois entre.");
+    telaAuth(`
+      <div class="auth-aguardando">
+        <div class="ic">📧</div>
+        <h2>Confirme seu e-mail</h2>
+        <p>Enviamos um link para <strong>${email}</strong>. Abra e clique nele para
+        ativar a conta.</p>
+        <p class="auth-nota">Depois volte aqui e entre normalmente. Seu cadastro
+        ${unidade?`para a unidade <strong>${unidade}</strong> `:''}ainda precisará
+        da liberação do síndico.</p>
+      </div>
+      <button class="auth-btn" onclick="formEntrar()">Já confirmei, quero entrar</button>`);
     return;
   }
   const { error: e2 } = await sb.rpc("cm_registrar", { p_nome: nome, p_unidade: unidade || null });
@@ -3690,9 +3704,10 @@ async function aposLogin(){
   USUARIO = (data && data[0]) || null;
 
   if(!USUARIO){
-    // conta existe no Auth mas nunca se registrou (ex.: confirmou e-mail depois)
-    const nome = prompt ? null : null;   // sem prompt: registra com o que o Auth tem
-    const { error:e2 } = await sb.rpc("cm_registrar", { p_nome: "", p_unidade: null });
+    // conta existe no Auth mas ainda não se registrou — típico de quem
+    // confirmou o e-mail depois. cm_registrar recupera nome e unidade
+    // do metadata deixado no cadastro.
+    const { error:e2 } = await sb.rpc("cm_registrar", {});
     if(e2){ formEntrar("Conta sem vínculo: "+e2.message); return; }
     const r = await sb.rpc("cm_eu");
     USUARIO = (r.data && r.data[0]) || null;

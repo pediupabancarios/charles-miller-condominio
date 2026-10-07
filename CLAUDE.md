@@ -34,6 +34,10 @@ então re-renderiza. Se o banco não responder, o app entra em **modo demonstra�
   e **unidade**. Conta sem vínculo, ou `ativo=false`, não enxerga nada.
 - **A primeira conta criada vira síndico ativo** (bootstrap em `cm_registrar()`);
   as demais entram pendentes até o síndico liberar em **Contas de acesso**.
+- O projeto está com **"Confirm email" ligado** no Supabase: o `signUp` não abre
+  sessão, então o registro só acontece no primeiro login. Por isso nome e unidade
+  vão no `options.data` do `signUp` (user_metadata) e `cm_registrar()` os recupera
+  de lá — sem isso, o cadastro chegaria sem unidade.
 - O antigo seletor de perfil no topo **não existe mais** — o papel vem da conta.
   `setRole()` força o papel do usuário e ignora qualquer outro valor.
 - `morador.cod` vem de `USUARIO.unidade`, não está mais fixo no código.
