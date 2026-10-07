@@ -214,3 +214,30 @@ begin
     execute format('create policy %I on %I for all using (true) with check (true)', t||'_all', t);
   end loop;
 end $$;
+
+
+-- ============================================================
+-- ETAPA 2 — AUTENTICAÇÃO E RLS POR PAPEL
+-- (migrations charles_miller_auth_usuarios_e_votos,
+--  charles_miller_rls_por_papel e charles_miller_registro_de_conta)
+--
+-- cm_usuarios liga cada conta do Supabase Auth a um papel e a uma
+-- unidade. Conta sem vínculo aqui, ou com ativo=false, não lê nada.
+-- A PRIMEIRA conta criada vira síndico ativo (bootstrap); as demais
+-- entram pendentes até o síndico liberar em "Contas de acesso".
+--
+-- Helpers usados pelas policies (SECURITY DEFINER para não recursar):
+--   cm_papel()  cm_unidade()  cm_logado()  cm_eh(text[])
+--   cm_registrar(nome, unidade)  cm_eu()
+--
+-- Resumo das regras:
+--   público geral (logado): avisos, documentos, assembleias, moradores,
+--                           reservas, ocorrências, sugestões, encomendas, config
+--   própria unidade:        boletos, veículos, autorizações, conversas, perfil
+--   staff:                  visitantes
+--   síndico + administrativo: boletos_mes, publicar avisos/documentos
+--   só síndico:             manutenções, config (escrita), contas, assembleias (escrita)
+--
+-- O SQL completo está nas migrations do projeto; este arquivo é a
+-- referência da etapa 1. Ao alterar policies, replicar aqui.
+-- ============================================================

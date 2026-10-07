@@ -273,6 +273,41 @@ table.datatable td{padding:12px;border-bottom:1px solid var(--line);}
 table.datatable tr:last-child td{border-bottom:none;}
 .inline-select{border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 8px;font-family:inherit;background:var(--paper);}
 
+/* --- tela de autenticação --- */
+#authShell{position:fixed;inset:0;z-index:2000;background:linear-gradient(160deg,var(--navy-950),var(--navy-800) 70%);
+  display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
+.auth-card{background:var(--card);border-radius:var(--radius-lg);padding:30px 26px;width:100%;max-width:380px;
+  box-shadow:0 20px 60px -20px rgba(0,0,0,.5);}
+.auth-marca{width:52px;height:52px;border-radius:15px;background:var(--gold-500);color:var(--navy-950);
+  display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:700;
+  font-size:18px;margin-bottom:16px;}
+.auth-card h1{font-size:22px;margin:0 0 2px;}
+.auth-sub{font-size:12.5px;color:var(--ink-soft);margin:0 0 22px;}
+.auth-card label{display:block;font-size:11.5px;font-weight:700;color:var(--ink-soft);margin:14px 0 6px;}
+.auth-card input{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+  font-family:inherit;font-size:14px;background:var(--paper);}
+.auth-card input:focus{outline:none;border-color:var(--navy-700);}
+.auth-btn{width:100%;background:var(--navy-950);color:#fff;border:none;padding:13px;border-radius:11px;
+  font-weight:700;font-size:14px;margin-top:20px;}
+.auth-link{width:100%;background:none;border:none;color:var(--navy-700);font-weight:600;font-size:12.5px;
+  padding:12px 0 0;}
+.auth-erro{background:var(--red-bg);color:var(--red);border-radius:10px;padding:11px 13px;font-size:12.5px;
+  font-weight:600;margin-bottom:4px;}
+.auth-nota{font-size:11px;color:var(--ink-soft);line-height:1.5;margin:14px 0 0;}
+.auth-aguardando{text-align:center;padding:6px 0;}
+.auth-aguardando .ic{font-size:34px;margin-bottom:10px;}
+.auth-aguardando h2{font-family:'Fraunces',serif;font-size:17px;margin:0 0 10px;}
+.auth-aguardando p{font-size:13px;color:var(--ink-soft);line-height:1.55;margin:0 0 8px;}
+
+/* --- cabeçalho da conta (substituiu o seletor de perfil) --- */
+#roleSwitch{align-items:center;gap:10px;padding:7px 8px 7px 16px;}
+#roleSwitch .conta-nome{color:#fff;font-weight:700;font-size:12.5px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;}
+#roleSwitch .conta-papel{color:var(--gold-400);font-size:11px;font-weight:600;white-space:nowrap;
+  margin-right:auto;}
+#roleSwitch .conta-sair{border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;
+  border-radius:999px;padding:6px 14px;font-size:11.5px;font-weight:700;flex:none;}
+
 /* --- faixa de status da conexão com o banco --- */
 #statusDB{position:fixed;left:0;right:0;bottom:0;z-index:1200;padding:11px 16px;
   font-size:12.5px;font-weight:600;text-align:center;display:flex;align-items:center;
@@ -422,12 +457,7 @@ table.datatable tr:last-child td{border-bottom:none;}
 </head>
 <body>
 
-<div id="roleSwitch">
-  <button id="btnResident" class="active" onclick="setRole('resident')">Morador</button>
-  <button id="btnPorteiro" onclick="setRole('porteiro')">Portaria</button>
-  <button id="btnAdministrativo" onclick="setRole('administrativo')">Administrativo</button>
-  <button id="btnAdmin" onclick="setRole('sindico')">Síndico</button>
-</div>
+<div id="roleSwitch"></div>
 
 <!-- ======================= RESIDENT APP ======================= -->
 <div id="residentApp">
@@ -479,49 +509,19 @@ const morador = {
 
 /* --- Fale com o síndico: uma thread por assunto --- */
 const categoriasConversa = ["Dúvida","Solicitação","Reclamação","Sugestão","Elogio"];
-let conversas = [
-  {id:1,unidade:"802-A",morador:"Rodrigo Cahuana",assunto:"Barulho de obra fora do horário",
-   categoria:"Reclamação",encerrada:false,
-   mensagens:[
-     {de:"morador",texto:"Boa noite. A obra do 902 seguiu batendo laje até às 22h ontem. O regimento permite até que horas?",data:"2026-08-24",hora:"20:15",lida:true},
-     {de:"sindico",texto:"Boa noite, Rodrigo. O regimento permite obras de segunda a sexta, das 8h às 18h. Já notifiquei a unidade por escrito e a portaria foi orientada a barrar entrada de material fora desse horário.",data:"2026-08-25",hora:"09:02",lida:false}
-   ]},
-  {id:2,unidade:"802-A",morador:"Rodrigo Cahuana",assunto:"Segunda via do boleto de julho",
-   categoria:"Solicitação",encerrada:true,
-   mensagens:[
-     {de:"morador",texto:"Preciso da segunda via do boleto de julho para o imposto de renda.",data:"2026-08-10",hora:"11:40",lida:true},
-     {de:"sindico",texto:"Enviei ao seu e-mail cadastrado. Qualquer coisa, o histórico também fica na aba Financeiro.",data:"2026-08-10",hora:"15:20",lida:true}
-   ]},
-  {id:3,unidade:"1401-B",morador:"João Neto",assunto:"Infiltração na parede da garagem",
-   categoria:"Reclamação",encerrada:false,
-   mensagens:[
-     {de:"morador",texto:"A parede ao lado da vaga B-27 está com infiltração há duas semanas.",data:"2026-08-26",hora:"08:30",lida:false}
-   ]},
-  {id:4,unidade:"301-A",morador:"Marina Costa",assunto:"Horário da academia aos domingos",
-   categoria:"Dúvida",encerrada:false,
-   mensagens:[
-     {de:"morador",texto:"A academia abre aos domingos? O quadro na portaria não deixa claro.",data:"2026-08-27",hora:"07:12",lida:false}
-   ]}
-];
+let conversas = [];
 
 const eventos = [
   {dia:20,mes:"AGO",titulo:"Assembleia Geral Ordinária",hora:"20/08/2026 às 19:00",local:"Salão de Festas",tag:"Confirmado",tagClass:"b-blue"},
   {dia:25,mes:"AGO",titulo:"Limpeza da caixa d'água",hora:"25/08/2026 (sábado)",local:"Todo o condomínio",tag:"Informativo",tagClass:"b-amber"},
 ];
 
-let reservas = [
-  {ic:"🎉",cor:"#f3e6d8",titulo:"Salão de Festas",morador:"802-A",data:"05/09/2026 · 18:00 às 23:00",num:"Reserva #1187",tag:"Confirmada",tagClass:"b-green"},
-  {ic:"🍖",cor:"#e6efe0",titulo:"Churrasqueira 1",morador:"1401-B",data:"12/09/2026 · 12:00 às 16:00",num:"Reserva #1192",tag:"Confirmada",tagClass:"b-green"},
-  {ic:"🏓",cor:"#e0ebf2",titulo:"Quadra Poliesportiva",morador:"301-A",data:"14/09/2026 · 09:00 às 11:00",num:"Reserva #1201",tag:"Pendente",tagClass:"b-amber"},
-];
+let reservas = [];
 
 const calendarEvents = {5:"reserva",12:"reserva",14:"reserva",20:"assembleia",25:"manutencao",8:"evento"};
 
 /* boletos da unidade do morador logado — dado privado da própria unidade */
-let boletos = [
-  {titulo:"Condomínio - Agosto/2026",venc:"Vencimento: 10/08/2026",val:412.80},
-  {titulo:"Fundo de Obras",venc:"Vencimento: 15/08/2026",val:95.00},
-];
+let boletos = [];
 
 /* categoria do aviso define ícone, cor e badge — fonte única para os dois apps */
 const tiposAviso = {
@@ -530,43 +530,17 @@ const tiposAviso = {
   manutencoes: {plural:"Manutenções",  tag:"Manutenção", ic:"🔧", cor:"var(--amber-bg)", tagClass:"b-amber"}
 };
 
-let avisos = [
-  {titulo:"Manutenção no reservatório",data:"19/08/2026 - 08:30",corpo:"Amanhã, 20/08, das 09h às 14h, haverá interrupção no abastecimento de água.",cat:"urgentes",fixado:true},
-  {titulo:"Convocação de Assembleia",data:"14/08/2026 - 10:15",corpo:"A pauta inclui aprovação do orçamento 2027 e eleição da nova gestão.",cat:"comunicados",fixado:false},
-  {titulo:"Manutenção do elevador social",data:"12/08/2026 - 14:45",corpo:"Manutenção preventiva será realizada no elevador social no dia 22/08.",cat:"manutencoes",fixado:false},
-];
+let avisos = [];
 
-let ocorrencias = [
-  {ic:"💧",cor:"var(--blue-bg)",titulo:"Vazamento na garagem",data:"Abertura: 18/08/2026 - 09:30",local:"Garagem - Subsolo 1",tag:"Em execução",tagClass:"b-amber",cat:"minhas"},
-  {ic:"💡",cor:"var(--amber-bg)",titulo:"Lâmpada queimada",data:"Abertura: 16/08/2026 - 18:20",local:"Corredor - 3º andar",tag:"Aberta",tagClass:"b-blue",cat:"minhas"},
-  {ic:"🔊",cor:"var(--red-bg)",titulo:"Barulho excessivo",data:"Abertura: 15/08/2026 - 22:15",local:"Apto 102 - Torre A",tag:"Resolvida",tagClass:"b-green",cat:"condominio"},
-];
+let ocorrencias = [];
 
-let encomendas = [
-  {titulo:"Encomenda #38821",data:"Recebida em 18/08/2026 - 11:20",loja:"Mercado Livre",tag:"Em armazenamento",tagClass:"b-amber"},
-  {titulo:"Encomenda #38790",data:"Recebida em 17/08/2026 - 15:45",loja:"Amazon",tag:"Em armazenamento",tagClass:"b-amber"},
-  {titulo:"Encomenda #38712",data:"Entregue em 15/08/2026 - 10:30",loja:"Shopee",tag:"Entregue",tagClass:"b-green"},
-];
+let encomendas = [];
 
-let sugestoes = [
-  {ic:"💡",cor:"var(--gold-100)",titulo:"Instalar bicicletário coberto",unidade:"802-A",data:"17/08/2026",corpo:"Sugiro um bicicletário coberto perto da garagem para proteger as bikes da chuva.",tag:"Em análise",tagClass:"b-amber",cat:"minhas"},
-  {ic:"🌱",cor:"var(--green-bg)",titulo:"Compostagem no jardim",unidade:"301-A",data:"14/08/2026",corpo:"Criar uma composteira comunitária para reduzir o lixo orgânico do condomínio.",tag:"Aprovada",tagClass:"b-green",cat:"condominio"},
-  {ic:"🔐",cor:"var(--blue-bg)",titulo:"Fechadura digital no salão de festas",unidade:"1401-B",data:"10/08/2026",corpo:"Trocar a chave física do salão por fechadura digital com senha por reserva.",tag:"Implementada",tagClass:"b-navy",cat:"condominio"},
-];
+let sugestoes = [];
 
-let moradoresLista = [
-  {nome:"Rodrigo Cahuana",unidade:"802-A",papel:"Proprietário · Síndico"},
-  {nome:"João Neto",unidade:"1401-B",papel:"Proprietário · Subsíndico"},
-  {nome:"Marina Costa",unidade:"301-A",papel:"Locatária"},
-  {nome:"Eduardo Lima",unidade:"1502-B",papel:"Proprietário"},
-  {nome:"Fernanda Alves",unidade:"202-A",papel:"Proprietária"},
-];
+let moradoresLista = [];
 
-let visitantes = [
-  {nome:"Carlos Mendes",unidade:"301-A",motivo:"Visita",entrada:"09:40",saida:"11:15"},
-  {nome:"Paula Ribeiro",unidade:"1502-B",motivo:"Entrega",entrada:"10:05",saida:null},
-  {nome:"Técnico NET",unidade:"202-A",motivo:"Prestador de serviço",entrada:"08:20",saida:"09:00"},
-];
+let visitantes = [];
 
 const APP_VERSAO = "1.6.0";
 const TOTAL_UNIDADES = 104;
@@ -612,78 +586,20 @@ const vagas = (function(){
 /* --- Visitantes pré-autorizados pelo morador --- */
 const diasSemana = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
 const motivosVisita = ["Visita","Prestador de serviço","Entrega","Diarista","Cuidador(a)","Transporte por app"];
-let autorizacoes = [
-  {id:1,unidade:"802-A",nome:"Ana Paula Ferreira",doc:"123.456.789-00",motivo:"Diarista",
-   tipo:"recorrente",de:"2026-08-01",ate:"2026-12-31",dias:[2,4],codigo:"CM-7K2P",
-   cancelada:false,usos:[{data:"2026-08-25",hora:"08:05"}]},
-  {id:2,unidade:"802-A",nome:"Marcos Vinícius Alves",doc:"987.654.321-00",motivo:"Visita",
-   tipo:"unica",data:"2026-08-27",codigo:"CM-3B9X",cancelada:false,usos:[]},
-  {id:3,unidade:"1401-B",nome:"Equipe Climatiza Ar",doc:"CNPJ 09.876.543/0001-21",motivo:"Prestador de serviço",
-   tipo:"periodo",de:"2026-08-26",ate:"2026-08-29",codigo:"CM-5T4Q",cancelada:false,usos:[]},
-  {id:4,unidade:"301-A",nome:"Juliana Reis",doc:"111.222.333-44",motivo:"Visita",
-   tipo:"unica",data:"2026-08-20",codigo:"CM-9W4M",cancelada:false,usos:[{data:"2026-08-20",hora:"19:30"}]},
-];
+let autorizacoes = [];
 
 const tiposVeiculo = {Carro:"🚗",Moto:"🏍️",Bicicleta:"🚲"};
-let veiculos = [
-  {placa:"QAB1D23",modelo:"Honda Civic",cor:"Prata",tipo:"Carro",unidade:"802-A",vaga:"A-16"},
-  {placa:"PBX7H41",modelo:"Yamaha Fazer 250",cor:"Azul",tipo:"Moto",unidade:"802-A",vaga:"A-16"},
-  {placa:"QBC4F09",modelo:"Toyota Corolla",cor:"Preto",tipo:"Carro",unidade:"1401-B",vaga:"B-27"},
-  {placa:"OGH2A88",modelo:"Fiat Argo",cor:"Branco",tipo:"Carro",unidade:"301-A",vaga:"A-05"},
-  {placa:"QDE9J55",modelo:"Jeep Renegade",cor:"Cinza",tipo:"Carro",unidade:"202-A",vaga:"A-04"},
-  {placa:"PZK3C17",modelo:"Hyundai HB20",cor:"Vermelho",tipo:"Carro",unidade:"1102-B",vaga:"B-22"},
-];
+let veiculos = [];
 
 /* --- Assembleias: cada pauta é votada em separado --- */
-let assembleias = [
-  {id:1,titulo:"Assembleia Geral Ordinária",data:"2026-09-20",hora:"19:00",local:"Salão de Festas",
-   status:"Votação aberta",
-   pauta:[
-     {id:11,titulo:"Aprovação do orçamento 2027",desc:"Previsão de receitas e despesas para o exercício de 2027, com reajuste de 6,2% na taxa condominial.",sim:41,nao:12,abst:5,meuVoto:null},
-     {id:12,titulo:"Eleição da nova gestão",desc:"Chapa única: Rodrigo Cahuana (síndico) e João Neto (subsíndico), mandato de 2 anos.",sim:48,nao:4,abst:6,meuVoto:null},
-     {id:13,titulo:"Obra de impermeabilização da laje",desc:"Orçamento de R$ 186.000,00, custeado pelo Fundo de Obras em 12 parcelas.",sim:29,nao:22,abst:7,meuVoto:null}
-   ]},
-  {id:2,titulo:"Assembleia Geral Extraordinária",data:"2026-11-08",hora:"10:00",local:"Salão de Festas",
-   status:"Agendada",
-   pauta:[
-     {id:21,titulo:"Instalação de câmeras na garagem",desc:"Proposta de 12 câmeras com gravação em nuvem por 30 dias.",sim:0,nao:0,abst:0,meuVoto:null}
-   ]},
-  {id:3,titulo:"Assembleia Geral Ordinária 2025",data:"2025-09-18",hora:"19:00",local:"Salão de Festas",
-   status:"Encerrada",
-   pauta:[
-     {id:31,titulo:"Aprovação das contas de 2025",desc:"Prestação de contas do exercício encerrado.",sim:63,nao:8,abst:3,meuVoto:"sim"},
-     {id:32,titulo:"Reforma do playground",desc:"Substituição dos brinquedos e do piso emborrachado.",sim:58,nao:11,abst:5,meuVoto:"sim"}
-   ]}
-];
+let assembleias = [];
 
 /* --- Documentos --- */
-let documentos = [
-  {nome:"Convenção do Condomínio",cat:"Institucional",tipo:"PDF",tam:"1,2 MB",data:"12/03/2024"},
-  {nome:"Regimento Interno",cat:"Institucional",tipo:"PDF",tam:"680 KB",data:"12/03/2024"},
-  {nome:"Ata da AGO 2025",cat:"Atas",tipo:"PDF",tam:"420 KB",data:"25/09/2025"},
-  {nome:"Ata da AGE 03/2026",cat:"Atas",tipo:"PDF",tam:"310 KB",data:"14/03/2026"},
-  {nome:"Prestação de contas · Julho/2026",cat:"Financeiro",tipo:"PDF",tam:"890 KB",data:"05/08/2026"},
-  {nome:"Balancete · 1º semestre 2026",cat:"Financeiro",tipo:"XLSX",tam:"156 KB",data:"10/07/2026"},
-  {nome:"Contrato · Portaria 24h",cat:"Contratos",tipo:"PDF",tam:"1,8 MB",data:"01/02/2026"},
-  {nome:"Contrato · Manutenção de elevadores",cat:"Contratos",tipo:"PDF",tam:"940 KB",data:"15/01/2026"},
-  {nome:"Apólice de seguro predial",cat:"Contratos",tipo:"PDF",tam:"2,1 MB",data:"20/04/2026"},
-  {nome:"Planta baixa · Pavimento tipo",cat:"Técnico",tipo:"PDF",tam:"3,4 MB",data:"08/11/2023"},
-  {nome:"AVCB · Corpo de Bombeiros",cat:"Técnico",tipo:"PDF",tam:"520 KB",data:"30/05/2026"}
-];
+let documentos = [];
 const catsDocumento = ["Institucional","Atas","Financeiro","Contratos","Técnico"];
 
 /* --- Manutenções preventivas --- */
-let manutencoes = [
-  {item:"Elevador social · Torre A",cat:"Elevadores",period:"Mensal",ultima:"2026-08-12",prox:"2026-09-12",resp:"ThyssenKrupp",custo:1850},
-  {item:"Elevador social · Torre B",cat:"Elevadores",period:"Mensal",ultima:"2026-08-12",prox:"2026-09-12",resp:"ThyssenKrupp",custo:1850},
-  {item:"Limpeza da caixa d'água",cat:"Hidráulica",period:"Semestral",ultima:"2026-02-25",prox:"2026-08-25",resp:"HidroClean",custo:3200},
-  {item:"Recarga de extintores",cat:"Incêndio",period:"Anual",ultima:"2025-11-10",prox:"2026-11-10",resp:"Extinpar",custo:4700},
-  {item:"Teste da bomba de incêndio",cat:"Incêndio",period:"Mensal",ultima:"2026-08-05",prox:"2026-09-05",resp:"Extinpar",custo:600},
-  {item:"Dedetização das áreas comuns",cat:"Higiene",period:"Trimestral",ultima:"2026-06-18",prox:"2026-09-18",resp:"Sanivet",custo:1400},
-  {item:"Limpeza de calhas e ralos",cat:"Hidráulica",period:"Trimestral",ultima:"2026-05-02",prox:"2026-08-02",resp:"Equipe interna",custo:0},
-  {item:"Manutenção do portão da garagem",cat:"Acessos",period:"Trimestral",ultima:"2026-07-14",prox:"2026-10-14",resp:"PortAuto",custo:980},
-  {item:"Inspeção do gerador",cat:"Elétrica",period:"Semestral",ultima:"2026-04-20",prox:"2026-10-20",resp:"GenPower",custo:2600}
-];
+let manutencoes = [];
 const periodicidades = {"Mensal":1,"Bimestral":2,"Trimestral":3,"Semestral":6,"Anual":12};
 
 /* --- Séries para os relatórios --- */
@@ -711,32 +627,7 @@ const inadimplentes = [
 ];
 
 /* --- Configurações --- */
-const config = {
-  condominio:{nome:"Residencial Charles Miller",cnpj:"12.345.678/0001-90",
-    endereco:"Av. Charles Miller, 1200 — João Pessoa/PB",torres:2,andares:26,unidades:TOTAL_UNIDADES},
-  taxas:[
-    {nome:"Taxa condominial · 2 quartos",valor:398.50},
-    {nome:"Taxa condominial · 3 quartos",valor:412.80},
-    {nome:"Taxa condominial · cobertura",valor:445.10},
-    {nome:"Fundo de reserva (10%)",valor:41.28},
-    {nome:"Fundo de obras",valor:95.00}
-  ],
-  areas:[
-    {nome:"Salão de Festas",cap:80,taxa:250,antec:30,ativa:true},
-    {nome:"Churrasqueira 1",cap:20,taxa:80,antec:15,ativa:true},
-    {nome:"Churrasqueira 2",cap:20,taxa:80,antec:15,ativa:true},
-    {nome:"Quadra Poliesportiva",cap:20,taxa:0,antec:7,ativa:true},
-    {nome:"Espaço Gourmet",cap:30,taxa:150,antec:15,ativa:false}
-  ],
-  notificacoes:[
-    {chave:"avisos",label:"Avisos e comunicados",desc:"Notificar moradores a cada novo aviso publicado",ativo:true},
-    {chave:"boletos",label:"Vencimento de boletos",desc:"Lembrete 3 dias antes do vencimento",ativo:true},
-    {chave:"encomendas",label:"Chegada de encomendas",desc:"Avisar o morador quando a portaria registrar",ativo:true},
-    {chave:"reservas",label:"Confirmação de reservas",desc:"Notificar aprovação ou recusa da reserva",ativo:true},
-    {chave:"assembleias",label:"Convocação de assembleias",desc:"Notificar abertura de pauta e votação",ativo:true},
-    {chave:"visitantes",label:"Entrada de visitantes",desc:"Avisar o morador a cada entrada autorizada",ativo:false}
-  ]
-};
+const config = { condominio:{}, taxas:[], areas:[], notificacoes:[] };
 
 /* ============================================================
    RESIDENT APP RENDERING
@@ -1211,7 +1102,7 @@ const sbItemsSindico=[
   ["encomendas","📦","Encomendas"],["visitantes","🪪","Visitantes"],["veiculos","🚗","Veículos e vagas"],
   ["assembleias","🗳️","Assembleias"],
   ["documentos","📄","Documentos"],["manutencoes","🔧","Manutenções"],["relatorios","📊","Relatórios"],
-  ["configuracoes","⚙️","Configurações"]
+  ["contas","🔑","Contas de acesso"],["configuracoes","⚙️","Configurações"]
 ];
 const sbItemsAdministrativo=[
   ["dashboard","▦","Dashboard"],["mensagens","📬","Fale com moradores"],["avisos","📣","Avisos"],
@@ -1397,13 +1288,7 @@ function donut(){
   </div>`;
 }
 
-let boletosDoMes = [
-  {unidade:"802-A", morador:"Rodrigo Cahuana", venc:"10/08/2026", val:412.80, status:"Pago"},
-  {unidade:"1401-B",morador:"João Neto",       venc:"10/08/2026", val:412.80, status:"Pago"},
-  {unidade:"301-A", morador:"Marina Costa",    venc:"10/08/2026", val:398.50, status:"Em atraso"},
-  {unidade:"1502-B",morador:"Eduardo Lima",    venc:"10/08/2026", val:445.10, status:"Pendente"},
-  {unidade:"202-A", morador:"Fernanda Alves",  venc:"10/08/2026", val:398.50, status:"Pago"},
-];
+let boletosDoMes = [];
 const clsStatusBoleto={"Pago":"b-green","Em atraso":"b-red","Pendente":"b-amber"};
 
 function renderAdminFinanceiro(){
@@ -2663,6 +2548,102 @@ async function addVeiculoMorador(){
 }
 
 /* ============================================================
+   MÓDULO: CONTAS (só o síndico)
+   Libera, muda papel/unidade e remove acessos.
+   ============================================================ */
+let contas = [];
+let filtroConta = "Pendentes";
+
+async function carregarContas(){
+  const { data, error } = await sb.from("cm_usuarios").select("*").order("criado_em");
+  if(error){ avisarFalhaDB("carregar contas", error); return; }
+  contas = data || [];
+}
+
+function renderAdminContas(){
+  const pendentes = contas.filter(c=>!c.ativo).length;
+  const lista = contas.filter(c=>
+    filtroConta==="Todas" ? true :
+    filtroConta==="Pendentes" ? !c.ativo : c.ativo);
+  return `
+  ${adminTopbar("Contas de acesso")}
+  <div class="kpi-grid">
+    ${kpi("Aguardando liberação",String(pendentes),pendentes?"exigem sua aprovação":"nenhuma pendente","down","⏳","var(--amber-bg)")}
+    ${kpi("Ativas",String(contas.filter(c=>c.ativo).length),"podem entrar no app","up","✅","var(--green-bg)")}
+    ${kpi("Moradores",String(contas.filter(c=>c.ativo&&c.papel==="morador").length),"de "+TOTAL_UNIDADES+" unidades","up","👥","var(--blue-bg)")}
+    ${kpi("Equipe",String(contas.filter(c=>c.ativo&&c.papel!=="morador").length),"portaria, administrativo e síndico","up","🪪","var(--gold-100)")}
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h3>Contas</h3><span class="see-all">${lista.length} ${lista.length===1?'conta':'contas'}</span></div>
+    <div class="filters" style="margin-bottom:14px">
+      ${["Pendentes","Ativas","Todas"].map(f=>
+        `<button class="chip ${f===filtroConta?'active':''}" onclick="filtrarContas('${f}')">${f}</button>`).join("")}
+    </div>
+    ${lista.length?`<table class="datatable">
+      <tr><th>Nome</th><th>E-mail</th><th>Papel</th><th>Unidade</th><th>Status</th><th></th></tr>
+      ${lista.map(c=>`<tr>
+        <td>${c.nome}${c.id===USUARIO.id?' <span class="badge b-navy" style="font-size:9px">você</span>':''}</td>
+        <td style="font-size:12px">${c.email}</td>
+        <td>
+          <select class="inline-select" ${c.id===USUARIO.id?'disabled':''} onchange="mudarPapel('${c.id}',this.value)">
+            ${Object.entries(ROTULO_PAPEL).map(([k,v])=>`<option value="${k}" ${k===c.papel?'selected':''}>${v}</option>`).join("")}
+          </select>
+        </td>
+        <td><input class="cell-input mono" style="width:86px" value="${c.unidade||''}" placeholder="—"
+                   ${c.id===USUARIO.id?'disabled':''} onchange="mudarUnidade('${c.id}',this.value)"></td>
+        <td><span class="badge ${c.ativo?'b-green':'b-amber'}">${c.ativo?'Ativa':'Pendente'}</span></td>
+        <td style="white-space:nowrap">
+          ${c.id===USUARIO.id?'<span style="color:var(--ink-soft);font-size:11px">—</span>':`
+            <button class="see-all" onclick="alternarConta('${c.id}')">${c.ativo?'Suspender':'Liberar'}</button>
+            <button class="see-all" style="color:var(--red);margin-left:12px" onclick="removerConta('${c.id}')">Remover</button>`}
+        </td>
+      </tr>`).join("")}
+    </table>`:`<div class="empty-note">Nenhuma conta ${filtroConta==="Todas"?'cadastrada':'neste filtro'}.</div>`}
+    <div class="tip-card" style="margin-top:16px">
+      <p class="t1">Como um morador entra</p>
+      <p>Ele cria a conta na tela de login informando a unidade. O acesso fica bloqueado até você liberar aqui —
+      e o banco só devolve os dados da unidade vinculada à conta.</p>
+    </div>
+  </div>`;
+}
+function filtrarContas(f){ filtroConta=f; goAdmin("contas"); }
+
+async function salvarConta(id, campos, aviso){
+  const { error } = await sb.from("cm_usuarios").update(campos).eq("id", id);
+  if(error){ avisarFalhaDB("atualizar conta", error); return false; }
+  await carregarContas();
+  goAdmin("contas");
+  if(aviso) toast(aviso);
+  return true;
+}
+async function alternarConta(id){
+  const c = contas.find(x=>x.id===id);
+  if(!c) return;
+  if(!c.ativo && c.papel==="morador" && !c.unidade){
+    toast("Informe a unidade antes de liberar"); return;
+  }
+  await salvarConta(id, { ativo: !c.ativo }, c.ativo ? "Acesso suspenso" : `${c.nome} liberado`);
+}
+async function mudarPapel(id, papel){
+  await salvarConta(id, { papel }, "Papel atualizado");
+}
+async function mudarUnidade(id, valor){
+  const u = (valor||"").trim().toUpperCase() || null;
+  if(u && !todasUnidades().includes(u)){ toast("Unidade inexistente — use o formato 802-A"); goAdmin("contas"); return; }
+  await salvarConta(id, { unidade: u }, "Unidade atualizada");
+}
+async function removerConta(id){
+  const c = contas.find(x=>x.id===id);
+  if(!c) return;
+  if(!confirm(`Remover o acesso de ${c.nome} (${c.email})?\n\nA conta deixa de enxergar qualquer dado do condomínio.`)) return;
+  const { error } = await sb.from("cm_usuarios").delete().eq("id", id);
+  if(error){ avisarFalhaDB("remover conta", error); return; }
+  await carregarContas();
+  goAdmin("contas");
+  toast("Acesso removido");
+}
+
+/* ============================================================
    MÓDULO: AVISOS (publicação pelo síndico / administrativo)
    ============================================================ */
 let avisoEditando = null;      // índice em `avisos`, ou null se for publicação nova
@@ -3335,7 +3316,7 @@ const adminRenderers={
   avisos:renderAdminAvisos, veiculos:renderAdminVeiculos, mensagens:renderAdminMensagens,
   assembleias:renderAdminAssembleias, documentos:renderAdminDocumentos,
   manutencoes:renderAdminManutencoes, relatorios:renderAdminRelatorios,
-  configuracoes:renderAdminConfiguracoes
+  contas:renderAdminContas, configuracoes:renderAdminConfiguracoes
 };
 const administrativoRenderers={
   dashboard:renderDashboard, financeiro:renderAdminFinanceiro, moradores:renderAdminMoradores,
@@ -3354,13 +3335,26 @@ const rendererMap={sindico:adminRenderers, administrativo:administrativoRenderer
 /* ============================================================
    ROLE SWITCH
    ============================================================ */
+const ROTULO_PAPEL={morador:"Morador",porteiro:"Portaria",administrativo:"Administrativo",sindico:"Síndico"};
+
+/* cabeçalho com a conta: substituiu o antigo seletor de perfil,
+   que trocava de papel sem senha */
+function montarCabecalho(){
+  const el=document.getElementById("roleSwitch");
+  if(!el || !USUARIO) return;
+  el.style.display="flex";
+  el.innerHTML=`
+    <span class="conta-nome">${USUARIO.nome}</span>
+    <span class="conta-papel">${ROTULO_PAPEL[USUARIO.papel]||USUARIO.papel}${USUARIO.unidade?" · "+USUARIO.unidade:""}</span>
+    <button class="conta-sair" onclick="sair()">Sair</button>`;
+}
+
 function setRole(role){
+  // o papel vem da conta; ninguém troca de perfil pela interface
+  const permitido = papelAtual()==="morador" ? "resident" : papelAtual();
+  if(USUARIO && role!==permitido) role = permitido;
   const resident=document.getElementById("residentApp");
   const staff=document.getElementById("staffApp");
-  document.getElementById("btnResident").classList.toggle("active",role==="resident");
-  document.getElementById("btnAdmin").classList.toggle("active",role==="sindico");
-  document.getElementById("btnPorteiro").classList.toggle("active",role==="porteiro");
-  document.getElementById("btnAdministrativo").classList.toggle("active",role==="administrativo");
   if(role==="resident"){
     resident.style.display="block"; staff.classList.remove("show");
     goView(currentView);
@@ -3464,6 +3458,12 @@ async function dbSalvarPerfil(){
 
 /* ---------- carga inicial ---------- */
 async function carregarTudo(){
+  // a unidade deixa de ser fixa no código: vem da conta autenticada
+  if(USUARIO && USUARIO.unidade){
+    morador.cod = USUARIO.unidade;
+    morador.nomeCompleto = USUARIO.nome;
+    morador.nome = USUARIO.nome.split(" ")[0];
+  }
   const nomes = Object.keys(TABELAS);
   const respostas = await Promise.all(
     nomes.map(n => sb.from(TABELAS[n]).select("*").order("id", { ascending:true }))
@@ -3490,6 +3490,8 @@ async function carregarTudo(){
   if(cfg.error) throw new Error("config: "+cfg.error.message);
   (cfg.data||[]).forEach(r => { config[r.chave] = r.valor; });
 
+  if(papelAtual()==="sindico") await carregarContas();
+
   const perf = await sb.from("cm_perfil").select("*").eq("cod", morador.cod).maybeSingle();
   if(perf.error) throw new Error("perfil: "+perf.error.message);
   if(perf.data){
@@ -3513,22 +3515,184 @@ function faixaStatus(texto, cor){
   el.innerHTML = texto;
 }
 
-async function boot(){
+/* ============================================================
+   AUTENTICAÇÃO — Supabase Auth
+   O papel e a unidade vêm da conta (cm_usuarios), não mais de um
+   seletor na tela. A RLS do banco aplica as mesmas regras do lado
+   do servidor: o morador só enxerga a própria unidade.
+   ============================================================ */
+let USUARIO = null;     // {id,email,nome,papel,unidade,ativo}
+
+function papelAtual(){ return USUARIO ? USUARIO.papel : null; }
+function ehStaff(){ return ["porteiro","administrativo","sindico"].includes(papelAtual()); }
+
+function telaAuth(conteudo){
+  document.getElementById("roleSwitch").style.display = "none";
+  document.getElementById("residentApp").style.display = "none";
+  document.getElementById("staffApp").classList.remove("show");
+  let el = document.getElementById("authShell");
+  if(!el){
+    el = document.createElement("div");
+    el.id = "authShell";
+    document.body.appendChild(el);
+  }
+  el.style.display = "flex";
+  el.innerHTML = `<div class="auth-card">
+    <div class="auth-marca"><span>CM</span></div>
+    <h1>Charles Miller</h1>
+    <p class="auth-sub">App do Condomínio</p>
+    ${conteudo}
+  </div>`;
+}
+function fecharAuth(){
+  const el = document.getElementById("authShell");
+  if(el) el.style.display = "none";
+}
+
+function formEntrar(erro){
+  telaAuth(`
+    ${erro?`<div class="auth-erro">${erro}</div>`:''}
+    <label>E-mail</label>
+    <input id="auEmail" type="email" autocomplete="username" placeholder="seu@email.com">
+    <label>Senha</label>
+    <input id="auSenha" type="password" autocomplete="current-password" placeholder="••••••••"
+           onkeydown="if(event.key==='Enter')entrar()">
+    <button class="auth-btn" onclick="entrar()">Entrar</button>
+    <button class="auth-link" onclick="formCriar()">Criar conta</button>
+  `);
+  const e=document.getElementById("auEmail"); if(e) e.focus();
+}
+
+function formCriar(erro){
+  telaAuth(`
+    ${erro?`<div class="auth-erro">${erro}</div>`:''}
+    <label>Nome completo</label>
+    <input id="auNome" placeholder="Como aparece para o síndico">
+    <label>Unidade</label>
+    <input id="auUnidade" placeholder="Ex: 802-A" style="text-transform:uppercase">
+    <label>E-mail</label>
+    <input id="auEmail" type="email" autocomplete="username" placeholder="seu@email.com">
+    <label>Senha</label>
+    <input id="auSenha" type="password" autocomplete="new-password" placeholder="mínimo 8 caracteres"
+           onkeydown="if(event.key==='Enter')criarConta()">
+    <button class="auth-btn" onclick="criarConta()">Criar conta</button>
+    <button class="auth-link" onclick="formEntrar()">Já tenho conta</button>
+    <p class="auth-nota">A conta precisa ser liberada pelo síndico antes do primeiro acesso.</p>
+  `);
+  const e=document.getElementById("auNome"); if(e) e.focus();
+}
+
+function telaPendente(){
+  telaAuth(`
+    <div class="auth-aguardando">
+      <div class="ic">⏳</div>
+      <h2>Conta aguardando liberação</h2>
+      <p>Olá, ${USUARIO.nome}. Seu cadastro foi registrado${USUARIO.unidade?` para a unidade <strong>${USUARIO.unidade}</strong>`:''},
+      mas ainda precisa ser aprovado pelo síndico.</p>
+      <p class="auth-nota">Assim que for liberado, basta entrar novamente.</p>
+    </div>
+    <button class="auth-btn" onclick="recarregarSessao()">Verificar de novo</button>
+    <button class="auth-link" onclick="sair()">Sair</button>
+  `);
+}
+
+async function entrar(){
+  const email=(document.getElementById("auEmail").value||"").trim();
+  const senha=document.getElementById("auSenha").value||"";
+  if(!email||!senha){ formEntrar("Informe e-mail e senha."); return; }
+  const { error } = await sb.auth.signInWithPassword({ email, password: senha });
+  if(error){ formEntrar(traduzErroAuth(error.message)); return; }
+  await aposLogin();
+}
+
+async function criarConta(){
+  const nome=(document.getElementById("auNome").value||"").trim();
+  const unidade=(document.getElementById("auUnidade").value||"").trim().toUpperCase();
+  const email=(document.getElementById("auEmail").value||"").trim();
+  const senha=document.getElementById("auSenha").value||"";
+  if(!nome){ formCriar("Informe seu nome."); return; }
+  if(!email||!senha){ formCriar("Informe e-mail e senha."); return; }
+  if(senha.length<8){ formCriar("A senha precisa ter ao menos 8 caracteres."); return; }
+
+  const { error } = await sb.auth.signUp({ email, password: senha });
+  if(error){ formCriar(traduzErroAuth(error.message)); return; }
+
+  // signUp pode não deixar sessão aberta se a confirmação por e-mail estiver ligada
+  const { data:{ session } } = await sb.auth.getSession();
+  if(!session){
+    formEntrar("Conta criada. Confirme o e-mail que enviamos e depois entre.");
+    return;
+  }
+  const { error: e2 } = await sb.rpc("cm_registrar", { p_nome: nome, p_unidade: unidade || null });
+  if(e2){ formCriar("Conta criada, mas o registro falhou: "+e2.message); return; }
+  await aposLogin();
+}
+
+async function sair(){
+  await sb.auth.signOut();
+  USUARIO = null;
+  location.reload();
+}
+
+async function recarregarSessao(){ await aposLogin(); }
+
+function traduzErroAuth(msg){
+  const m = (msg||"").toLowerCase();
+  if(m.includes("invalid login")) return "E-mail ou senha incorretos.";
+  if(m.includes("already registered")) return "Esse e-mail já tem conta. Use “Já tenho conta”.";
+  if(m.includes("email not confirmed")) return "Confirme o e-mail antes de entrar.";
+  if(m.includes("password")) return "Senha muito curta — use ao menos 8 caracteres.";
+  return msg;
+}
+
+/* carrega o vínculo da conta e decide o que mostrar */
+async function aposLogin(){
+  const { data, error } = await sb.rpc("cm_eu");
+  if(error){ formEntrar("Falha ao ler o perfil: "+error.message); return; }
+
+  USUARIO = (data && data[0]) || null;
+
+  if(!USUARIO){
+    // conta existe no Auth mas nunca se registrou (ex.: confirmou e-mail depois)
+    const nome = prompt ? null : null;   // sem prompt: registra com o que o Auth tem
+    const { error:e2 } = await sb.rpc("cm_registrar", { p_nome: "", p_unidade: null });
+    if(e2){ formEntrar("Conta sem vínculo: "+e2.message); return; }
+    const r = await sb.rpc("cm_eu");
+    USUARIO = (r.data && r.data[0]) || null;
+  }
+  if(!USUARIO){ formEntrar("Não foi possível registrar a conta."); return; }
+  if(!USUARIO.ativo){ telaPendente(); return; }
+
+  fecharAuth();
+  await iniciarApp();
+}
+
+/* carrega os dados e abre a interface do papel do usuário */
+async function iniciarApp(){
   faixaStatus("Carregando dados…","carregando");
   try{
-    if(!window.supabase) throw new Error("SDK do Supabase não carregou");
-    sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
     await carregarTudo();
     ONLINE = true;
     const el=document.getElementById("statusDB");
     if(el) el.remove();
   }catch(e){
-    console.error("[boot]", e);
+    console.error("[iniciarApp]", e);
     ONLINE = false;
-    faixaStatus("⚠ Sem conexão com o banco — modo demonstração, nada será salvo "+
+    faixaStatus("⚠ Falha ao carregar os dados — nada será salvo "+
                 "<button onclick=\"location.reload()\">Tentar de novo</button>","offline");
   }
-  goView("home");
+  montarCabecalho();
+  setRole(papelAtual()==="morador" ? "resident" : papelAtual());
+}
+
+async function boot(){
+  if(!window.supabase){
+    faixaStatus("⚠ Não foi possível carregar o app. Verifique sua conexão.","offline");
+    return;
+  }
+  sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+  const { data:{ session } } = await sb.auth.getSession();
+  if(session) await aposLogin(); else formEntrar();
 }
 
 /* init */

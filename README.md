@@ -7,9 +7,9 @@ App single-file: tudo vive em `index.html` (HTML + CSS + JS inline, sem build).
 Os dados ficam no **Supabase** (17 tabelas com prefixo `cm_`); se o banco não
 responder, o app entra em modo demonstração e avisa no rodapé.
 
-> ⚠️ **Ainda não há autenticação.** O seletor de perfil no topo troca de papel sem
-> senha, e a política de acesso do banco está aberta. Os dados publicados são
-> fictícios — não cadastre morador, boleto ou CPF reais antes do login estar pronto.
+O acesso exige **login**: cada conta tem papel (morador, portaria, administrativo,
+síndico) e unidade, e o banco só devolve o que aquele papel pode ver. A primeira
+conta criada vira síndico; as demais ficam pendentes até ele liberar.
 
 ## Estrutura
 

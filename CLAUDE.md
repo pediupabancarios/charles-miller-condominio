@@ -29,10 +29,25 @@ então re-renderiza. Se o banco não responder, o app entra em **modo demonstra�
 - Toda função que persiste é `async` e dá `await` antes de `goView`/`goAdmin`
 - `id` vem do banco e é o mesmo usado pela lógica (assembleias, conversas, autorizações)
 
+### Autenticação (Supabase Auth)
+- `cm_usuarios` liga cada conta a **papel** (`morador`/`porteiro`/`administrativo`/`sindico`)
+  e **unidade**. Conta sem vínculo, ou `ativo=false`, não enxerga nada.
+- **A primeira conta criada vira síndico ativo** (bootstrap em `cm_registrar()`);
+  as demais entram pendentes até o síndico liberar em **Contas de acesso**.
+- O antigo seletor de perfil no topo **não existe mais** — o papel vem da conta.
+  `setRole()` força o papel do usuário e ignora qualquer outro valor.
+- `morador.cod` vem de `USUARIO.unidade`, não está mais fixo no código.
+- A RLS repete as regras no servidor: a checagem de interface
+  (`podeVerInadimplencia()`, `temModulo()`) é conveniência, não proteção.
+- Dados fictícios **não estão mais no JavaScript** — se o banco falhar, o app
+  aparece vazio em vez de mostrar dados falsos como se fossem reais.
+
 ### Limitações conhecidas desta etapa
-- **Sem autenticação.** A chave publishable e a RLS aberta (`using (true)`) deixam
-  qualquer um com o link ler e gravar tudo. Os dados publicados hoje são fictícios.
-  **Não cadastrar morador, boleto ou CPF reais antes de ter login + RLS por unidade.**
+- A tabela `cm_votos` já existe (voto por unidade, com `unique(pauta_id, unidade)`),
+  mas a tela de assembleias **ainda usa os contadores no jsonb da pauta**. Migrar a UI
+  para `cm_votos` resolve concorrência e dá auditoria de quem votou.
+- O mascaramento da inadimplência para o administrativo é de interface: a RLS deixa
+  ele ler `cm_boletos_mes` inteiro. Para valer no servidor, seria uma view sem os nomes.
 - `vagas` continua gerado proceduralmente (não há tela para remanejar vaga)
 - `eventos`, `calendarEvents`, `serieFinanceira`, `despesasPorCategoria` e
   `inadimplentes` seguem fixos no código — são read-only, não há UI que os altere
@@ -208,9 +223,8 @@ Sidebar do síndico: 17 módulos · administrativo: 14 · portaria: 6.
 Views do morador: 14.
 
 ## Próximos passos
-1. **Autenticação real** — hoje o seletor de perfil no topo troca de papel sem login.
-   É o bloqueio para entrar qualquer dado real: sem ele a RLS não tem em quem se apoiar
-2. **RLS por unidade** — morador só enxerga a própria unidade; hoje a política é aberta
+1. ~~Autenticação real~~ e ~~RLS por unidade~~ — **feitos**
+2. Migrar a votação de assembleia para `cm_votos` (ver limitações)
 3. Upload real de documentos (hoje o `<input type=file>` só lê o tamanho)
 4. Envio real das notificações (Web Push) — hoje os toggles só controlam textos
 5. QR code para a autorização (hoje o visitante apresenta o código digitado)
