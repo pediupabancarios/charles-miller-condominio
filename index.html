@@ -1247,8 +1247,16 @@ function mobileTabs(){
   ).join("")}</div>`;
 }
 
+/* Papel efetivo: o da conta autenticada. currentStaffRole é estado de
+   navegação e só vale enquanto não houver sessão — manter duas fontes
+   para a mesma verdade deixaria a permissão depender de qual delas se
+   consultou primeiro. */
+function papelEfetivo(){
+  return papelAtual() || currentStaffRole;
+}
 function temModulo(v){
-  return staffRoles[currentStaffRole].items.some(i=>i[0]===v);
+  const cfg = staffRoles[papelEfetivo()];
+  return !!cfg && cfg.items.some(i=>i[0]===v);
 }
 
 /* ------------------------------------------------------------
@@ -1258,7 +1266,7 @@ function temModulo(v){
    O administrativo trabalha com os totais, sem os nomes.
    ------------------------------------------------------------ */
 function podeVerInadimplencia(){
-  return currentStaffRole==="sindico";
+  return papelEfetivo()==="sindico";
 }
 function painelRestrito(msg){
   return `<div class="restrito">
@@ -1278,10 +1286,40 @@ function goAdmin(v){
   if(v!=="avisos" && staffViewByRole[currentStaffRole]==="avisos") avisoEditando=null;
   staffViewByRole[currentStaffRole]=v;
   buildSidebar();
-  const renderers=rendererMap[currentStaffRole];
+  const renderers=rendererMap[papelEfetivo()] || rendererMap[currentStaffRole];
   const body = renderers[v] ? renderers[v]() : adminStub(v);
   document.getElementById("adminMain").innerHTML = mobileTabs() + body;
   window.scrollTo(0,0);
+}
+
+/* Números do mês a partir do banco. Antes eram texto fixo: com o banco
+   vazio o app exibia R$ 138.240 de receita que não existiam. */
+function resumoDoMes(){
+  const serie = serieFinanceira;
+  const atual = serie[serie.length-1] || null;
+  const anterior = serie[serie.length-2] || null;
+  const variacao = (a,b) => (a==null||b==null||!b) ? null : Math.round((a-b)/b*100);
+  const emAtraso = inadimplentes.reduce((t,i)=>t+i.valor,0);
+  return {
+    temDados: !!atual,
+    receita: atual ? atual.receita : null,
+    despesa: atual ? atual.despesa : null,
+    saldo:   atual ? atual.receita - atual.despesa : null,
+    inadPct: atual ? atual.inad : null,
+    inadValor: emAtraso,
+    varReceita: atual && anterior ? variacao(atual.receita, anterior.receita) : null,
+    varDespesa: atual && anterior ? variacao(atual.despesa, anterior.despesa) : null
+  };
+}
+/* um KPI que não inventa número quando não há dado */
+function kpiValor(rotulo, valor, detalhe, dir, ic, bg){
+  return valor==null
+    ? kpi(rotulo, "—", "sem dados registrados", "up", ic, bg)
+    : kpi(rotulo, valor, detalhe, dir, ic, bg);
+}
+function variacaoTexto(v){
+  return v==null ? "sem mês anterior"
+       : `${v>=0?"+":""}${v}% vs mês anterior`;
 }
 
 function adminTopbar(title){
@@ -1293,12 +1331,14 @@ function renderDashboard(){
   return `
   ${adminTopbar("Dashboard")}
   <div class="kpi-grid">
-    ${kpi("Receitas do mês","R$ 138.240,00","+9% vs mês anterior","up","💰","var(--green-bg)")}
-    ${kpi("Despesas do mês","R$ 94.610,00","-3% vs mês anterior","down","🧾","var(--red-bg)")}
-    ${podeVerInadimplencia()
-      ? kpi("Inadimplência","R$ 21.340,00","12,8% da receita","down","📉","var(--amber-bg)")
-      : kpi("Saldo em caixa","R$ 187.920,00","+5% vs mês anterior","up","🏦","var(--green-bg)")}
-    ${kpi("Unidades",String(TOTAL_UNIDADES),Math.round((TOTAL_UNIDADES-UNIDADES_DESOCUPADAS.length)/TOTAL_UNIDADES*100)+"% ocupadas","up","🏢","var(--blue-bg)")}
+    ${(()=>{const r=resumoDoMes();return `
+      ${kpiValor("Receitas do mês", r.receita!=null?fmtBRL(r.receita):null, variacaoTexto(r.varReceita), (r.varReceita||0)>=0?"up":"down","💰","var(--green-bg)")}
+      ${kpiValor("Despesas do mês", r.despesa!=null?fmtBRL(r.despesa):null, variacaoTexto(r.varDespesa), (r.varDespesa||0)<=0?"down":"up","🧾","var(--red-bg)")}
+      ${podeVerInadimplencia()
+        ? kpiValor("Inadimplência", r.inadValor?fmtBRL(r.inadValor):(r.temDados?fmtBRL(0):null),
+                   r.inadPct!=null?String(r.inadPct).replace(".",",")+"% da receita":"", "down","📉","var(--amber-bg)")
+        : kpiValor("Saldo em caixa", r.saldo!=null?fmtBRL(r.saldo):null, "receitas menos despesas", (r.saldo||0)>=0?"up":"down","🏦","var(--green-bg)")}`;})()}
+    ${kpi("Unidades",String(TOTAL_UNIDADES), moradoresLista.length?`${moradoresLista.length} com morador cadastrado`:"nenhum morador cadastrado","up","🏢","var(--blue-bg)")}
   </div>
   <div class="admin-grid">
     <div class="panel">
@@ -1402,12 +1442,14 @@ function renderAdminFinanceiro(){
   return `
   ${adminTopbar("Financeiro")}
   <div class="kpi-grid">
-    ${kpi("Receitas do mês","R$ 138.240,00","+9% vs mês anterior","up","💰","var(--green-bg)")}
-    ${kpi("Despesas do mês","R$ 94.610,00","-3% vs mês anterior","down","🧾","var(--red-bg)")}
-    ${verInad
-      ? kpi("Inadimplência","R$ 21.340,00","12,8% da receita","down","📉","var(--amber-bg)")
-      : kpi("Boletos emitidos",String(TOTAL_UNIDADES),"referentes a agosto/2026","up","🧾","var(--blue-bg)")}
-    ${kpi("Saldo em caixa","R$ 187.920,00","+5% vs mês anterior","up","🏦","var(--blue-bg)")}
+    ${(()=>{const r=resumoDoMes();return `
+      ${kpiValor("Receitas do mês", r.receita!=null?fmtBRL(r.receita):null, variacaoTexto(r.varReceita), (r.varReceita||0)>=0?"up":"down","💰","var(--green-bg)")}
+      ${kpiValor("Despesas do mês", r.despesa!=null?fmtBRL(r.despesa):null, variacaoTexto(r.varDespesa), (r.varDespesa||0)<=0?"down":"up","🧾","var(--red-bg)")}
+      ${verInad
+        ? kpiValor("Inadimplência", r.inadValor?fmtBRL(r.inadValor):(r.temDados?fmtBRL(0):null),
+                   r.inadPct!=null?String(r.inadPct).replace(".",",")+"% da receita":"", "down","📉","var(--amber-bg)")
+        : kpiValor("Boletos emitidos", boletosDoMes.length?String(boletosDoMes.length):null,"lançados no mês","up","🧾","var(--blue-bg)")}
+      ${kpiValor("Saldo em caixa", r.saldo!=null?fmtBRL(r.saldo):null,"receitas menos despesas",(r.saldo||0)>=0?"up":"down","🏦","var(--blue-bg)")}`;})()}
   </div>
   <div class="panel">
     <div class="panel-head">

@@ -165,6 +165,17 @@ Ambas ganharam coluna `unidade`, que é o que a RLS usa:
 - A aba **Minhas** de ocorrências filtra por `o.unidade === morador.cod`, não
   mais por um campo `cat` fixo que não tinha relação com quem abriu.
 
+## Números do dashboard e do financeiro
+`resumoDoMes()` calcula receita, despesa, saldo e variação a partir de
+`serieFinanceira`; `kpiValor()` mostra **—** e "sem dados registrados" quando o
+valor é nulo. Antes os KPIs eram texto fixo (`"R$ 138.240,00"`), então com o
+banco zerado o app exibia uma receita que não existia.
+
+`papelEfetivo()` é a fonte do papel: a conta autenticada (`papelAtual()`), com
+`currentStaffRole` só como reserva enquanto não há sessão. `temModulo()`,
+`podeVerInadimplencia()` e `goAdmin()` usam essa função — manter duas fontes
+para a mesma verdade fazia a permissão depender de qual delas fosse consultada.
+
 ## Privacidade — inadimplência
 Quem deve em qual unidade é dado pessoal. A regra está em `podeVerInadimplencia()`
 (hoje: apenas `sindico`) e é aplicada em **três** telas — mexeu numa, confira as outras:
