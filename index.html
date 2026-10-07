@@ -1562,15 +1562,17 @@ async function confirmReserva(i){
   toast("Reserva confirmada");
 }
 /* ícone/cor por área; áreas novas caem no padrão em vez de quebrar */
+/* nomes conforme a cobrança da ConForte — o que o morador reserva no app
+   precisa casar com a linha que aparece no boleto dele */
 const iconesArea={
-  "Salão de Festas":["🎉","#f3e6d8"], "Salão Gourmet":["🍽️","#f3e6d8"],
-  "Churrasqueira 1":["🍖","#e6efe0"], "Garagem Band":["🎸","#e6e0f2"],
+  "Salão de Festas":["🎉","#f3e6d8"], "Espaço Gourmet":["🍽️","#f3e6d8"],
+  "Churrasqueira":["🍖","#e6efe0"],   "Garage Band":["🎸","#e6e0f2"],
   "Home Cinema":["🎬","#e0ebf2"],
   "Sauna":["🧖","#f8ecd8"], "Spa":["💆","#e6e0f2"],
-  /* áreas desativadas: mantidas só para as reservas já existentes não
-     perderem o ícone no histórico */
-  "Churrasqueira 2":["🍖","#e6efe0"], "Quadra Poliesportiva":["🏓","#e0ebf2"],
-  "Espaço Gourmet":["🍽️","#f3e6d8"]};
+  /* nomes antigos: só para o histórico de reservas não perder o ícone */
+  "Salão Gourmet":["🍽️","#f3e6d8"], "Churrasqueira 1":["🍖","#e6efe0"],
+  "Churrasqueira 2":["🍖","#e6efe0"], "Garagem Band":["🎸","#e6e0f2"],
+  "Quadra Poliesportiva":["🏓","#e0ebf2"]};
 function iconeArea(nome){return iconesArea[nome]||["🏛️","#eceae2"];}
 
 async function addReserva(){
