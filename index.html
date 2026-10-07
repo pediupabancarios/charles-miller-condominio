@@ -372,6 +372,13 @@ table.datatable tr:last-child td{border-bottom:none;}
 .vaga.visitante{background:var(--gold-100);border-color:var(--gold-400);}
 .vaga.livre{border-style:dashed;}
 
+/* --- liberação em lote de contas --- */
+.lote-linha{display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:12px 0;border-bottom:1px solid var(--line);flex-wrap:wrap;}
+.lote-linha:last-child{border-bottom:none;}
+.lote-linha .t1{font-size:13.5px;font-weight:700;margin:0 0 3px;}
+.lote-linha .t2{font-size:11.5px;color:var(--ink-soft);margin:0;}
+
 /* --- painel restrito por perfil --- */
 .restrito{padding:38px 20px;text-align:center;color:var(--ink-soft);}
 .restrito .ic{font-size:30px;margin-bottom:10px;}
@@ -2740,6 +2747,32 @@ function renderAdminContas(){
     ${kpi("Moradores",String(contas.filter(c=>c.ativo&&c.papel==="morador").length),"de "+TOTAL_UNIDADES+" unidades","up","👥","var(--blue-bg)")}
     ${kpi("Equipe",String(contas.filter(c=>c.ativo&&c.papel!=="morador").length),"portaria, administrativo e síndico","up","🪪","var(--gold-100)")}
   </div>
+  ${(()=>{
+    const prontas = contasLiberaveis();
+    const semUnidade = contas.filter(c=>!c.ativo && c.papel==="morador" && !unidadeValida(c.unidade));
+    if(!prontas.length && !semUnidade.length) return "";
+    return `
+    <div class="panel" style="margin-bottom:16px">
+      <div class="panel-head"><h3>Liberar em lote</h3></div>
+      ${prontas.length?`
+        <div class="lote-linha">
+          <div>
+            <p class="t1">${prontas.length} ${prontas.length===1?'conta pronta':'contas prontas'} para liberar</p>
+            <p class="t2">${prontas.slice(0,6).map(c=>c.unidade).join(", ")}${prontas.length>6?` e mais ${prontas.length-6}`:""}</p>
+          </div>
+          <button class="btn-primary" onclick="liberarPendentes()">Liberar ${prontas.length}</button>
+        </div>`:''}
+      ${semUnidade.length?`
+        <div class="lote-linha">
+          <div>
+            <p class="t1">${semUnidade.length} ${semUnidade.length===1?'conta sem unidade válida':'contas sem unidade válida'}</p>
+            <p class="t2">Preencha a unidade na tabela abaixo para poder liberar: ${
+              semUnidade.slice(0,4).map(c=>c.nome).join(", ")}${semUnidade.length>4?"…":""}</p>
+          </div>
+          <span class="badge b-amber">precisa de você</span>
+        </div>`:''}
+    </div>`;
+  })()}
   <div class="panel">
     <div class="panel-head"><h3>Contas</h3><span class="see-all">${lista.length} ${lista.length===1?'conta':'contas'}</span></div>
     <div class="filters" style="margin-bottom:14px">
@@ -2774,6 +2807,30 @@ function renderAdminContas(){
   </div>`;
 }
 function filtrarContas(f){ filtroConta=f; goAdmin("contas"); }
+
+function unidadeValida(u){ return !!u && todasUnidades().includes(u); }
+
+/* pendentes que já dá para liberar sem decidir nada: morador com unidade
+   existente. Quem está sem unidade fica de fora — liberar sem ela deixaria
+   a conta sem enxergar nada, e a RLS não teria em que se apoiar. */
+function contasLiberaveis(){
+  return contas.filter(c => !c.ativo && c.papel==="morador" && unidadeValida(c.unidade));
+}
+
+async function liberarPendentes(){
+  const prontas = contasLiberaveis();
+  if(!prontas.length){ toast("Nenhuma conta pronta para liberar"); return; }
+  const lista = prontas.slice(0,8).map(c=>`• ${c.nome} — ${c.unidade}`).join("\n");
+  const resto = prontas.length>8 ? `\n… e mais ${prontas.length-8}` : "";
+  if(!confirm(`Liberar ${prontas.length} ${prontas.length===1?'conta':'contas'}?\n\n${lista}${resto}\n\nCada uma passa a enxergar os dados da sua unidade.`)) return;
+
+  const { error } = await sb.from("cm_usuarios").update({ ativo:true })
+    .in("id", prontas.map(c=>c.id));
+  if(error){ avisarFalhaDB("liberar contas", error); return; }
+  await carregarContas();
+  goAdmin("contas");
+  toast(`${prontas.length} ${prontas.length===1?'conta liberada':'contas liberadas'}`);
+}
 
 async function salvarConta(id, campos, aviso){
   const { error } = await sb.from("cm_usuarios").update(campos).eq("id", id);

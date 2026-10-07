@@ -34,6 +34,13 @@ então re-renderiza. Se o banco não responder, o app entra em **modo demonstra�
   e **unidade**. Conta sem vínculo, ou `ativo=false`, não enxerga nada.
 - **A primeira conta criada vira síndico ativo** (bootstrap em `cm_registrar()`);
   as demais entram pendentes até o síndico liberar em **Contas de acesso**.
+- **Liberar em lote:** `liberarPendentes()` ativa de uma vez os moradores pendentes
+  cuja unidade existe (`contasLiberaveis()`). Quem está sem unidade ou com unidade
+  inexistente fica de fora e é listado pelo nome — liberar sem unidade deixaria a
+  conta sem enxergar nada, porque a RLS não teria em que se apoiar.
+- A constraint do banco exige unidade só para morador **ativo**
+  (`cm_usuarios_morador_ativo_tem_unidade`): antes exigia de todo morador, e quem
+  se cadastrasse sem informá-la tinha o registro recusado, ficando sem conta.
 - O projeto está com **"Confirm email" ligado** no Supabase: o `signUp` não abre
   sessão, então o registro só acontece no primeiro login. Por isso nome e unidade
   vão no `options.data` do `signUp` (user_metadata) e `cm_registrar()` os recupera
