@@ -233,7 +233,8 @@ button.see-all,.see-all[onclick]{cursor:pointer;}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-md);padding:18px;box-shadow:var(--shadow);}
 .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
 .panel-head h3{margin:0;font-size:14.5px;font-weight:700;}
-.panel-head .see-all,td .see-all{font-size:11.5px;color:var(--navy-700);font-weight:600;background:none;border:none;padding:0;font-family:inherit;}
+.panel-head .see-all,td .see-all,.list-body .see-all{font-size:11.5px;color:var(--navy-700);font-weight:600;background:none;border:none;padding:0;font-family:inherit;}
+.list-body .see-all{margin-top:5px;text-decoration:underline;}
 .panel-head select{border:1px solid var(--line);border-radius:8px;font-size:11.5px;padding:5px 9px;font-family:inherit;background:var(--paper);}
 
 .chart-wrap{display:flex;align-items:flex-end;gap:8px;height:150px;padding-top:6px;}
@@ -459,6 +460,9 @@ table.datatable tr:last-child td{border-bottom:none;}
 }
 @media (max-width:760px){
   .sidebar{display:none;}
+  /* tabelas largas rolam dentro do card em vez de esticar a página inteira */
+  .panel{overflow-x:auto;}
+  table.datatable{min-width:max-content;}
   .admin-main{padding:calc(70px + var(--sat)) 14px calc(60px + var(--sab));}
   .staff-mobile-tabs{display:flex;}
 }
@@ -529,6 +533,11 @@ const eventos = [
 ];
 
 let reservas = [];
+
+/* Notificações pessoais (cm_notificacoes): endereçadas a uma unidade.
+   Diferente de config.notificacoes (quais tipos o condomínio dispara) e de
+   morador.notificacoes (preferências pessoais). */
+let notifs = [];
 
 const calendarEvents = {5:"reserva",12:"reserva",14:"reserva",20:"assembleia",25:"manutencao",8:"evento"};
 
@@ -640,7 +649,7 @@ function iconBg(hex){return `style="background:${hex}"`;}
 function renderHome(){
   return `
   <div class="hero">
-    <button class="bell" onclick="goView('avisos')">🔔<span class="dot">${avisos.length}</span></button>
+    <button class="bell" onclick="goView('notificacoes')">🔔${naoLidasNotif()?`<span class="dot">${naoLidasNotif()}</span>`:""}</button>
     <p class="greet">Olá, ${morador.nome} 👋</p>
     <p class="sub">Bem-vindo ao Residencial Charles Miller</p>
     <div class="unit-card">
@@ -679,6 +688,63 @@ function quick(ic,label,bg,color,view){
   return `<button class="quick-item" onclick="goView('${view}')"><div class="ic" style="background:${bg};color:${color}">${ic}</div><span>${label}</span></button>`;
 }
 
+/* =========================================================
+   NOTIFICAÇÕES PESSOAIS
+   Endereçadas a uma unidade (cm_notificacoes). O sino da home
+   mostra quantas ainda não foram lidas.
+   ========================================================= */
+function minhasNotifs(){
+  return notifs.filter(n=>n.unidade===morador.cod).slice().sort((a,b)=>(b.id||0)-(a.id||0));
+}
+function naoLidasNotif(){
+  return minhasNotifs().filter(n=>!n.lida).length;
+}
+/* Grava uma notificação para uma unidade. Só síndico/administrativo/portaria
+   conseguem inserir (RLS); por isso só é chamada a partir das telas da equipe. */
+async function notificar(unidade, ic, titulo, texto){
+  if(!unidade) return;
+  const n={unidade, ic:ic||"🔔", titulo, texto:texto||"",
+           data:new Date().toLocaleDateString('pt-BR')+" - "+horaAgora(), lida:false};
+  await dbInserir("notifs", n);
+  notifs.push(n);
+}
+function renderNotificacoes(){
+  const lista=minhasNotifs();
+  const naoLidas=lista.filter(n=>!n.lida).length;
+  return `
+  <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Notificações</h1></div>
+  <div class="view">
+    ${naoLidas?`<div class="form-actions" style="margin-bottom:12px">
+      <button class="btn-ghost" onclick="marcarTodasLidas()">Marcar todas como lidas</button>
+    </div>`:""}
+    ${lista.length?`<div class="card list-card">
+      ${lista.map(n=>`
+        <div class="list-row" style="${n.lida?'':'background:var(--amber-bg)'}">
+          <div class="list-ic" style="background:var(--card)">${n.ic||"🔔"}</div>
+          <div class="list-body">
+            <p class="t1">${n.titulo}</p>
+            <p class="t2">${n.data}</p>
+            ${n.texto?`<p class="t2">${n.texto}</p>`:""}
+          </div>
+          ${n.lida?"":'<span class="badge b-amber">Nova</span>'}
+        </div>`).join("")}
+    </div>`:`<div class="empty-note">Nenhuma notificação por enquanto.</div>`}
+    <div class="section-title"><h2>Avisos do condomínio</h2></div>
+    <div class="card" style="padding:16px">
+      <p class="t2" style="margin:0 0 12px;font-size:12.5px;color:var(--ink-soft)">
+        Comunicados gerais da administração ficam em uma tela separada.</p>
+      <button class="btn-primary" onclick="goView('avisos')">Ver avisos</button>
+    </div>
+  </div>`;
+}
+async function marcarTodasLidas(){
+  const pendentes=minhasNotifs().filter(n=>!n.lida);
+  if(!pendentes.length) return;
+  for(const n of pendentes){ n.lida=true; await dbAtualizar("notifs", n); }
+  goView("notificacoes");
+  toast(`${pendentes.length} ${pendentes.length===1?'notificação marcada':'notificações marcadas'} como lida${pendentes.length===1?'':'s'}`);
+}
+
 function renderReservas(){
   return `
   <div class="topbar"><button class="back" onclick="goView('home')">←</button><h1>Reservas</h1></div>
@@ -708,12 +774,20 @@ function renderReservas(){
     <div id="minhas-r" class="tab-panel">
       <div class="section-title" style="margin-top:0"><h2>Minhas reservas</h2></div>
       <div class="card list-card">
-        ${(reservas.filter(r=>r.morador===morador.cod).length?reservas.filter(r=>r.morador===morador.cod):[]).map(r=>`
+        ${(()=>{
+          const minhas=reservas.map((r,i)=>[r,i]).filter(([r])=>r.morador===morador.cod);
+          if(!minhas.length) return `<div class="empty-note">Você ainda não tem reservas.</div>`;
+          return minhas.map(([r,i])=>`
           <div class="list-row">
             <div class="list-ic" style="background:${r.cor}">${r.ic}</div>
-            <div class="list-body"><p class="t1">${r.titulo}</p><p class="t2">${r.data}</p><p class="t2">${r.num}</p></div>
+            <div class="list-body">
+              <p class="t1">${r.titulo}</p><p class="t2">${r.data}</p><p class="t2">${r.num}</p>
+              ${r.motivo?`<p class="t2" style="color:var(--red)">${r.motivo}</p>`:""}
+              ${reservaCancelavel(r)?`<button class="see-all" onclick="cancelarReservaMorador(${i})">Cancelar reserva</button>`:""}
+            </div>
             <span class="badge ${r.tagClass}">${r.tag}</span>
-          </div>`).join("")}
+          </div>`).join("");
+        })()}
       </div>
       <div class="section-title"><h2>Calendário do condomínio</h2></div>
       ${calendar()}
@@ -922,7 +996,7 @@ async function addReservaMorador(){
   const dias=diasAte(data);
   if(dias<0){ toast("A data não pode estar no passado"); return; }
   if(cfg && dias<cfg.antec){ toast(`${area} exige ${cfg.antec} dias de antecedência`); return; }
-  if(reservas.some(r=>r.titulo===area && r.data.startsWith(fmtData(data)) && r.tag!=="Cancelada")){
+  if(reservas.some(r=>r.titulo===area && r.data.startsWith(fmtData(data)) && !["Cancelada","Recusada"].includes(r.tag))){
     toast(`${area} já está reservada em ${fmtData(data)}`); return;
   }
   const [ic,cor]=iconeArea(area);
@@ -934,6 +1008,29 @@ async function addReservaMorador(){
   reservas.unshift(nova);
   goView("reservas");
   toast("Reserva solicitada — aguarde a confirmação");
+}
+
+/* Uma reserva só pode ser cancelada enquanto não passou a data. */
+function reservaNoFuturo(r){
+  const m=/^(\d{2})\/(\d{2})\/(\d{4})/.exec(r.data||"");
+  if(!m) return true;                       // formato inesperado: não bloqueia
+  return diasAte(`${m[3]}-${m[2]}-${m[1]}`) >= 0;
+}
+function reservaCancelavel(r){
+  return (r.tag==="Pendente" || r.tag==="Confirmada") && reservaNoFuturo(r);
+}
+/* O morador cancela a própria reserva. O RLS de cm_reservas só aceita um
+   update do morador quando a linha fica com tag='Cancelada' — ele não
+   consegue se autoconfirmar por aqui. */
+async function cancelarReservaMorador(i){
+  const r=reservas[i];
+  if(!r || r.morador!==morador.cod) return;
+  if(!reservaCancelavel(r)){ toast("Essa reserva não pode mais ser cancelada"); return; }
+  if(!confirm(`Cancelar a reserva de ${r.titulo} em ${r.data}?\n\nA área volta a ficar livre para outros moradores.`)) return;
+  r.tag="Cancelada"; r.tagClass="b-red"; r.motivo="Cancelada pelo morador";
+  await dbAtualizar("reservas", r);
+  goView("reservas");
+  toast("Reserva cancelada");
 }
 
 /* --- ocorrência aberta pelo próprio morador --- */
@@ -1177,7 +1274,8 @@ const viewMap={home:renderHome,reservas:renderReservas,financeiro:renderFinancei
   assembleias:renderAssembleiasMorador,documentos:renderDocumentosMorador,
   veiculos:renderVeiculosMorador,
   autorizacoes:renderAutorizacoesMorador,
-  fale:renderFaleMorador, config:renderConfigMorador};
+  fale:renderFaleMorador, config:renderConfigMorador,
+  notificacoes:renderNotificacoes};
 
 function goView(v){
   const render=viewMap[v];
@@ -1550,11 +1648,40 @@ function renderAdminReservas(){
       <button class="btn-primary" onclick="addReserva()">Criar reserva</button>
     </div>
   </div>
+  ${(()=>{
+    const pend=reservas.map((r,i)=>[r,i]).filter(([r])=>r.tag==="Pendente");
+    if(!pend.length) return "";
+    return `<div class="panel" style="margin-bottom:16px">
+      <div class="panel-head"><h3>Aguardando confirmação</h3><span class="badge b-amber">${pend.length}</span></div>
+      <div class="card list-card" style="box-shadow:none;border:none">
+        ${pend.map(([r,i])=>`
+          <div class="list-row">
+            <div class="list-ic" style="background:${r.cor}">${r.ic}</div>
+            <div class="list-body">
+              <p class="t1">${r.titulo}</p>
+              <p class="t2">${r.morador||"—"} · ${r.data}</p>
+              <div style="display:flex;gap:16px;margin-top:6px">
+                <button class="see-all" onclick="confirmReserva(${i})">Confirmar</button>
+                <button class="see-all" style="color:var(--red)" onclick="recusarReserva(${i})">Recusar</button>
+              </div>
+            </div>
+          </div>`).join("")}
+      </div>
+    </div>`;
+  })()}
   <div class="panel">
     <div class="panel-head"><h3>Reservas da semana</h3><button class="see-all" onclick="toggleReservaForm(true)">+ Nova reserva</button></div>
     <table class="datatable">
       <tr><th>Área</th><th>Unidade</th><th>Data</th><th>Status</th><th></th></tr>
-      ${reservas.map((r,i)=>`<tr><td>${r.titulo}</td><td class="mono">${r.morador||'—'}</td><td>${r.data}</td><td><span class="badge ${r.tagClass}">${r.tag}</span></td><td>${r.tag==='Pendente'?`<button class="see-all" onclick="confirmReserva(${i})">Confirmar</button>`:''}</td></tr>`).join("")}
+      ${reservas.map((r,i)=>`<tr>
+        <td>${r.titulo}</td>
+        <td class="mono">${r.morador||'—'}</td>
+        <td>${r.data}</td>
+        <td><span class="badge ${r.tagClass}">${r.tag}</span>${r.motivo?`<p class="t2" style="font-size:11px;color:var(--ink-soft);margin:4px 0 0">${r.motivo}</p>`:""}</td>
+        <td>${r.tag==='Pendente'
+          ? `<button class="see-all" style="display:block" onclick="confirmReserva(${i})">Confirmar</button>
+             <button class="see-all" style="display:block;color:var(--red);margin-top:6px" onclick="recusarReserva(${i})">Recusar</button>`
+          : ''}</td></tr>`).join("")}
     </table>
   </div>`;
 }
@@ -1562,10 +1689,26 @@ function toggleReservaForm(show){
   document.getElementById("reservaFormPanel").style.display = show ? "block":"none";
 }
 async function confirmReserva(i){
-  reservas[i].tag="Confirmada"; reservas[i].tagClass="b-green";
-  await dbAtualizar("reservas",reservas[i]);
+  const r=reservas[i];
+  if(!r) return;
+  r.tag="Confirmada"; r.tagClass="b-green"; r.motivo=null;
+  await dbAtualizar("reservas",r);
+  await notificar(r.morador,"✅","Reserva confirmada",`${r.titulo} · ${r.data}`);
   goAdmin("reservas");
-  toast("Reserva confirmada");
+  toast("Reserva confirmada — morador notificado");
+}
+/* Recusar exige motivo: é o texto que o morador vai ler na notificação
+   e na própria linha da reserva. */
+async function recusarReserva(i){
+  const r=reservas[i];
+  if(!r) return;
+  const motivo=(prompt(`Por que a reserva de ${r.titulo} em ${r.data} está sendo recusada?\n\nO morador vai ler esta mensagem.`)||"").trim();
+  if(!motivo){ toast("Recusa cancelada — informe o motivo"); return; }
+  r.tag="Recusada"; r.tagClass="b-red"; r.motivo=motivo;
+  await dbAtualizar("reservas",r);
+  await notificar(r.morador,"🚫","Reserva recusada",`${r.titulo} · ${r.data} — ${motivo}`);
+  goAdmin("reservas");
+  toast("Reserva recusada — morador notificado");
 }
 /* ícone/cor por área; áreas novas caem no padrão em vez de quebrar */
 /* nomes conforme a cobrança da ConForte — o que o morador reserva no app
@@ -1594,7 +1737,7 @@ async function addReserva(){
   if(cfg && antecedencia<cfg.antec){
     toast(`${area} exige ${cfg.antec} dias de antecedência`); return;
   }
-  if(reservas.some(r=>r.titulo===area && r.data.startsWith(fmtData(data)) && r.tag!=="Cancelada")){
+  if(reservas.some(r=>r.titulo===area && r.data.startsWith(fmtData(data)) && !["Cancelada","Recusada"].includes(r.tag))){
     toast(`${area} já está reservada em ${fmtData(data)}`); return;
   }
   const [ic,cor]=iconeArea(area);
@@ -1603,8 +1746,9 @@ async function addReserva(){
     num:"Reserva #"+(1200+reservas.length+1),tag:"Confirmada",tagClass:"b-green"};
   await dbInserir("reservas",nova);
   reservas.unshift(nova);
+  await notificar(unidade,"✅","Reserva confirmada",`${area} · ${nova.data}`);
   goAdmin("reservas");
-  toast("Reserva criada");
+  toast("Reserva criada — morador notificado");
 }
 
 function renderAdminOcorrencias(){
@@ -3685,7 +3829,8 @@ const TABELAS = {
   boletosDoMes:"cm_boletos_mes", avisos:"cm_avisos", ocorrencias:"cm_ocorrencias",
   encomendas:"cm_encomendas", sugestoes:"cm_sugestoes", visitantes:"cm_visitantes",
   autorizacoes:"cm_autorizacoes", veiculos:"cm_veiculos", assembleias:"cm_assembleias",
-  documentos:"cm_documentos", manutencoes:"cm_manutencoes", conversas:"cm_conversas"
+  documentos:"cm_documentos", manutencoes:"cm_manutencoes", conversas:"cm_conversas",
+  notifs:"cm_notificacoes"
 };
 /* colunas que o banco tem mas a UI não usa — não devolver no update */
 const COLS_INTERNAS = ["id","criado_em","atualizado_em","dia"];
@@ -3807,7 +3952,8 @@ async function carregarTudo(){
     boletosDoMes:v=>boletosDoMes=v, avisos:v=>avisos=v, ocorrencias:v=>ocorrencias=v,
     encomendas:v=>encomendas=v, sugestoes:v=>sugestoes=v, visitantes:v=>visitantes=v,
     autorizacoes:v=>autorizacoes=v, veiculos:v=>veiculos=v, assembleias:v=>assembleias=v,
-    documentos:v=>documentos=v, manutencoes:v=>manutencoes=v, conversas:v=>conversas=v
+    documentos:v=>documentos=v, manutencoes:v=>manutencoes=v, conversas:v=>conversas=v,
+    notifs:v=>notifs=v
   };
   respostas.forEach((r,i)=>{
     const nome=nomes[i];

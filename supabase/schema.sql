@@ -37,11 +37,27 @@ create table if not exists cm_reservas (
   morador text,                         -- código da unidade
   data text not null,                   -- "05/09/2026 · 18:00 às 23:00"
   num text,
-  tag text not null default 'Pendente',
+  tag text not null default 'Pendente',   -- Pendente | Confirmada | Recusada | Cancelada
   tag_class text not null default 'b-amber',
   ic text, cor text,
+  motivo text,                          -- por que foi recusada/cancelada
   criado_em timestamptz not null default now()
 );
+
+-- Notificações pessoais, endereçadas a uma unidade. Diferente de cm_avisos
+-- (comunicados gerais) — aqui cai o que é só daquele morador, como a
+-- confirmação ou a recusa de uma reserva.
+create table if not exists cm_notificacoes (
+  id bigint generated always as identity primary key,
+  unidade text not null,                -- código da unidade destinatária
+  ic text,
+  titulo text not null,
+  texto text,
+  data text,                            -- "13/10/2026 - 18:40"
+  lida boolean not null default false,
+  criado_em timestamptz not null default now()
+);
+create index if not exists cm_notificacoes_unidade_idx on cm_notificacoes (unidade, lida);
 
 create table if not exists cm_boletos (
   id bigint generated always as identity primary key,
@@ -237,6 +253,18 @@ end $$;
 --   staff:                  visitantes
 --   síndico + administrativo: boletos_mes, publicar avisos/documentos
 --   só síndico:             manutenções, config (escrita), contas, assembleias (escrita)
+--
+-- Reservas (migration cm_reservas_recusa_cancelamento_e_notificacoes):
+--   leitura: qualquer logado
+--   criação: a própria unidade, ou staff para qualquer unidade
+--   alteração: staff (confirmar/recusar) OU o próprio morador, e nesse
+--     caso o with_check exige tag='Cancelada' — ele não se autoconfirma
+--
+-- cm_notificacoes:
+--   leitura: a unidade destinatária + staff
+--   criação: só staff (é a equipe que avisa o morador)
+--   alteração: a própria unidade (marcar como lida) + staff
+--   exclusão: síndico e administrativo
 --
 -- O SQL completo está nas migrations do projeto; este arquivo é a
 -- referência da etapa 1. Ao alterar policies, replicar aqui.

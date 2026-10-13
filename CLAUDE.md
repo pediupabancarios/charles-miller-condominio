@@ -9,9 +9,9 @@ Estado atual: **protótipo** — dados mockados no próprio `index.html`, sem ba
 - **Projeto:** `ohuaoncwgioawgptyqgz` (prontuario-neonatal-candida-vargas), tabelas com prefixo `cm_`
 - **Schema:** `supabase/schema.sql` — idempotente, replicar aqui qualquer migration aplicada
 - **Chave no app:** publishable (`sb_publishable_…`), embutida no `index.html` — é pública por design
-- **17 tabelas:** cm_config, cm_perfil, cm_moradores, cm_reservas, cm_boletos, cm_boletos_mes,
+- **18 tabelas:** cm_config, cm_perfil, cm_moradores, cm_reservas, cm_boletos, cm_boletos_mes,
   cm_avisos, cm_ocorrencias, cm_encomendas, cm_sugestoes, cm_visitantes, cm_autorizacoes,
-  cm_veiculos, cm_assembleias, cm_documentos, cm_manutencoes, cm_conversas
+  cm_veiculos, cm_assembleias, cm_documentos, cm_manutencoes, cm_conversas, cm_notificacoes
 
 ### Como a persistência funciona
 Os arrays globais continuam sendo a fonte da UI — **os renderers não mudaram**.
@@ -119,6 +119,8 @@ O `theme-color` do HTML e o `manifest.json` carregam a cor escura: mudam junto.
   - `renderVeiculosMorador()` — própria vaga e veículos
   - `renderAutorizacoesMorador()` — pré-autoriza visitantes e acompanha os códigos
   - `renderFaleMorador()` — threads com o síndico; `renderConfigMorador()` — perfil e preferências
+  - `renderNotificacoes()` — notificações pessoais da unidade (o sino da home abre esta tela
+    e mostra quantas estão sem ler). Ver **Ciclo de uma reserva** abaixo
   - `ocultarFab(bool)` — o FAB cobre os botões de qualquer formulário aberto; todo
     `toggle*Form` do morador precisa chamá-lo
   - `viewMap{}` — mapeia nome da view → função render
@@ -138,6 +140,26 @@ O `theme-color` do HTML e o `manifest.json` carregam a cor escura: mudam junto.
     unidade e `liberarEntrada()`, que registra o uso e cria a entrada em `visitantes`
   - `renderAdminMensagens()` — caixa de entrada do "Fale com o síndico"
   - `podeVerInadimplencia()` / `painelRestrito()` — ver **Privacidade** abaixo
+
+### Ciclo de uma reserva de área comum
+1. Morador pede em Reservas → `addReservaMorador()`. Valida data no passado,
+   antecedência mínima da área (`config.areas[].antec`) e choque com outra
+   reserva da mesma área no mesmo dia. Nasce **Pendente**.
+2. Síndico / administrativo / portaria resolvem no painel **Aguardando confirmação**
+   (topo de `renderAdminReservas()`, desenhado como lista porque a tabela não
+   cabe no celular):
+   - `confirmReserva(i)` → **Confirmada**
+   - `recusarReserva(i)` → **Recusada**, exigindo motivo, que fica em `reservas[].motivo`
+     e aparece para o morador
+   Reserva criada pela equipe (`addReserva()`) já nasce Confirmada.
+3. Morador cancela a própria reserva em "Minhas reservas" → `cancelarReservaMorador(i)`,
+   liberada por `reservaCancelavel()` (só Pendente/Confirmada e só antes da data).
+4. Toda mudança feita pela equipe chama `notificar(unidade, ic, titulo, texto)`,
+   que grava em `cm_notificacoes`. **Só staff consegue inserir** (RLS) — por isso
+   `notificar()` nunca é chamada a partir de uma tela do morador.
+
+Estados possíveis de `reservas[].tag`: `Pendente` · `Confirmada` · `Recusada` ·
+`Cancelada`. Reservas Recusada/Cancelada liberam a data para outro morador.
   - `renderAdminAssembleias/AdminDocumentos/AdminManutencoes/AdminRelatorios/AdminConfiguracoes()`
   - `temModulo(v)` — o módulo existe no menu do perfil atual? (`goAdmin` bloqueia o que não existe)
 - **Troca de perfil:** `#roleSwitch` no topo → `setRole('resident'|'porteiro'|'administrativo'|'sindico')`
@@ -160,6 +182,12 @@ Também o CNPJ, o endereço e as taxas, que eram inventados.
 
 Cópia dos dados antigos em `supabase/backup-demonstracao.json` (ver
 `restaurar-demonstracao.sql`), caso seja preciso apresentar o app cheio.
+
+## Privacidade — notificações
+`cm_notificacoes.unidade` é o destinatário. A RLS devolve só as linhas da
+unidade do usuário (staff vê todas) e **só staff consegue inserir**, de modo
+que um morador não escreve notificação para outra unidade. O morador pode dar
+update apenas nas dele, para marcar como lida.
 
 ## Privacidade — encomendas e ocorrências
 Ambas ganharam coluna `unidade`, que é o que a RLS usa:
